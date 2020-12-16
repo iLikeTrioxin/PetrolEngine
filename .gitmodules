@@ -13,3 +13,6 @@
 [submodule "Dependencies/stb"]
 	path = Dependencies/stb
 	url = https://github.com/nothings/stb
+[submodule "Dependencies/GLEW"]
+	path = Dependencies/GLEW
+	url = https://github.com/nigels-com/glew
