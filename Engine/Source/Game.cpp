@@ -22,7 +22,7 @@ namespace Engine {
     }
 
     int Game::initalizeGLEW() {
-        if (glewInit() != GLEW_OK)
+        if (!gladLoadGL())
             return 1;
         
         initalizeTextureSettings(true);
@@ -43,7 +43,7 @@ namespace Engine {
 
         Renderer::get().parentWindow = &window;
 
-        Shader& basic = Renderer::loadShader("shader.vert", "shader.frag");
+        Shader& basic = Renderer::loadShader("C:/Users/mpr19/Desktop/Engine/Engine/Resources/Shaders/shader.vert", "C:/Users/mpr19/Desktop/Engine/Engine/Resources/Shaders/shader.frag");
         basic.setInt("material.diffuse", 0);
         basic.setInt("material.specular", 0);
         basic.setFloat("material.shininess", 1.0f);
@@ -62,8 +62,8 @@ namespace Engine {
 
         mainCamera = scene.createEntity("Camera");
         
-        auto a = modelLoader::Get().loadModel("C:\\Users\\mpr19\\source\\repos\\TechnoGamesCode\\OwO\\KAIO (C++)\\KAIO (C++)\\fbx\\Devildom girl\\d.fbx", &scene);
-        auto b = modelLoader::Get().loadModel("C:\\Users\\mpr19\\source\\repos\\TechnoGamesCode\\OwO\\KAIO (C++)\\KAIO (C++)\\fbx\\Devildom girl\\d.fbx", &scene);
+        auto a = modelLoader::Get().loadModel("C:/Users/mpr19/Desktop/Engine/Engine/Resources/Models/Devildom girl/blender/exports/devilgurl1.fbx", &scene);
+        auto b = modelLoader::Get().loadModel("C:/Users/mpr19/Desktop/Engine/Engine/Resources/Models/Devildom girl/blender/exports/devilgurl1.fbx", &scene);
         
         auto& ka = b.getComponent<Transform>();
         ka.position.z -= 10;

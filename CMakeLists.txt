@@ -40,5 +40,5 @@ File(GLOB HEADER_FILES
 
 add_executable(Engine ${SOURCE_FILES} ${HEADER_FILES})
 add_dependencies(Engine GLFW GLM Glad Assimp)
-target_link_libraries(Engine PUBLIC GLFW_lib Glad_lib Assimp_lib dl)
+target_link_libraries(Engine PUBLIC GLFW_lib Glad_lib Assimp_lib )
 target_compile_options(Engine PUBLIC -Wall -g)

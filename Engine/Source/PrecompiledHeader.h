@@ -1,6 +1,9 @@
 #pragma once
 
+#define GLM_ENABLE_EXPERIMENTAL
+
 // OpenGL
+#include <GLM/gtc/matrix_transform.hpp>
 #include <GLM/gtx/quaternion.hpp>
 #include <GLM/gtc/quaternion.hpp>
 #include <GLM/glm.hpp>

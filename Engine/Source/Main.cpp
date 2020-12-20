@@ -7,11 +7,11 @@ ToDo:
   -
 
 */
-#include <iostream>
+//#include <iostream>
 int main()
 {
-    //Engine::Game game;
-    std::cout << "ja" << std::endl;
-    //glfwTerminate();
+    Engine::Game game;
+    //std::cout << "ja" << std::endl;
+    glfwTerminate();
     return 0;
 }
