@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.5)
 
 project(Engine)
 
+set (CMAKE_CXX_STANDARD 17)
+
 add_subdirectory(Dependencies)
 
 include_directories(${DEPENDENCY_INCLUDE_DIR})
