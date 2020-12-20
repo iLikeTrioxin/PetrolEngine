@@ -62,8 +62,8 @@ namespace Engine {
 
         mainCamera = scene.createEntity("Camera");
         
-        auto a = modelLoader::Get().loadModel("C:/Users/mpr19/Desktop/Engine/Engine/Resources/Models/Devildom girl/blender/exports/devilgurl1.fbx", &scene);
-        auto b = modelLoader::Get().loadModel("C:/Users/mpr19/Desktop/Engine/Engine/Resources/Models/Devildom girl/blender/exports/devilgurl1.fbx", &scene);
+        auto a = modelLoader::Get().loadModel("C:/Users/mpr19/Desktop/Engine/Engine/Resources/Models/Devildom girl/blender/exports/devilgurl.fbx", &scene);
+        auto b = modelLoader::Get().loadModel("C:/Users/mpr19/Desktop/Engine/Engine/Resources/Models/Devildom girl/blender/exports/devilgurl.fbx", &scene);
         
         auto& ka = b.getComponent<Transform>();
         ka.position.z -= 10;

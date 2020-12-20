@@ -41,7 +41,7 @@ namespace Engine {
 			loadedShaders[i].setInt("light[0].lightType", 1);
 			loadedShaders[i].setVec3("light[0].direction", -1.0f, 0.0f, 1.0f);
 			loadedShaders[i].setVec3("light[0].ambient", 0.2f, 0.2f, 0.2f);
-			loadedShaders[i].setVec3("light[0].diffuse", glm::vec3(3.0f, 3.0f, 3.0f));
+			loadedShaders[i].setVec3("light[0].diffuse", glm::vec3(1.0f, 1.0f, 1.0f));
 			loadedShaders[i].setVec3("light[0].specular", 0.0f, 0.0f, 0.0f);
 			loadedShaders[i].setFloat("light[1].lightType", 0);
 			loadedShaders[i].setFloat("light[2].lightType", 0);
