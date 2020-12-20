@@ -1,10 +1,10 @@
 #pragma once
 
 // OpenGL
-#include <glm/gtx/quaternion.hpp>
-#include <glm/gtc/quaternion.hpp>
-#include <glm/glm.hpp>
-#include <GL/glew.h>
+#include <GLM/gtx/quaternion.hpp>
+#include <GLM/gtc/quaternion.hpp>
+#include <GLM/glm.hpp>
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
 // STD
@@ -20,7 +20,7 @@
 #include <assimp/postprocess.h>
 
 // Other
-#include <entt/entt.hpp>
+#include <EnTT/single_include/entt/entt.hpp>
 #include <future>
 #include "Material.h"
 
