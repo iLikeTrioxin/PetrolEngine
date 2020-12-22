@@ -1,10 +1,12 @@
 #pragma once
 
+#include "EnTT/single_include/entt/entt.hpp"
+
 namespace Engine
 {
-	class Entity;
-	class Window;
-	class Renderer;
+	static class Entity;
+	static class Window;
+	static class Renderer;
 	
 	class Scene
 	{

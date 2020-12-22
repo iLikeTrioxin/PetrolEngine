@@ -38,7 +38,8 @@ File(GLOB HEADER_FILES
 #
 #configure_file(settings.txt settings.txt COPYONLY)
 
-add_executable(Engine ${SOURCE_FILES} ${HEADER_FILES})
-add_dependencies(Engine GLFW GLM Glad Assimp)
+#add_executable(Engine ${SOURCE_FILES} ${HEADER_FILES})
+add_library(Engine STATIC ${SOURCE_FILES} ${HEADER_FILES})
+add_dependencies(Engine GLFW GLM Glad Assimp Stb EnTT)
 target_link_libraries(Engine PUBLIC GLFW_lib Glad_lib Assimp_lib )
 target_compile_options(Engine PUBLIC -Wall -g)

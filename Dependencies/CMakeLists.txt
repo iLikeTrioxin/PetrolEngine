@@ -42,12 +42,8 @@ externalproject_add(GLM
 
 externalproject_add(GLFW
     PREFIX ${DEPENDENCY_DIR}/GLFW
-    CMAKE_ARGS -DGLFW_BUILD_TESTS=OFF
-               -DGLFW_BUILD_EXAMPLES=OFF
-               -DGLFW_BUILD_DOCS=OFF
-               -DGLFW_INSTALL=ON
-               -DBUILD_SHARED_LIBS=ON
-               -DCMAKE_INSTALL_PREFIX=${DEPENDENCY_INSTALL_DIR}
+    CMAKE_ARGS -DBUILD_SHARED_LIBS=OFF
+	           -DCMAKE_INSTALL_PREFIX=${DEPENDENCY_INSTALL_DIR}
     UPDATE_COMMAND ""
     UPDATE_DISCONNECTED 1
     URL https://github.com/glfw/glfw/releases/download/3.2.1/glfw-3.2.1.zip
@@ -56,7 +52,7 @@ externalproject_add(GLFW
 externalproject_add(Glad
     PREFIX ${DEPENDENCY_DIR}/Glad
     CMAKE_ARGS -DGLAD_INSTALL=ON
-                             -DCMAKE_INSTALL_PREFIX=${DEPENDENCY_INSTALL_DIR}
+               -DCMAKE_INSTALL_PREFIX=${DEPENDENCY_INSTALL_DIR}
     UPDATE_COMMAND ""
     UPDATE_DISCONNECTED 1
     URL https://github.com/Dav1dde/glad/archive/v0.1.34.zip

@@ -2,6 +2,7 @@
 
 #include <sstream>
 #include <fstream>
+#include "PrecompiledHeader.h"
 
 class Shader
 {
