@@ -38,5 +38,5 @@ set_target_properties(Engine_and_deps PROPERTIES IMPORTED_LOCATION
   "${CMAKE_BINARY_DIR}/Lib/${OUTPUT_LIB_NAME}"
 )
 
-add_executable(Engine_test Engine/Source/Main.cpp)
+add_executable(Engine_test Engine/Source/main.cpp)
 add_dependencies(Engine_test Engine_and_deps)
