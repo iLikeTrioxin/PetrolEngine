@@ -6,8 +6,6 @@ set (CMAKE_CXX_STANDARD 17)
 
 add_subdirectory(Deps)
 
-include_directories(${DEPENDENCY_INCLUDE_DIR})
-
 File(GLOB SOURCE_FILES
     Engine/Source/*.cpp
 )
@@ -16,8 +14,9 @@ File(GLOB HEADER_FILES
     Engine/Source/*.h
 )
 
-add_library     (Engine ${SOURCE_FILES} ${HEADER_FILES})
-add_dependencies(Engine GLFW glm Glad Assimp Stb EnTT)
+add_library                (Engine ${SOURCE_FILES} ${HEADER_FILES} )
+target_include_directories (Engine ${DEPENDENCY_INCLUDE_DIR}       )
+add_dependencies           (Engine GLFW glm Glad Assimp Stb EnTT   )
 
 set(OUTPUT_LIB_NAME      "${CMAKE_STATIC_LIBRARY_PREFIX}Engine_and_deps${CMAKE_STATIC_LIBRARY_SUFFIX}")
 
@@ -30,6 +29,7 @@ endif()
 add_definitions("-Wall -g")
 
 file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/Lib)
+
 add_custom_target(combined ALL COMMAND ${CONNECT_LIBS_COMMAND})
 
 add_library(Engine_and_deps STATIC IMPORTED GLOBAL)
@@ -38,5 +38,6 @@ set_target_properties(Engine_and_deps PROPERTIES IMPORTED_LOCATION
   "${CMAKE_BINARY_DIR}/Lib/${OUTPUT_LIB_NAME}"
 )
 
-add_executable(Engine_test Engine/Source/main.cpp)
+add_executable(Engine_test Engine/Source/Main.cpp)
+target_include_directories(Engine_test ${DEPENDENCY_INCLUDE_DIR} Engine/Source)
 target_link_libraries(Engine_test Engine_and_deps)
