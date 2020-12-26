@@ -63,13 +63,12 @@ ExternalProject_Add(Glad
 )
 
 ExternalProject_Add(Assimp
-    GIT_REPOSITORY      "https://github.com/assimp/assimp"
-	PREFIX              ${DEPENDENCY_DIR}/Assimp
-    UPDATE_COMMAND      ""
-    UPDATE_DISCONNECTED 1
-	 CMAKE_ARGS         -DCMAKE_INSTALL_PREFIX=${DEPENDENCY_INSTALL_DIR}
-						-DASSIMP_BUILD_TESTS=OFF
-	                    -DBUILD_SHARED_LIBS=ON
+    GIT_REPOSITORY       "https://github.com/assimp/assimp"
+	GIT_TAG              "v5.0.1"
+	PREFIX               ${DEPENDENCY_DIR}/Assimp
+     UPDATE_COMMAND      ""
+     UPDATE_DISCONNECTED 1
+	  CMAKE_ARGS         -DCMAKE_INSTALL_PREFIX=${DEPENDENCY_INSTALL_DIR}
 )
 
 #
