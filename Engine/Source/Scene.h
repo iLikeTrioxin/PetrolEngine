@@ -4,9 +4,9 @@
 
 namespace Engine
 {
-	static class Entity;
-	static class Window;
-	static class Renderer;
+	class Entity;
+	class Window;
+	class Renderer;
 	
 	class Scene
 	{
