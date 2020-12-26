@@ -39,4 +39,4 @@ set_target_properties(Engine_and_deps PROPERTIES IMPORTED_LOCATION
 )
 
 add_executable(Engine_test Engine/Source/main.cpp)
-add_dependencies(Engine_test Engine_and_deps)
+target_link_libraries(Engine_test Engine_and_deps)

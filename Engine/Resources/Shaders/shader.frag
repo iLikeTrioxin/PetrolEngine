@@ -55,7 +55,7 @@ void main()
 
     vec3 lightResult = CalcDirLight(light[0], normal, viewDir);
 
-    FragColor = color.z * vec4(lightResult, 1.0f);
+    FragColor = vec4(lightResult, 1.0f);
 }
 
 vec3 CalcDirLight(Light light, vec3 normal, vec3 viewDir)

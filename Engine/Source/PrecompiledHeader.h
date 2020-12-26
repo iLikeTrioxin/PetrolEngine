@@ -3,10 +3,10 @@
 #define GLM_ENABLE_EXPERIMENTAL
 
 // OpenGL
-#include <GLM/gtc/matrix_transform.hpp>
-#include <GLM/gtx/quaternion.hpp>
-#include <GLM/gtc/quaternion.hpp>
-#include <GLM/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/quaternion.hpp>
+#include <glm/gtc/quaternion.hpp>
+#include <glm/glm.hpp>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
