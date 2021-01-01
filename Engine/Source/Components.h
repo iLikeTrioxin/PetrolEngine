@@ -120,5 +120,9 @@ namespace Engine {
 	private:
 		float currentSpeed = 0.0f;
 	};
+	class ExternalScript {
+		virtual void onUpdate() = 0;
+		virtual void onStart () = 0;
+	};
 
 }
