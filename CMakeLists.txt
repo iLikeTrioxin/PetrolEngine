@@ -16,6 +16,7 @@ File(GLOB HEADER_FILES
 
 add_library                (Engine ${SOURCE_FILES} ${HEADER_FILES}  )
 target_include_directories (Engine PUBLIC ${DEPENDENCY_INCLUDE_DIR} )
+target_link_libraries      (Engine PUBLIC pthread dl                )
 add_dependencies           (Engine glm GLFW Glad Assimp Stb EnTT    )
 
 set(OUTPUT_LIB_NAME "${CMAKE_STATIC_LIBRARY_PREFIX}Engine_and_deps${CMAKE_STATIC_LIBRARY_SUFFIX}")
