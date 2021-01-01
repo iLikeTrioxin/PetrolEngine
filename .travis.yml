@@ -1,27 +1,22 @@
-language: cpp
-
+dist: trusty
+sudo: required
+language:
+  - cpp
 compiler:
   - gcc
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - gcc-6
+      - g++-6
+      - cmake
 
 # the install step will take care of deploying a newer cmake version
-install:    
-  # first we create a directory for the CMake binaries
-  - DEPS_DIR="${TRAVIS_BUILD_DIR}/deps"
-  - mkdir ${DEPS_DIR} && cd ${DEPS_DIR}
-  # we use wget to fetch the cmake binaries https://github.com/Kitware/CMake/releases/download/v3.19.2/cmake-3.19.2-Linux-x86_64.tar.gz
-  - travis_retry wget --no-check-certificate https://github.com/Kitware/CMake/releases/download/v3.19.2/cmake-3.19.2-Linux-x86_64.tar.gz
-  #https://cmake.org/files/v3.3/cmake-3.3.2-Linux-x86_64.tar.gz
-  - md5sum -c cmake-3.19.2-Linux-x86_64.tar.gz
-  # extract the binaries; the output here is quite lengthy,
-  # so we swallow it to not clutter up the travis console
-  - tar -xvf cmake-3.19.2-Linux-x86_64.tar.gz > /dev/null
-  - mv cmake-3.19.2-Linux-x86_64 cmake-install
-  # add both the top-level directory and the bin directory from the archive
-  # to the system PATH. By adding it to the front of the path we hide the
-  # preinstalled CMake with our own.
-  - PATH=${DEPS_DIR}/cmake-install:${DEPS_DIR}/cmake-install/bin:$PATH
-  # don't forget to switch back to the main build directory once you are done
-  - cd ${TRAVIS_BUILD_DIR}
+#install:    
+#  - sudo apt-get -y install cmake
+#  - cd ${TRAVIS_BUILD_DIR}
 
 before_script:
   # create a build folder for the out-of-source build
