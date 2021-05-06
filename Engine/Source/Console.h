@@ -17,9 +17,10 @@ namespace Engine::Console {
 	class ConsoleVariable : public IConsoleVariable
 	{
 	public:
-		ConsoleVariable(T& variable, std::string tag);
+		ConsoleVariable(std::string tag, T& variable)
+			: tag(tag), var(variable) {}
 		
-		void set(void* value);
+		void set(void* value) { *((T*)var) = *((T*)value); }
 	};
 
 	class Console
@@ -29,7 +30,9 @@ namespace Engine::Console {
 		static std::vector<IConsoleVariable*> variables;
 
 		template<typename T>
-		static void addVariable( std::string tag,   T&  variable );
+		static void addVariable( std::string tag,   T&  variable ) {
+			variables.emplace_back((IConsoleVariable*) new ConsoleVariable<T>(tag, variable));
+		}
 		static void setVariable( std::string tag, void* value    );
 
 	private:

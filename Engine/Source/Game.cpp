@@ -1,10 +1,11 @@
-#include "PrecompiledHeader.h"
+#include "PCH.h"
 #include "Game.h"
 
 #include "Components.h"
 #include "Entity.h"
 #include "Renderer.h"
 #include "modelLoader.h"
+#include "DebugTools.h"
 
 namespace Engine {
 
@@ -84,6 +85,8 @@ namespace Engine {
     }
 
     void Game::gameLoop() {
+        LOG_FUNCTION();
+
         uint   iter = 0;
         double time = 0;
         
@@ -96,6 +99,7 @@ namespace Engine {
         double previousFrame      = glfwGetTime();
         while (!glfwWindowShouldClose(window.windowHandle))
         {
+            LOG_SCOPE("Frame");
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
             if (glfwGetKey(window.windowHandle, GLFW_KEY_ESCAPE))
@@ -123,6 +127,7 @@ namespace Engine {
 
             for (int i = 0; i < scenes.size(); i++)
                 scenes[i].update();
+
 
             glfwSwapBuffers(window.windowHandle);
             

@@ -4,7 +4,7 @@
 #include "Components.h"
 #include "Window.h"
 #include "Entity.h"
-
+#include "DebugTools.h"
 namespace Engine {
 	Entity Scene::createEntity(const char* name) {
 		Entity entity = { sceneRegistry.create(), this };
@@ -26,11 +26,13 @@ namespace Engine {
 		return Entity((entt::entity)id, this);
 	}
 	void Scene::update() {
-		
+		LOG_FUNCTION();
 		auto cameras = sceneRegistry.group<Camera>(entt::get<Transform>);
 		auto meshes  = sceneRegistry.group< Mesh >(entt::get<Transform>);
 		
 		for (auto camera : cameras) {
+			LOG_SCOPE("Processing camera view");
+			
 			auto& cam = cameras.get<  Camera >(camera);
 			auto& tra = cameras.get<Transform>(camera);
 
@@ -40,6 +42,8 @@ namespace Engine {
 			Renderer::updateCamera(cam);
 
 			for (auto entity : meshes) {
+				LOG_SCOPE("Rendering mesh");
+
 				auto& mesh      = meshes.get<   Mesh  >(entity);
 				auto  transform = meshes.get<Transform>(entity);
 				auto  parent    = sceneRegistry.get<   Tag   >(entity).parent;

@@ -45,17 +45,17 @@ vec3 CalcSpotLight  (Light light, vec3 normal, vec3 fragPos, vec3 viewDir);
 
 void main()
 {
-    vec4 color = texture(texture_diffuse1, _TexCoords);
-    
-    if(color.w < 0.05)
-        discard;
+    //vec4 color = texture(texture_diffuse1, _TexCoords);
+    //
+    //if(color.w < 0.05)
+    //    discard;
+	//
+    //vec3 normal      = normalize(_Normal);
+    //vec3 viewDir     = normalize(viewPos - _FragPos);
+	//
+    //vec3 lightResult = CalcDirLight(light[0], normal, viewDir);
 
-    vec3 normal      = normalize(_Normal);
-    vec3 viewDir     = normalize(viewPos - _FragPos);
-
-    vec3 lightResult = CalcDirLight(light[0], normal, viewDir);
-
-    FragColor = vec4(lightResult, 1.0f);
+    FragColor = vec4(1.0f);
 }
 
 vec3 CalcDirLight(Light light, vec3 normal, vec3 viewDir)

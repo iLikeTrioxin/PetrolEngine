@@ -3,6 +3,7 @@
 
 #include "Components.h"
 #include "Window.h"
+#include "DebugTools.h"
 
 namespace Engine {
 	Renderer Renderer::rendererInstance;
@@ -33,6 +34,7 @@ namespace Engine {
 		get().internalCameraUpdate(camera);
 	}
 	void Renderer::internalCameraUpdate(Camera& camera) {
+		LOG_FUNCTION();
 		for (uint i = 0; i < loadedShaders.size(); i++) {
 			loadedShaders[i].setMat4("pav", camera.perspective * camera.view);
 			loadedShaders[i].setInt("material.diffuse", 0);
@@ -51,6 +53,7 @@ namespace Engine {
 		}
 	}
 	void Renderer::internalMeshRender(Mesh& mesh, Transform& transform) {
+		LOG_FUNCTION();
 
 		// Applying them to shader used by mesh
 		mesh.material.shader->setMat4("model", transform.transformation);
@@ -67,6 +70,8 @@ namespace Engine {
 		uint specularNumber = 1;
 
 		for (uint textureIndex = 0; textureIndex < mesh.material.textures.size(); textureIndex++) {
+			LOG_SCOPE("Assigning texture");
+
 			Texture& texture = mesh.material.textures[textureIndex];
 			
 			glActiveTexture(GL_TEXTURE0 + textureIndex);

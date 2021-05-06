@@ -3,6 +3,7 @@
 #include "Game.h"
 #include "Renderer.h"
 #include "Window.h"
+#include "DebugTools.h"
 
 namespace Engine {
 
@@ -77,13 +78,16 @@ namespace Engine {
         updateCameraVectors();
     }
     void Camera::updatePerspectiveMatrix(float aspectRatio) {
+        LOG_FUNCTION();
         this->perspective = glm::perspective(glm::radians(Zoom), aspectRatio, near, far);
     }
     void Camera::updateViewMatrix(glm::vec3 position) {
+        LOG_FUNCTION();
         this->view = glm::lookAt(position, position + front, up);
     }
     void Camera::updateCameraVectors()
     {
+        LOG_FUNCTION();
         float x = cos(Pitch);
 
         front.x = cos( Yaw ) * x;
@@ -99,6 +103,7 @@ namespace Engine {
          Movement::Movement(Transform* trans) :
         transform(trans) {};
     void Movement::update(){
+        LOG_FUNCTION();
         auto& camera = mainCamera.getComponent<Camera>();
         auto  window = Renderer::getWindow();
 

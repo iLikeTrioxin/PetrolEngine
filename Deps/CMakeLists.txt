@@ -48,6 +48,15 @@ ExternalProject_Add(Stb
 #
 # Accualy compile-required projects
 #
+ExternalProject_Add(lua
+   URL                  "https://www.lua.org/ftp/lua-5.3.5.tar.gz"
+   PREFIX               ${DEPENDENCY_DIR}/Lua
+    UPDATE_COMMAND      ""
+    UPDATE_DISCONNECTED 1
+    PATCH_COMMAND       ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/Deps/LuaCMakeLists.txt ${DEPENDENCY_DIR}/lua/src/lua/CMakeLists.txt
+     CMAKE_ARGS         -DCMAKE_INSTALL_PREFIX=${DEPENDENCY_INSTALL_DIR}
+)
+
 ExternalProject_Add(GLFW
     GIT_REPOSITORY      "https://github.com/glfw/glfw"
     PREFIX              ${DEPENDENCY_DIR}/GLFW
@@ -74,23 +83,36 @@ ExternalProject_Add(Assimp
      UPDATE_COMMAND      ""
      UPDATE_DISCONNECTED 1
       CMAKE_ARGS         -DCMAKE_INSTALL_PREFIX=${DEPENDENCY_INSTALL_DIR}
+                         -DLIBRARY_SUFFIX=
+                         -DASSIMP_BUILD_TESTS=OFF
+                         -DINJECT_DEBUG_POSTFIX=OFF
 )
 
 #
 # Create libraries and assign files to them
 #
+add_library(   lua_lib STATIC IMPORTED GLOBAL)
 add_library(  GLFW_lib STATIC IMPORTED GLOBAL)
 add_library(  Glad_lib STATIC IMPORTED GLOBAL)
 add_library(Assimp_lib STATIC IMPORTED GLOBAL)
 
-set_target_properties(GLFW_lib PROPERTIES IMPORTED_LOCATION
-  "${DEPENDENCY_INSTALL_LIB_DIR}/${CMAKE_STATIC_LIBRARY_PREFIX}glfw3${CMAKE_STATIC_LIBRARY_SUFFIX}"
+add_dependencies(   lua_lib lua   )
+add_dependencies(  GLFW_lib GLFW  )
+add_dependencies(  Glad_lib Glad  )
+add_dependencies(Assimp_lib Assimp)
+
+set_target_properties(lua_lib PROPERTIES
+    IMPORTED_LOCATION "${DEPENDENCY_INSTALL_LIB_DIR}/${CMAKE_STATIC_LIBRARY_PREFIX}lua${CMAKE_STATIC_LIBRARY_SUFFIX}"
 )
 
-set_target_properties(Glad_lib PROPERTIES IMPORTED_LOCATION
-  "${DEPENDENCY_INSTALL_LIB_DIR}/${CMAKE_STATIC_LIBRARY_PREFIX}glad${CMAKE_STATIC_LIBRARY_SUFFIX}"
+set_target_properties(GLFW_lib PROPERTIES
+    IMPORTED_LOCATION "${DEPENDENCY_INSTALL_LIB_DIR}/${CMAKE_STATIC_LIBRARY_PREFIX}glfw3${CMAKE_STATIC_LIBRARY_SUFFIX}"
 )
 
-set_target_properties(Assimp_lib PROPERTIES IMPORTED_LOCATION
-  "${DEPENDENCY_INSTALL_LIB_DIR}/${CMAKE_STATIC_LIBRARY_PREFIX}assimp-vc142-mtd${CMAKE_STATIC_LIBRARY_SUFFIX}"
+set_target_properties(Glad_lib PROPERTIES
+    IMPORTED_LOCATION "${DEPENDENCY_INSTALL_LIB_DIR}/${CMAKE_STATIC_LIBRARY_PREFIX}glad${CMAKE_STATIC_LIBRARY_SUFFIX}"
+)
+
+set_target_properties(Assimp_lib PROPERTIES
+    IMPORTED_LOCATION "${DEPENDENCY_INSTALL_LIB_DIR}/${CMAKE_STATIC_LIBRARY_PREFIX}assimp${CMAKE_STATIC_LIBRARY_SUFFIX}"
 )
