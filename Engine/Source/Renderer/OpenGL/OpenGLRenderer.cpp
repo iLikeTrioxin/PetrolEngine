@@ -14,6 +14,7 @@ namespace Engine {
 	//Shader& Renderer::internalLoadShader(const char* vertexPath, const char* fragmentPath, const char* geometryPath) {
 	//	return loadedShaders.emplace_back(vertexPath, fragmentPath, geometryPath);
 	//}
+
 	void Renderer::internalCameraUpdate(Camera& camera) {
 		LOG_FUNCTION();
 		for (uint i = 0; i < loadedShaders.size(); i++) {

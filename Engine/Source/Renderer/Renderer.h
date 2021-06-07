@@ -8,8 +8,8 @@
 namespace Engine {
 	class Renderer {
 	public:
-		static Renderer& get() { return renderer; };
-		static int init() { return rendererAPI->init(); }
+		static Renderer& get () { return renderer;            };
+		static int       init() { return rendererAPI->init(); };
 		//static Shader&   loadShader(const char* vertexPath, const char* fragmentPath, const char* geometryPath = nullptr);
 		static void renderMesh    (Mesh&    mesh , Transform& transform) { LOG_FUNCTION(); rendererAPI->renderMesh (mesh, transform    ); };
 		static void OnWindowResize(uint32_t width, uint32_t   height   ) { LOG_FUNCTION(); rendererAPI->setViewport(0, 0, width, height); };
@@ -38,8 +38,8 @@ namespace Engine {
 		static std::unique_ptr<RendererAPI> create() {
 			switch (currentAPI)
 			{
-				case API::None  : return nullptr;
-				case API::OpenGL: return std::make_unique<OpenGLRenderer>();
+				case API::None  : return nullptr;                            break;
+				case API::OpenGL: return std::make_unique<OpenGLRenderer>(); break;
 			}
 
 			return nullptr;

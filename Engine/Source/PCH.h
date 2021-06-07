@@ -25,7 +25,7 @@
 // Other
 #include <EnTT/single_include/entt/entt.hpp>
 #include <future>
-#include "Material.h"
+#include "Renderer/Material.h"
 
 template<typename T>
 using Ptr = std::unique_ptr<T>;
