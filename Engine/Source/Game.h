@@ -3,8 +3,8 @@
 
 #include "Scene.h"
 
-#include "Window.h"
-#include "Shader.h"
+#include "./Core/Window.h"
+#include "./Renderer/Shader.h"
 #include "Entity.h"
 
 namespace Engine {

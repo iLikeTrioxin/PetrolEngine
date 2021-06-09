@@ -1,8 +1,8 @@
-#include "PrecompiledHeader.h"
+#include "PCH.h"
 #include "Components.h"
 #include "Game.h"
-#include "Renderer.h"
-#include "Window.h"
+#include "./Renderer/Renderer.h"
+#include "./Core/Window.h"
 #include "DebugTools.h"
 
 namespace Engine {

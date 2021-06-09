@@ -1,32 +1,12 @@
-#include "PrecompiledHeader.h"
+#include "../PCH.h"
 #include "Renderer.h"
 
-#include "Components.h"
-#include "Window.h"
-#include "DebugTools.h"
+#include "../Components.h"
+#include "../Core/Window.h"
+#include "../DebugTools.h"
 
 namespace Engine {
-	Renderer Renderer::rendererInstance;
-	Renderer::Renderer() {
-
-	}
-	Renderer::~Renderer() {
-		for (unsigned int i = 0; i < loadedShaders.size(); i++) {
-			glDeleteProgram(loadedShaders[i].ID);
-		}
-	}
-	Renderer& Renderer::get() {
-		return rendererInstance;
-	}
-	Window* Renderer::getWindow() {
-		return get().parentWindow;
-	}
-	Shader& Renderer::loadShader(const char* vertexPath, const char* fragmentPath, const char* geometryPath) {
-		return get().internalLoadShader(vertexPath, fragmentPath, geometryPath);
-	}
-	Shader& Renderer::internalLoadShader(const char* vertexPath, const char* fragmentPath, const char* geometryPath) {
-		return loadedShaders.emplace_back(vertexPath, fragmentPath, geometryPath);
-	}
+	/*
 	void Renderer::renderMesh(Mesh& mesh, Transform& transform) {
 		get().internalMeshRender(mesh, transform);
 	}
@@ -57,11 +37,6 @@ namespace Engine {
 
 		// Applying them to shader used by mesh
 		mesh.material.shader->setMat4("model", transform.transformation);
-		
-		if (currentShader != mesh.material.shader->ID) {
-			mesh.material.shader->use();
-			currentShader = mesh.material.shader->ID;
-		}
 
 		// loading textures into the buffers
 		uint diffuseNumber  = 1;
@@ -106,4 +81,5 @@ namespace Engine {
 	void Renderer::resetBuffers() {
 		glActiveTexture(GL_TEXTURE0);
 	}
+	*/
 }

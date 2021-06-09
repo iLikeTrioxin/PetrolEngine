@@ -10,9 +10,6 @@ namespace Engine {
     public:
         uint32_t ID;
         
-        template<>
-        Shader(){}
-
         virtual ~Shader() = default;
         
         // remove all possible constructors (Shader is just interface for API shader)

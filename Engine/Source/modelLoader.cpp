@@ -1,9 +1,9 @@
-#include "PrecompiledHeader.h"
+#include "PCH.h"
 #include "modelLoader.h"
 
 #include "Components.h"
 #include "Scene.h"
-#include "Texture.h"
+#include "./Renderer/Texture.h"
 #include "Entity.h"
 
 namespace Engine {

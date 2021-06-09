@@ -1,4 +1,4 @@
-#include "PrecompiledHeader.h"
+#include "../PCH.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 

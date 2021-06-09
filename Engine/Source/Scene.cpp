@@ -1,10 +1,11 @@
-#include "PrecompiledHeader.h"
+#include "PCH.h"
 #include "Scene.h"
-#include "Renderer.h"
+#include "./Renderer/Renderer.h"
 #include "Components.h"
-#include "Window.h"
+#include "./Core/Window.h"
 #include "Entity.h"
 #include "DebugTools.h"
+
 namespace Engine {
 	Entity Scene::createEntity(const char* name) {
 		Entity entity = { sceneRegistry.create(), this };
