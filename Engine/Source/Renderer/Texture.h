@@ -60,7 +60,11 @@ namespace Engine {
 		unsigned int getHeight() { return height; };
 		unsigned int getWidth () { return width ; };
 
-		static std::shared_ptr<Texture> load();
+		unsigned int getID() {
+			return id;
+		}
+
+		static std::shared_ptr<Texture> load(std::string path = "", TextureType type = TextureType::NONE, TextureFormat format = TextureFormat::NONE);
 
 		static std::shared_ptr<Texture> create(std::string path = "", TextureType type = TextureType::NONE, TextureFormat format = TextureFormat::NONE);
 	protected:

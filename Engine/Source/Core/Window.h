@@ -4,6 +4,12 @@
 #include <memory>
 
 namespace Engine {
+
+	extern double deltaXMousePos;
+	extern double deltaYMousePos;
+	extern double cursorXPos;
+	extern double cursorYPos;
+		
 	class Window {
 	public:
 		struct WindowData {
@@ -14,6 +20,7 @@ namespace Engine {
 
 	public:
 		WindowData windowData;
+		double deltaTime;
 
 		static std::unique_ptr<Window> create();
 		
@@ -23,6 +30,5 @@ namespace Engine {
 		virtual uint32_t getHeight  () = 0;
 		
 		float getAspectRatio();
-		void getActualWindowSize();
 	};
 }

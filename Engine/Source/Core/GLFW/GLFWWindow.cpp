@@ -5,7 +5,7 @@
 
 namespace Engine {
 
-    int   GLFWWindow::init() {
+    int GLFWWindow::init() {
         int success = glfwInit();
 
         if (!success)

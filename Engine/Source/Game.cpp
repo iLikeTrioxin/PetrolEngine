@@ -9,12 +9,6 @@
 
 namespace Engine {
 
-    double deltaXMousePos = 0.0;
-    double deltaYMousePos = 0.0;
-    double cursorXPos     = 0.0;
-    double cursorYPos     = 0.0;
-    double deltaTime      = 0.0;
-    
     Entity mainCamera = Entity();
 
     void mouse_callback(GLFWwindow* _window, double xpos, double ypos) {

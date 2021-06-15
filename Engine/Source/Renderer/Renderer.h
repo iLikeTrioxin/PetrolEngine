@@ -18,6 +18,7 @@ namespace Engine {
 		
 		static void setClearColor(float red, float green, float blue, float alpha);
 	private:
+		Renderer() { rendererAPI = RendererAPI::create(); }
 		static std::unique_ptr<RendererAPI> rendererAPI;
 		static Renderer renderer;
 		//void internalCameraUpdate(Camera& camera);
@@ -44,7 +45,7 @@ namespace Engine {
 
 			return nullptr;
 		}
-
+		
 		virtual int  init    ();
 		virtual void drawMesh();
 		virtual void setViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height);

@@ -8,23 +8,13 @@
 #include "Entity.h"
 
 namespace Engine {
-	
-	class Scene;
-	class Camera;
-
-	extern double deltaXMousePos;
-	extern double deltaYMousePos;
-	extern double cursorXPos    ;
-	extern double cursorYPos    ;
-	extern double deltaTime     ;
-
 	extern Entity mainCamera;
 
 	class Game {
 	public:
-		Window  window;
+		std::unique_ptr<Window>  window = Window::create();
 
-		std::vector<Scene > scenes;
+		std::vector<Scene> scenes;
 		
 		Game();
 		int initalizeGLEW();

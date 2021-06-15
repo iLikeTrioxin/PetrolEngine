@@ -6,6 +6,9 @@
 #include "../DebugTools.h"
 
 namespace Engine {
+	std::unique_ptr<RendererAPI> Renderer::rendererAPI;
+	Renderer Renderer::renderer;
+	
 	/*
 	void Renderer::renderMesh(Mesh& mesh, Transform& transform) {
 		get().internalMeshRender(mesh, transform);

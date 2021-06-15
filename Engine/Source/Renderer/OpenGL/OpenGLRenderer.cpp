@@ -1,6 +1,7 @@
 #include "../../PCH.h"
 
 #include "OpenGLRenderer.h"
+#include "../Texture.h"
 
 namespace Engine {
 	//Renderer::~Renderer() {
@@ -14,8 +15,8 @@ namespace Engine {
 	//Shader& Renderer::internalLoadShader(const char* vertexPath, const char* fragmentPath, const char* geometryPath) {
 	//	return loadedShaders.emplace_back(vertexPath, fragmentPath, geometryPath);
 	//}
-
-	void Renderer::internalCameraUpdate(Camera& camera) {
+	
+	void OpenGLRenderer::internalCameraUpdate(Camera& camera) {
 		LOG_FUNCTION();
 		for (uint i = 0; i < loadedShaders.size(); i++) {
 			loadedShaders[i].setMat4("pav", camera.perspective * camera.view);
@@ -35,7 +36,7 @@ namespace Engine {
 			//loadedShaders[i].setMat4(   "view"   , camera.view       );
 		}
 	}
-	void Renderer::renderMesh(Mesh& mesh, Transform& transform) {
+	void OpenGLRenderer::renderMesh(Mesh& mesh, Transform& transform) {
 		LOG_FUNCTION();
 
 		// Applying them to shader used by mesh
@@ -58,20 +59,20 @@ namespace Engine {
 			Texture& texture = mesh.material.textures[textureIndex];
 			
 			glActiveTexture(GL_TEXTURE0 + textureIndex);
-			glBindTexture(GL_TEXTURE_2D, texture.id);
+			glBindTexture(GL_TEXTURE_2D, texture.getID());
 
 			switch (texture.type)
 			{
-			case textureType::DIFFUSE:
+			case TextureType::DIFFUSE:
 				mesh.material.shader->setInt("texture_diffuse" + diffuseNumber, textureIndex);
 				break;
-			case textureType::HEIGHT:
+			case TextureType::HEIGHT:
 				mesh.material.shader->setInt("texture_height" + heightNumber, textureIndex);
 				break;
-			case textureType::NORMAL:
+			case TextureType::NORMAL:
 				mesh.material.shader->setInt("texture_normal" + normalNumber, textureIndex);
 				break;
-			case textureType::SPECULAR:
+			case TextureType::SPECULAR:
 				mesh.material.shader->setInt("texture_specular" + specularNumber, textureIndex);
 				break;
 			default:
@@ -86,7 +87,7 @@ namespace Engine {
 		//resetBuffers();
 
 	}
-	void Renderer::resetBuffers() {
+	void OpenGLRenderer::resetBuffers() {
 		glActiveTexture(GL_TEXTURE0);
 	}
 }
