@@ -13,8 +13,8 @@ namespace Engine
 	public:
 		Entity createEntity (const char* name                     );
 		Entity createEntity (const char* name, entt::entity parent);
-		Entity getEntityById(uint id);
-		void update();
+		Entity getEntityById(unsigned int id);
+		void update(float a);
 
 		entt::registry sceneRegistry;
 	private:

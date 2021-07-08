@@ -5,4 +5,8 @@ namespace Engine {
 	public:
 
 	};
+
+	class KeyPressed : Event {
+
+	};
 }

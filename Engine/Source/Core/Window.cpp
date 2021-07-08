@@ -9,17 +9,18 @@ namespace Engine {
     double deltaYMousePos = 0.0;
     double cursorXPos     = 0.0;
     double cursorYPos     = 0.0;
+    double deltaTime      = 0.0;
 
-    std::unique_ptr<Window> Window::create() {
+    std::shared_ptr<Window> Window::create(uint32_t width, uint32_t height, std::string title) {
         switch ( RendererAPI::get() )
         {
             case RendererAPI::API::None  : return nullptr                       ; break;
-            case RendererAPI::API::OpenGL: return std::make_unique<GLFWWindow>(); break;
+            case RendererAPI::API::OpenGL: return std::make_shared<GLFWWindow>(width, height, title); break;
         }
     }
 
     float Window::getAspectRatio() {
-        return windowData.height / windowData.width;
+        return ((float) windowData.width) / ((float)windowData.height);
     }
     
 }

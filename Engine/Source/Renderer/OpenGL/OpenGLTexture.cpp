@@ -5,23 +5,26 @@
 
 namespace Engine {
 
-	OpenGLTexture::OpenGLTexture(const char* path) {
-		loadTexture(path);
+	OpenGLTexture::OpenGLTexture(std::string path, TextureType type, TextureFormat format){
+		this->type   = type;
+		this->format = format;
+
+		loadTexture(path.c_str());
 	}
 	void OpenGLTexture::createTexture() {
 		glGenTextures(1, &id);
 	}
-	void OpenGLTexture::updateTextureImage(TextureFormat format, unsigned int width, unsigned int height, const void* data) {
-		auto GLFormat = textureFormatLookupTable.find(format)->second;
-		
-		glTextureSubImage2D(id, 0, 0, 0, width, height, GLFormat, GL_UNSIGNED_BYTE, data);
-	}
+	//void OpenGLTexture::updateTextureImage(TextureFormat format, unsigned int width, unsigned int height, const void* data) {
+	//	auto GLFormat = textureFormatLookupTable.find(format)->second;
+	//	
+	//	glTextureSubImage2D(id, 0, 0, 0, width, height, GLFormat, GL_UNSIGNED_BYTE, data);
+	//}
 	void OpenGLTexture::loadTexture(const char* path) {
 		int nrComponents;
 		
 		glGenTextures(1, &id);
 
-		unsigned char* data = stbi_load(path, &width, &height, &nrComponents, 0);
+		unsigned char* data = stbi_load(path, (int*)&width, (int*)&height, &nrComponents, 0);
 		if (data) {
 			GLenum format;
 

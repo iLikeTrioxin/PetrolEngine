@@ -1,14 +1,14 @@
-#include "../PCH.h"
-#include "Window.h"
-#include "../Renderer/Renderer.h"
-#include "GLFW/GLFWWindow.h"
+#include "layerStack.h"
 
 namespace Engine {
-    std::unique_ptr<Window> create() {
-        switch (RendererAPI::get())
-        {
-            case RendererAPI::API::None  : return nullptr;
-            case RendererAPI::API::OpenGL: return std::make_unique<GLFWWindow>();
-        }
-    }
+	std::vector<std::shared_ptr<Layer>> LayerStack::layers;
+
+	void LayerStack::execute() {
+		for (auto layer : layers) { layer->layerBody(); }
+	}
+
+	void LayerStack::addLayer(std::shared_ptr<Layer> layer) {
+		layers.push_back(layer);
+	}
+
 }

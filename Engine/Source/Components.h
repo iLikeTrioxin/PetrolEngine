@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Entity.h"
+#include "Core/Window.h"
 
 namespace Engine {
 	struct Vertex {
@@ -12,13 +13,6 @@ namespace Engine {
 	};
 
 	class Entity;
-
-	extern double deltaXMousePos;
-	extern double deltaYMousePos;
-	extern double cursorXPos;
-	extern double cursorYPos;
-
-	extern double deltaTime;
 
 	class Tag {
 	public:
@@ -97,7 +91,7 @@ namespace Engine {
 		Camera(glm::vec3 _position);
 		
 		void updatePerspectiveMatrix(float aspectRatio);
-		void updateViewMatrix(glm::vec3 position);
+		void updateViewMatrix(const glm::vec3& position);
 		void updateCameraVectors();
 	};
 
@@ -116,7 +110,7 @@ namespace Engine {
 
 		Movement(Transform* trans);
 
-		void update();
+		void update(std::shared_ptr<Window> window);
 	private:
 		float currentSpeed = 0.0f;
 	};

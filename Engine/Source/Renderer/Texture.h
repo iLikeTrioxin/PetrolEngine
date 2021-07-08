@@ -55,7 +55,7 @@ namespace Engine {
 		TextureFormat format;
 		TextureType type;
 
-		virtual ~Texture();
+		virtual ~Texture() = default;
 
 		unsigned int getHeight() { return height; };
 		unsigned int getWidth () { return width ; };
@@ -71,9 +71,6 @@ namespace Engine {
 		unsigned int id;
 		unsigned int width = 0;
 		unsigned int height = 0;
-
-		virtual void loadTexture() = 0;
-		virtual void createTexture() = 0;
 
 		static std::unordered_map<std::string, std::shared_ptr<Texture>> loadedTextures;
 	};

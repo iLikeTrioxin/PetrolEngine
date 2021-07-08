@@ -8,6 +8,8 @@
 #include "../Core/Files.h"
 
 namespace Engine {
+	std::unordered_map<std::string, std::shared_ptr<Shader>> Shader::loadedShaders;
+	
 	std::unordered_map<std::string, std::string> getSourcesFromString(std::string& fileSource, std::string keyword = "#type") {
 		std::unordered_map<std::string, std::string> sources;
 

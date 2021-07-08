@@ -81,7 +81,7 @@ namespace Engine {
         LOG_FUNCTION();
         this->perspective = glm::perspective(glm::radians(Zoom), aspectRatio, near, far);
     }
-    void Camera::updateViewMatrix(glm::vec3 position) {
+    void Camera::updateViewMatrix(const glm::vec3& position) {
         LOG_FUNCTION();
         this->view = glm::lookAt(position, position + front, up);
     }
@@ -102,23 +102,20 @@ namespace Engine {
     // Movement
          Movement::Movement(Transform* trans) :
         transform(trans) {};
-    void Movement::update(){
+    void Movement::update(std::shared_ptr<Window> window){
         LOG_FUNCTION();
         auto& camera = mainCamera.getComponent<Camera>();
-        auto  window = Renderer::getWindow();
 
-        if (glfwGetKey(window->windowHandle, GLFW_KEY_LEFT_SHIFT))
-            currentSpeed = runSpeed;
-        else
-            currentSpeed = walkSpeed;
-
-        if (glfwGetKey(window->windowHandle, GLFW_KEY_W))
+        currentSpeed = walkSpeed + (window->isPressed(GLFW_KEY_LEFT_SHIFT) * runSpeed);
+        
+        if (window->isPressed(GLFW_KEY_W))
             transform->position += camera.front * (float)deltaTime * currentSpeed;
-        if (glfwGetKey(window->windowHandle, GLFW_KEY_S))
+        if (window->isPressed(GLFW_KEY_S))
             transform->position -= camera.front * (float)deltaTime * currentSpeed;
-        if (glfwGetKey(window->windowHandle, GLFW_KEY_A))
+
+        if (window->isPressed(GLFW_KEY_A))
             transform->position -= camera.right * (float)deltaTime * currentSpeed;
-        if (glfwGetKey(window->windowHandle, GLFW_KEY_D))
+        if (window->isPressed(GLFW_KEY_D))
             transform->position += camera.right * (float)deltaTime * currentSpeed;
 
         camera.Yaw   += deltaXMousePos * 0.005;
@@ -130,5 +127,5 @@ namespace Engine {
             camera.Pitch = -1.4f;
 
         camera.updateCameraVectors();
-};
+    }
 }

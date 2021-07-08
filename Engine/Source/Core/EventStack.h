@@ -7,11 +7,19 @@
 #include <typeindex>
 
 namespace Engine {
+
     // Event manager
     class EventStack {
     public:
         template<class T>
-        std::list<T*>* getEvents() {
+        static bool checkEvents() {
+            return events.find(typeid(T)) == events.end() ? false : true;
+        }
+
+        template<class T>
+        static std::list<T*>* getEvents() {
+            // I belive that typeid is resolved here on compile time but i'm not sure
+            // so it is something to check later.
             auto eventList = events.find(typeid(T));
 
             if (eventList == events.end())
@@ -21,20 +29,19 @@ namespace Engine {
         }
 
         template<class T>
-        T* addEvent(T* event) {
+        static T* addEvent(T* _event) {
             auto eventClassEvents = events.find(typeid(T));
 
             // If there wasn't list of this event class create new
             // Else reinterpret any Event-inherited class into Event and push
             if (eventClassEvents == events.end())
-                events.emplace<std::type_index, std::list<Event*>>(typeid(T), { event });
+                events.emplace<std::type_index, std::list<Event*>>(typeid(T), { _event });
             else
-                eventClassEvents->second.push_back(reinterpret_cast<Event*>(event));
+                eventClassEvents->second.push_back(reinterpret_cast<Event*>(_event));
             
-            // return event
-            return event;
+            return _event;
         }
     private:
-        std::unordered_map<std::type_index, std::list<Event*>> events;
+        static std::unordered_map<std::type_index, std::list<Event*>> events;
     };
 }

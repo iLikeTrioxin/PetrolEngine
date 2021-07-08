@@ -7,6 +7,7 @@
 #include "DebugTools.h"
 
 namespace Engine {
+	
 	Entity Scene::createEntity(const char* name) {
 		Entity entity = { sceneRegistry.create(), this };
 		
@@ -15,6 +16,7 @@ namespace Engine {
 
 		return entity;
 	}
+
 	Entity Scene::createEntity(const char* name, entt::entity parent) {
 		Entity entity = { sceneRegistry.create(), this };
 
@@ -23,10 +25,12 @@ namespace Engine {
 		
 		return entity;
 	}
+
 	Entity Scene::getEntityById(uint id) {
 		return Entity((entt::entity)id, this);
 	}
-	void Scene::update() {
+
+	void Scene::update(float a) {
 		LOG_FUNCTION();
 		auto cameras = sceneRegistry.group<Camera>(entt::get<Transform>);
 		auto meshes  = sceneRegistry.group< Mesh >(entt::get<Transform>);
@@ -36,18 +40,15 @@ namespace Engine {
 			
 			auto& cam = cameras.get<  Camera >(camera);
 			auto& tra = cameras.get<Transform>(camera);
-
-			cam.updatePerspectiveMatrix(Renderer::getWindow()->getAspectRatio());
-			cam.updateViewMatrix       (tra.position);
 			
-			Renderer::updateCamera(cam);
-
+			cam.updateViewMatrix(tra.position);
+			
 			for (auto entity : meshes) {
 				LOG_SCOPE("Rendering mesh");
 
 				auto& mesh      = meshes.get<   Mesh  >(entity);
 				auto  transform = meshes.get<Transform>(entity);
-				auto  parent    = sceneRegistry.get<   Tag   >(entity).parent;
+				auto  parent    = sceneRegistry.get<Tag>(entity).parent;
 				
 				if (parent != entt::null) {
 					transform += sceneRegistry.get<Transform>(parent);
@@ -55,7 +56,7 @@ namespace Engine {
 
 				transform.updateTransformMatrix();
 				
-				Renderer::renderMesh(mesh, transform);
+				Renderer::renderMesh(mesh, transform, cam);
 			}
 		}
 	}

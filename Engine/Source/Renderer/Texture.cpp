@@ -12,20 +12,12 @@ namespace Engine {
 	void initalizeTextureSettings(bool flipImage) {
 		stbi_set_flip_vertically_on_load(flipImage);
 	}
+
 	std::shared_ptr<Texture> Texture::create(std::string path, TextureType type, TextureFormat format) {
-		std::shared_ptr<Texture> result;
-		
 		switch (RendererAPI::get())
 		{
-		case RendererAPI::API::None: result = nullptr; break;
-		case RendererAPI::API::OpenGL: result = std::make_shared<OpenGLTexture>(path); break;
+			case RendererAPI::API::None  : return nullptr                                            ; break;
+			case RendererAPI::API::OpenGL: return std::make_shared<OpenGLTexture>(path, type, format); break;
 		}
-		
-		if (result == nullptr)
-			return nullptr;
-
-		
-
-		return result;
 	}
 }

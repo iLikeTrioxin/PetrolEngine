@@ -12,12 +12,12 @@ namespace Engine {
 
 	class Game {
 	public:
-		std::unique_ptr<Window>  window = Window::create();
+		std::shared_ptr<Window> window;
 
 		std::vector<Scene> scenes;
 		
 		Game();
-		int initalizeGLEW();
+
 		void gameLoop();
 	};
 }

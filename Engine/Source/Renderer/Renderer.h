@@ -1,28 +1,10 @@
 #pragma once
 
 #include <memory>
-#include "OpenGL/OpenGLRenderer.h"
 #include "../Components.h"
 #include "../DebugTools.h"
 
 namespace Engine {
-	class Renderer {
-	public:
-		static Renderer& get () { return renderer;            };
-		static int       init() { return rendererAPI->init(); };
-		//static Shader&   loadShader(const char* vertexPath, const char* fragmentPath, const char* geometryPath = nullptr);
-		static void renderMesh    (Mesh&    mesh , Transform& transform) { LOG_FUNCTION(); rendererAPI->renderMesh (mesh, transform    ); };
-		static void OnWindowResize(uint32_t width, uint32_t   height   ) { LOG_FUNCTION(); rendererAPI->setViewport(0, 0, width, height); };
-		
-		static void clear() { LOG_FUNCTION(); rendererAPI->clear(); }
-		
-		static void setClearColor(float red, float green, float blue, float alpha);
-	private:
-		Renderer() { rendererAPI = RendererAPI::create(); }
-		static std::unique_ptr<RendererAPI> rendererAPI;
-		static Renderer renderer;
-		//void internalCameraUpdate(Camera& camera);
-	};
 
 	/// <summary>
 	/// Graphics API interface for Renderer.
@@ -30,33 +12,42 @@ namespace Engine {
 	/// </summary>
 	class RendererAPI {
 	public:
-		enum class API {
+		static enum class API {
 			None = 0,
 			OpenGL = 1
 		};
 
 	public:
-		static std::unique_ptr<RendererAPI> create() {
-			switch (currentAPI)
-			{
-				case API::None  : return nullptr;                            break;
-				case API::OpenGL: return std::make_unique<OpenGLRenderer>(); break;
-			}
-
-			return nullptr;
-		}
+		static std::unique_ptr<RendererAPI> create();
 		
-		virtual int  init    ();
-		virtual void drawMesh();
-		virtual void setViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height);
-		virtual void renderMesh (Mesh& mesh, Transform& transform);
-		virtual void clear();
+		virtual int  init    () = 0;
+		virtual void setViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height) = 0;
+		virtual void renderMesh (Mesh& mesh, Transform& transform, Camera& camera) = 0;
+		virtual void clear() = 0;
 
-		virtual ~RendererAPI();
+		virtual ~RendererAPI() = default;
 
 		static API get() { return currentAPI; };
 
 	private:
 		static API currentAPI;
+	};
+
+	class Renderer {
+	public:
+		static Renderer& get() { return renderer; };
+		static int       init() { return rendererAPI->init(); };
+		//static Shader&   loadShader(const char* vertexPath, const char* fragmentPath, const char* geometryPath = nullptr);
+		static void renderMesh(Mesh& mesh, Transform& transform, Camera& camera) { LOG_FUNCTION(); rendererAPI->renderMesh(mesh, transform, camera); };
+		static void OnWindowResize(uint32_t width, uint32_t   height) { LOG_FUNCTION(); rendererAPI->setViewport(0, 0, width, height); };
+
+		static void clear() { LOG_FUNCTION(); rendererAPI->clear(); }
+
+		static void setClearColor(float red, float green, float blue, float alpha);
+	private:
+		Renderer() { rendererAPI = RendererAPI::create(); }
+		static std::unique_ptr<RendererAPI> rendererAPI;
+		static Renderer renderer;
+		//void internalCameraUpdate(Camera& camera);
 	};
 }

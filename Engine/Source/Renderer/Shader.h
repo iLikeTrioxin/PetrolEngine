@@ -5,6 +5,8 @@
 #include <fstream>
 #include <map>
 
+#include <glm/glm.hpp>
+
 namespace Engine {
     class Shader {
     public:
@@ -43,23 +45,20 @@ namespace Engine {
                                             std::string&& fragmentSrc = "",
                                             std::string&& geometrySrc = "" );
 
-        // activate the shader
-        virtual void use();
-        
         // utility uniform functions
 
-        virtual void setBool (const std::string& name, bool  value);
-        virtual void setInt  (const std::string& name, int   value);
-        virtual void setFloat(const std::string& name, float value);
-        virtual void setVec2 (const std::string& name, const glm::vec2& value);
-        virtual void setVec2 (const std::string& name, float x, float y);
-        virtual void setVec3 (const std::string& name, const glm::vec3& value);
-        virtual void setVec3 (const std::string& name, float x, float y, float z);
-        virtual void setVec4 (const std::string& name, const glm::vec4& value);
-        virtual void setVec4 (const std::string& name, float x, float y, float z, float w);
-        virtual void setMat2 (const std::string& name, const glm::mat2& mat);
-        virtual void setMat3 (const std::string& name, const glm::mat3& mat);
-        virtual void setMat4 (const std::string& name, const glm::mat4& mat);
+        virtual void setBool (const std::string& name, bool  value                        ) = 0;
+        virtual void setInt  (const std::string& name, int   value                        ) = 0;
+        virtual void setFloat(const std::string& name, float value                        ) = 0;
+        virtual void setVec2 (const std::string& name, const glm::vec2& value             ) = 0;
+        virtual void setVec2 (const std::string& name, float x, float y                   ) = 0;
+        virtual void setVec3 (const std::string& name, const glm::vec3& value             ) = 0;
+        virtual void setVec3 (const std::string& name, float x, float y, float z          ) = 0;
+        virtual void setVec4 (const std::string& name, const glm::vec4& value             ) = 0;
+        virtual void setVec4 (const std::string& name, float x, float y, float z, float w ) = 0;
+        virtual void setMat2 (const std::string& name, const glm::mat2& mat               ) = 0;
+        virtual void setMat3 (const std::string& name, const glm::mat3& mat               ) = 0;
+        virtual void setMat4 (const std::string& name, const glm::mat4& mat               ) = 0;
         
     private:
         static std::unordered_map<std::string, std::shared_ptr<Shader>> loadedShaders;

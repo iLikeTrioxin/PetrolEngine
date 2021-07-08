@@ -9,15 +9,23 @@
 namespace Engine {
 
 	std::mutex modelLoader::mutex;
-
 	modelLoader modelLoader::modelLoaderInstance;
+
 	modelLoader& modelLoader::Get() {
 		return modelLoaderInstance;
 	}
+
 	Entity modelLoader::loadModel(const char* _path, Scene* _scene) {
+		auto pPath = std::filesystem::current_path();
+		auto path  = std::filesystem::path(_path);
+		
+		auto filename   = path.filename().string();
+		auto workingDir = path.remove_filename();
+
+		std::filesystem::current_path(path);
 
 		Assimp::Importer importer;
-		const aiScene* scene = importer.ReadFile(_path, aiProcess_GenSmoothNormals | aiProcess_Triangulate);
+		const aiScene* scene = importer.ReadFile(filename, aiProcess_GenSmoothNormals | aiProcess_Triangulate);
 		//  aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace
 		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
 			std::cout << "ERROR::ASSIMP:: " << importer.GetErrorString() << std::endl;
@@ -25,10 +33,8 @@ namespace Engine {
 		}
 
 		debug_log("[*] Running down the Root node of model(" << _path << ")");
-
-		std::string fileName(_path);
-
-		Entity model = _scene->createEntity(fileName.substr( fileName.find_last_of("\\/") + 1 ).c_str());
+	
+		Entity model = _scene->createEntity(filename.c_str());
 
 		modelLoaderInstance.processNode(scene->mRootNode, scene, model);
 
@@ -37,6 +43,8 @@ namespace Engine {
 		}
 
 		modelLoaderInstance.meshProcesses.clear();
+
+		std::filesystem::current_path(pPath);
 
 		return model;
 	}
@@ -66,13 +74,14 @@ namespace Engine {
 
 		return model;
 	}
-	void modelLoader::texturesFromMaterial(aiMaterial* material, aiTextureType type, textureType myType, std::vector<Texture>* textures) {
+	void modelLoader::texturesFromMaterial(aiMaterial* material, aiTextureType type, TextureType myType, std::vector< std::shared_ptr<Texture> >* textures) {
 		debug_log("[*] Detected " << material->GetTextureCount(type) << " textures of " << myType);
 
 		for (uint i = 0; i < (material->GetTextureCount(type)); i++) {
 			aiString path;
 			material->GetTexture(type, i, &path);
-			textures->emplace_back(path.C_Str(), myType);
+			auto tex = Texture::create(std::string(path.C_Str()), myType);
+			textures->push_back(tex);
 		}
 	}
 	
@@ -128,11 +137,10 @@ namespace Engine {
 		
 		aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
 		{
-			
-			texturesFromMaterial(material, aiTextureType_DIFFUSE, textureType::DIFFUSE, &outputMesh->material.textures);
-			texturesFromMaterial(material, aiTextureType_AMBIENT, textureType::HEIGHT, &outputMesh->material.textures);
-			texturesFromMaterial(material, aiTextureType_HEIGHT, textureType::NORMAL, &outputMesh->material.textures);
-			texturesFromMaterial(material, aiTextureType_SPECULAR, textureType::SPECULAR, &outputMesh->material.textures);
+			texturesFromMaterial(material, aiTextureType_DIFFUSE , TextureType::DIFFUSE , &outputMesh->material.textures);
+			texturesFromMaterial(material, aiTextureType_AMBIENT , TextureType::HEIGHT  , &outputMesh->material.textures);
+			texturesFromMaterial(material, aiTextureType_HEIGHT  , TextureType::NORMAL  , &outputMesh->material.textures);
+			texturesFromMaterial(material, aiTextureType_SPECULAR, TextureType::SPECULAR, &outputMesh->material.textures);
 		}
 		outputMesh->initalizeBuffers();
 		outputMesh->fillBufferWithData();

@@ -9,8 +9,8 @@ namespace Engine{
 	class Material
 	{
 	public:
-		std::vector<Texture> textures;
-		Shader* shader;
+		std::vector< std::shared_ptr<Texture> > textures;
+		std::shared_ptr<Shader> shader;
 	};
 }
 

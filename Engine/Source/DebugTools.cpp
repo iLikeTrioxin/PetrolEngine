@@ -29,7 +29,7 @@ namespace Engine::Debuging {
 	}
 	void Logger::logFunction(FunctionSpecification spec) {
 		if(!get().outputStream)
-			get().setOutputFile("C:/Users/mpr19/Desktop/dash/build/Debug/Result.json");
+			get().setOutputFile("C:/Users/mpr19/Desktop/Result.json");
 
 		std::stringstream json;
 
