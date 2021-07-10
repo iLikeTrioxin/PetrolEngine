@@ -99,7 +99,7 @@ namespace Engine {
 			LOG_SCOPE("Assigning texture");
 
 			std::shared_ptr<Texture> texture = mesh.material.textures[textureIndex];
-			
+
 			glActiveTexture(GL_TEXTURE0 + textureIndex);
 			glBindTexture(GL_TEXTURE_2D, texture->getID());
 
@@ -107,18 +107,18 @@ namespace Engine {
 			{
 			case TextureType::DIFFUSE:
 				shader->setInt("texture_diffuse" + diffuseNumber, textureIndex);
-				break;
+				continue;
 			case TextureType::HEIGHT:
 				shader->setInt("texture_height" + heightNumber, textureIndex);
-				break;
+				continue;
 			case TextureType::NORMAL:
 				shader->setInt("texture_normal" + normalNumber, textureIndex);
-				break;
+				continue;
 			case TextureType::SPECULAR:
 				shader->setInt("texture_specular" + specularNumber, textureIndex);
-				break;
+				continue;
 			default:
-				break;
+				continue;
 			}
 		}
 

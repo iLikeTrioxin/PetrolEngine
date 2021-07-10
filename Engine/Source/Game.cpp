@@ -19,7 +19,6 @@ namespace Engine {
         Renderer::init();
         
         glfwSwapInterval(0);
-        initalizeTextureSettings(true);
 
         auto basic = Shader::load(
             "default",

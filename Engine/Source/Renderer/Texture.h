@@ -2,8 +2,6 @@
 
 namespace Engine {
 
-	void initalizeTextureSettings(bool flipImage);
-
 	enum TextureType {
 		NONE     = 0,
 		DIFFUSE  = 1,
@@ -64,7 +62,7 @@ namespace Engine {
 			return id;
 		}
 
-		static std::shared_ptr<Texture> load(std::string path = "", TextureType type = TextureType::NONE, TextureFormat format = TextureFormat::NONE);
+		//static std::shared_ptr<Texture> load(std::string path = "", TextureType type = TextureType::NONE, TextureFormat format = TextureFormat::NONE);
 
 		static std::shared_ptr<Texture> create(std::string path = "", TextureType type = TextureType::NONE, TextureFormat format = TextureFormat::NONE);
 	protected:
