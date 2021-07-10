@@ -1,0 +1,3 @@
+[submodule "Deps/Deps"]
+	path = Deps/Deps
+	url = https://github.com/g-truc/glm
