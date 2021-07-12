@@ -4,8 +4,6 @@ project(Engine)
 
 set (CMAKE_CXX_STANDARD 17)
 
-add_subdirectory(Deps)
-
 File(GLOB_RECURSE SOURCE_FILES
     Engine/Source/*.cpp
 )
@@ -22,35 +20,34 @@ source_group(TREE ${CMAKE_SOURCE_DIR}/Engine FILES ${SOURCE_FILES} ${HEADER_FILE
 
 add_library                (Engine ${SOURCE_FILES} ${HEADER_FILES} ${RESOURCE_FILES} )
 target_precompile_headers  (Engine PRIVATE "Engine/Source/PCH.h"    )
-target_include_directories (Engine PUBLIC ${DEPENDENCY_INCLUDE_DIR} )
-target_link_libraries      (Engine PUBLIC pthread dl                )
-add_dependencies           (Engine glm GLFW Glad Assimp Stb EnTT lua)
 
-set(OUTPUT_LIB_NAME "${CMAKE_STATIC_LIBRARY_PREFIX}Engine_and_deps${CMAKE_STATIC_LIBRARY_SUFFIX}")
-
-if(WIN32)
-	set(CONNECT_LIBS_COMMAND ${CMAKE_AR} /OUT:${CMAKE_BINARY_DIR}/Lib/${OUTPUT_LIB_NAME} $<TARGET_FILE:GLFW_lib> $<TARGET_FILE:Glad_lib> $<TARGET_FILE:Assimp_lib> $<TARGET_FILE:lua_lib> $<TARGET_FILE:Engine> )
-else()
-	set(CONNECT_LIBS_COMMAND ${CMAKE_AR}      ${CMAKE_BINARY_DIR}/Lib/${OUTPUT_LIB_NAME} $<TARGET_FILE:GLFW_lib> $<TARGET_FILE:Glad_lib> $<TARGET_FILE:Assimp_lib> $<TARGET_FILE:lua_lib> $<TARGET_FILE:Engine> )
+if(NOT WIN32)
+target_link_libraries(Engine PUBLIC pthread dl)
 endif()
 
-add_definitions("-Wall -g")
+add_subdirectory(Deps)
 
-file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/Lib)
+target_link_libraries(Engine
+    PRIVATE glad
+    PRIVATE glfw
+    PRIVATE assimp
+    PRIVATE freetype
+)
 
-add_custom_target(combined DEPENDS Engine ALL COMMAND ${CONNECT_LIBS_COMMAND})
-
-add_library     (Engine_and_deps STATIC IMPORTED GLOBAL)
-add_dependencies(Engine_and_deps combined)
-
-set_target_properties(Engine_and_deps PROPERTIES IMPORTED_LOCATION
-  "${CMAKE_BINARY_DIR}/Lib/${OUTPUT_LIB_NAME}"
+# include only libraries
+target_include_directories(Engine
+    PUBLIC Deps/glm
+    PUBLIC Deps/stb
+    PUBLIC Deps/entt/single_include
 )
 
 add_executable             (Engine_test        Engine/Source/Main.cpp       )
 target_include_directories (Engine_test PUBLIC Engine/Source                )
 target_include_directories (Engine_test PUBLIC ${DEPENDENCY_INCLUDE_DIR}    )
-target_include_directories (Engine_test PUBLIC ${DEPENDENCY_INCLUDE_DIR}/lua)
-add_dependencies           (Engine_test Engine                              )
-add_dependencies           (Engine_test Engine_and_deps                     )
-target_link_libraries      (Engine_test Engine_and_deps                     )
+target_link_libraries      (Engine_test Engine                              )
+
+target_include_directories(Engine_test
+    PUBLIC Deps/glm
+    PUBLIC Deps/stb
+    PUBLIC Deps/entt/single_include
+)

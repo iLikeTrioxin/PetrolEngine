@@ -104,6 +104,13 @@ namespace Engine {
             time += deltaTime;
             iter += 1;
 
+            if (window->isPressed(GLFW_KEY_R)) {
+                auto shad1 = ReadFile("../Engine/Resources/Shaders/shader.vert");
+                auto shad2 = ReadFile("../Engine/Resources/Shaders/shader.frag");
+
+                Shader::load("default", "")->recompileShader(shad1.c_str(), shad2.c_str());
+            }
+
             auto* wr = EventStack::getEvents<Window::WindowResizedEvent>();
             if (wr != nullptr) {
                 for (auto w : *wr) {

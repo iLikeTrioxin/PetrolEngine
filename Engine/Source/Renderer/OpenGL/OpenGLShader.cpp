@@ -6,98 +6,166 @@
 #include "../../Core/Files.h"
 #include <fstream>
 
+//
+// INFO
+// 1. I use here propertie of glShaderXXX(shader) which is stated at khronos site "A value of 0 for shader will be silently ignored."
+//
+
 namespace Engine {
-    OpenGLShader::OpenGLShader(std::string&& vShaderCode, std::string&& fShaderCode, std::string&& gShaderCode) {
-        if (vShaderCode.empty())
-            vShaderCode = ReadFile(defaultVertexShaderPath);
-        if (fShaderCode.empty())
-            fShaderCode = ReadFile(defaultFragmentShaderPath);
 
-        int a = glCreateProgram();
-        this->ID = a;
+    int OpenGLShader::recompileShader( const char* vertexShaderSourceCode  ,
+                                       const char* fragmentShaderSourceCode,
+                                       const char* geometryShaderSourceCode ) {
+        debug_log("started");
+        uint32_t   newVertexShaderID = 0,
+                 newFragmentShaderID = 0,
+                 newGeometryShaderID = 0;
 
-        // ID's of program shaders
-        unsigned int vertex, fragment, geometry;
+        if (vertexShaderSourceCode) {
+            newVertexShaderID = glCreateShader(GL_VERTEX_SHADER);    
 
-        // creating and attaching vertex shader
-        {
-            vertex = glCreateShader(GL_VERTEX_SHADER);
+            glShaderSource (vertexShaderID, 1, &vertexShaderSourceCode, NULL);
+            glCompileShader(vertexShaderID);
 
-            const char* vertexShaderSourceCode = vShaderCode.c_str();
-            
-            debug_log("VVV");
-            debug_log(vertexShaderSourceCode);
-            debug_log("VVV");
+            int error = checkShaderCompileErrors(vertexShaderID, "VERTEX");
 
-            glShaderSource(vertex, 1, &vertexShaderSourceCode, NULL);
-            glCompileShader(vertex);
-
-            checkCompileErrors(vertex, "VERTEX");
-
-            glAttachShader(ID, vertex);
-        }
-        
-        // creating and attaching fragment shader
-        {
-            fragment = glCreateShader(GL_FRAGMENT_SHADER);
-
-            const char* fragmentShaderSourceCode = fShaderCode.c_str();
-            
-            debug_log("FFF");
-            debug_log(fragmentShaderSourceCode);
-            debug_log("FFF");
-
-            glShaderSource(fragment, 1, &fragmentShaderSourceCode, NULL);
-            glCompileShader(fragment);
-
-            checkCompileErrors(fragment, "FRAGMENT");
-
-            glAttachShader(ID, fragment);
+            if (!error) {
+                glDetachShader(ID,    vertexShaderID);
+                glAttachShader(ID, newVertexShaderID);
+            }
         }
 
-        // creating and attaching geometry shader if given
-        if (!gShaderCode.empty())
-        {
-            geometry = glCreateShader(GL_GEOMETRY_SHADER);
-            
-            const char* geometryShaderSourceCode = fShaderCode.c_str();
+        if (fragmentShaderSourceCode) {
+            newFragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);
 
-            debug_log("GGG");
-            debug_log(geometryShaderSourceCode);
-            debug_log("GGG");
+            glShaderSource(fragmentShaderID, 1, &fragmentShaderSourceCode, NULL);
+            glCompileShader(fragmentShaderID);
 
-            glShaderSource (geometry, 1, &geometryShaderSourceCode, NULL);
-            glCompileShader(geometry);
-            
-            checkCompileErrors(geometry, "GEOMETRY");
-            
-            glAttachShader(ID, geometry);
+            int error = checkShaderCompileErrors(fragmentShaderID, "FRAGMENT");
+
+            if (!error) {
+                glDetachShader(ID,    fragmentShaderID);
+                glAttachShader(ID, newFragmentShaderID);
+            }
+        }
+
+        if (geometryShaderSourceCode) {
+            newGeometryShaderID = glCreateShader(GL_GEOMETRY_SHADER);
+
+            glShaderSource(geometryShaderID, 1, &geometryShaderSourceCode, NULL);
+            glCompileShader(geometryShaderID);
+
+            int error = checkShaderCompileErrors(geometryShaderID, "GEOMETRY");
+
+            if (!error) {
+                glDetachShader(ID,    geometryShaderID);
+                glAttachShader(ID, newGeometryShaderID);
+            }
         }
 
         glLinkProgram(ID);
 
-        checkCompileErrors(ID, "PROGRAM");
+        int error = checkProgramCompileErrors(ID);
+
+        if (!error) {
+            // We need to remove only old code before we change old id's to new
+            if (  vertexShaderSourceCode) { glDeleteShader(  vertexShaderID);   vertexShaderID =   newVertexShaderID; }
+            if (fragmentShaderSourceCode) { glDeleteShader(fragmentShaderID); fragmentShaderID = newFragmentShaderID; }
+            if (geometryShaderSourceCode) { glDeleteShader(geometryShaderID); geometryShaderID = newGeometryShaderID; }
+            
+            return 0;
+        }
+        
+        // reverse all changes
+        if (  vertexShaderSourceCode) { glDetachShader(ID,   newVertexShaderID); glAttachShader(ID,   vertexShaderID); glDeleteShader(  vertexShaderID); }
+        if (fragmentShaderSourceCode) { glDetachShader(ID, newFragmentShaderID); glAttachShader(ID, fragmentShaderID); glDeleteShader(fragmentShaderID); }
+        if (geometryShaderSourceCode) { glDetachShader(ID, newGeometryShaderID); glAttachShader(ID, geometryShaderID); glDeleteShader(geometryShaderID); }
+        
+        glLinkProgram(ID);
+        return 1;
+    }
+
+    OpenGLShader::OpenGLShader( const char* vertexShaderSourceCode  ,
+                                const char* fragmentShaderSourceCode,
+                                const char* geometryShaderSourceCode ) {
+        this->  vertexShaderID = 0;
+        this->fragmentShaderID = 0;
+        this->geometryShaderID = 0;
+
+        this->ID = glCreateProgram();
+
+        // creating and attaching vertex shader
+        {
+            this->vertexShaderID = glCreateShader(GL_VERTEX_SHADER);
+            
+            glShaderSource(vertexShaderID, 1, &vertexShaderSourceCode, NULL);
+            glCompileShader(vertexShaderID);
+
+            debug_log("VERTEX\n" << vertexShaderSourceCode << "\nVERTEX");
+
+            checkShaderCompileErrors(vertexShaderID, "VERTEX");
+
+            glAttachShader(ID, vertexShaderID);
+        }
+        
+        // creating and attaching fragment shader
+        {
+            this->fragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);
+
+            glShaderSource(fragmentShaderID, 1, &fragmentShaderSourceCode, NULL);
+            glCompileShader(fragmentShaderID);
+
+            debug_log("FRAGMENT\n" << fragmentShaderSourceCode << "\nFRAGMENT");
+
+            checkShaderCompileErrors(fragmentShaderID, "FRAGMENT");
+
+            glAttachShader(ID, fragmentShaderID);
+        }
+
+        // creating and attaching geometry shader if given
+        if (geometryShaderSourceCode != nullptr)
+        {
+            this->geometryShaderID = glCreateShader(GL_GEOMETRY_SHADER);
+
+            glShaderSource (geometryShaderID, 1, &geometryShaderSourceCode, NULL);
+            glCompileShader(geometryShaderID);
+            
+            debug_log("GEOMETRY\n" << geometryShaderSourceCode << "\nGEOMETRY");
+
+            checkShaderCompileErrors(geometryShaderID, "GEOMETRY");
+            
+            glAttachShader(ID, geometryShaderID);
+        }
+
+        glLinkProgram(ID);
+
+        checkProgramCompileErrors(ID);
         
         // delete the shaders as they're linked into our program now and no longer necessery
-        glDeleteShader(vertex);
-        glDeleteShader(fragment);
+        //glDeleteShader(vertexShaderID);
+        //glDeleteShader(fragment);
+        //glDeleteShader(geometry);
+    }
 
-        if (!gShaderCode.empty())
-            glDeleteShader(geometry);
+    
+
+    OpenGLShader::~OpenGLShader() {
+        glDeleteShader(vertexShaderID  );
+        glDeleteShader(fragmentShaderID);
+        glDeleteShader(geometryShaderID);
+
+        glDeleteProgram(this->ID);
     }
 
     void OpenGLShader::setVec4(const std::string& name, float x, float y, float z, float w) {
         glUniform4f(glGetUniformLocation(ID, name.c_str()), x, y, z, w);
     }
-
     void OpenGLShader::setBool(const std::string& name, bool     value) {
         glUniform1i(glGetUniformLocation(ID, name.c_str()), (int)value);
     }
-
     void OpenGLShader::setInt(const std::string& name, int      value) {
         glUniform1i(glGetUniformLocation(ID, name.c_str()), value);
     }
-
     void OpenGLShader::setFloat(const std::string& name, float     value) {
         glUniform1f(glGetUniformLocation(ID, name.c_str()), value);
     }
@@ -107,51 +175,54 @@ namespace Engine {
     void OpenGLShader::setVec2(const std::string& name, float x, float    y) {
         glUniform2f(glGetUniformLocation(ID, name.c_str()), x, y);
     }
-    void OpenGLShader::setVec3(const std::string& name, const glm::vec3& value)
-    {
+    void OpenGLShader::setVec3(const std::string& name, const glm::vec3& value) {
         glUniform3fv(glGetUniformLocation(ID, name.c_str()), 1, &value[0]);
     }
-    void OpenGLShader::setVec3(const std::string& name, float x, float y, float z)
-    {
+    void OpenGLShader::setVec3(const std::string& name, float x, float y, float z) {
         glUniform3f(glGetUniformLocation(ID, name.c_str()), x, y, z);
     }
-    void OpenGLShader::setVec4(const std::string& name, const glm::vec4& value)
-    {
+    void OpenGLShader::setVec4(const std::string& name, const glm::vec4& value) {
         glUniform4fv(glGetUniformLocation(ID, name.c_str()), 1, &value[0]);
     }
-    void OpenGLShader::setMat2(const std::string& name, const glm::mat2& mat)
-    {
+    void OpenGLShader::setMat2(const std::string& name, const glm::mat2& mat) {
         glUniformMatrix2fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &mat[0][0]);
     }
-    void OpenGLShader::setMat3(const std::string& name, const glm::mat3& mat)
-    {
+    void OpenGLShader::setMat3(const std::string& name, const glm::mat3& mat) {
         glUniformMatrix3fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &mat[0][0]);
     }
-    void OpenGLShader::setMat4(const std::string& name, const glm::mat4& mat)
-    {
+    void OpenGLShader::setMat4(const std::string& name, const glm::mat4& mat) {
         glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &mat[0][0]);
     }
-    void OpenGLShader::checkCompileErrors(GLuint shader, std::string type)
-    {
+
+    int OpenGLShader::checkProgramCompileErrors(GLuint shader) {
         GLint success;
         GLchar infoLog[1024];
-        if (type != "PROGRAM")
-        {
-            glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
-            if (!success)
-            {
-                glGetShaderInfoLog(shader, 1024, NULL, infoLog);
-                std::cout << "ERROR::SHADER_COMPILATION_ERROR of type: " << type << "\n" << infoLog << "\n -- --------------------------------------------------- -- " << std::endl;
-            }
-        }
-        else
-        {
-            glGetProgramiv(shader, GL_LINK_STATUS, &success);
-            if (!success)
-            {
-                glGetProgramInfoLog(shader, 1024, NULL, infoLog);
-                std::cout << "ERROR::PROGRAM_LINKING_ERROR of type: " << type << "\n" << infoLog << "\n -- --------------------------------------------------- -- " << std::endl;
-            }
-        }
+
+        glGetProgramiv(shader, GL_LINK_STATUS, &success);
+
+        if (success)
+            return 0;
+
+        glGetProgramInfoLog(shader, 1024, NULL, infoLog);
+
+        debug_log( "ERROR::PROGRAM_LINKING_ERROR: " << infoLog );
+
+        return 1;
+    }
+
+    int OpenGLShader::checkShaderCompileErrors(GLuint shader, std::string type) {
+        GLint success;
+        GLchar infoLog[1024];
+
+        glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
+
+        if (success)
+            return 0;
+
+        glGetShaderInfoLog(shader, 1024, NULL, infoLog);
+
+        debug_log( "ERROR::SHADER_COMPILATION_ERROR(" << type << "): " << infoLog );
+
+        return 1;
     }
 }

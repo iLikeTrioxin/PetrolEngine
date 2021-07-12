@@ -11,9 +11,16 @@ namespace Engine {
 
     class OpenGLShader : public Shader {
     public:
-        OpenGLShader() = default;
-        OpenGLShader(std::string&& vShaderCode, std::string&& fShaderCode, std::string&& gShaderCode = "");
+        OpenGLShader( const char* vertexShaderSourceCode   = nullptr,
+                      const char* fragmentShaderSourceCode = nullptr,
+                      const char* geometryShaderSourceCode = nullptr );
         
+        ~OpenGLShader();
+
+        virtual int recompileShader(const char* vertexShaderSourceCode   = nullptr,
+                                    const char* fragmentShaderSourceCode = nullptr,
+                                    const char* geometryShaderSourceCode = nullptr ) override;
+
         virtual void setBool (const std::string& name, bool  value                       ) override;
         virtual void setInt  (const std::string& name, int   value                       ) override;
         virtual void setFloat(const std::string& name, float value                       ) override;
@@ -28,6 +35,7 @@ namespace Engine {
         virtual void setMat4 (const std::string& name, const glm::mat4& mat              ) override;
 
     private:
-        void checkCompileErrors(GLuint shader, std::string type);
+        int checkShaderCompileErrors(GLuint shader, std::string type);
+        int checkProgramCompileErrors(GLuint shader);
     };
 }

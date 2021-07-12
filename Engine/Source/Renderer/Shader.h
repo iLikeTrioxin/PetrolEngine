@@ -11,8 +11,12 @@ namespace Engine {
     class Shader {
     public:
         uint32_t ID;
+        std::string name;
         
         virtual ~Shader() = default;
+        virtual int recompileShader(const char* vertexShaderSourceCode   = nullptr,
+                                    const char* fragmentShaderSourceCode = nullptr,
+                                    const char* geometryShaderSourceCode = nullptr ) = 0;
         
         // remove all possible constructors (Shader is just interface for API shader)
 
@@ -60,6 +64,11 @@ namespace Engine {
         virtual void setMat3 (const std::string& name, const glm::mat3& mat               ) = 0;
         virtual void setMat4 (const std::string& name, const glm::mat4& mat               ) = 0;
         
+    protected:
+        uint32_t geometryShaderID;
+        uint32_t fragmentShaderID;
+        uint32_t   vertexShaderID;
+
     private:
         static std::unordered_map<std::string, std::shared_ptr<Shader>> loadedShaders;
         

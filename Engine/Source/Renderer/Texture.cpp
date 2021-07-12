@@ -2,7 +2,6 @@
 
 #include "Texture.h"
 #include "OpenGL/OpenGLTexture.h"
-#include <STB/stb_image.h>
 #include "Renderer.h"
 
 namespace Engine {

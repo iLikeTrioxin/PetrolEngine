@@ -10,7 +10,7 @@
 namespace Engine {
 	std::unordered_map<std::string, std::shared_ptr<Shader>> Shader::loadedShaders;
 	
-	std::unordered_map<std::string, std::string> getSourcesFromString(std::string& fileSource, std::string keyword = "#type") {
+	auto getSourcesFromString(std::string& fileSource, std::string keyword = "#type") {
 		std::unordered_map<std::string, std::string> sources;
 
 		std::string lcSource; // lower case source because find would detect only lower case "#type"
@@ -62,6 +62,8 @@ namespace Engine {
 									 std::move(shaders[1]),
 									 std::move(shaders[2]) );
 
+		shader->name = path;
+
 		// add shader to unordered map to not clone it in future
 		loadedShaders[path] = shader;
 
@@ -84,6 +86,8 @@ namespace Engine {
 									 std::move(fragmentSrc),
 								     std::move(geometrySrc) );
 		
+		shader->name = name;
+
 		// add it to unordered map to prevent copying
 		loadedShaders[name] = shader;
 		
@@ -93,9 +97,8 @@ namespace Engine {
 		switch (RendererAPI::get())
 		{
 			case RendererAPI::API::None  : return nullptr;
-			case RendererAPI::API::OpenGL: return std::make_shared<OpenGLShader>(std::move( vertexSrc ),
-																				 std::move(fragmentSrc),
-																				 std::move(geometrySrc) );
+			case RendererAPI::API::OpenGL: return std::make_shared<OpenGLShader>( vertexSrc .c_str(),
+																				 fragmentSrc.c_str() );
 		}
 	}
 }

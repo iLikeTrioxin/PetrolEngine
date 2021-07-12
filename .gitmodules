@@ -1,3 +1,21 @@
-[submodule "Deps/Deps"]
-	path = Deps/Deps
+[submodule "Deps/glm"]
+	path = Deps/glm
 	url = https://github.com/g-truc/glm
+[submodule "Deps/entt"]
+	path = Deps/entt
+	url = https://github.com/skypjack/entt
+[submodule "Deps/stb"]
+	path = Deps/stb
+	url = https://github.com/nothings/stb
+[submodule "Deps/glfw"]
+	path = Deps/glfw
+	url = https://github.com/glfw/glfw
+[submodule "Deps/glad"]
+	path = Deps/glad
+	url = https://github.com/Dav1dde/glad
+[submodule "Deps/assimp"]
+	path = Deps/assimp
+	url = https://github.com/assimp/assimp
+[submodule "Deps/freetype"]
+	path = Deps/freetype
+	url = https://github.com/freetype/freetype

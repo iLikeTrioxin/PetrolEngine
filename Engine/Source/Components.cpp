@@ -118,8 +118,8 @@ namespace Engine {
         if (window->isPressed(GLFW_KEY_D))
             transform->position += camera.right * (float)deltaTime * currentSpeed;
 
-        camera.Yaw   += deltaXMousePos * 0.005;
-        camera.Pitch -= deltaYMousePos * 0.005;
+        camera.Yaw   += (float)(deltaXMousePos * 0.005);
+        camera.Pitch -= (float)(deltaYMousePos * 0.005);
         
         if (camera.Pitch > 1.4f)
             camera.Pitch = 1.4f;

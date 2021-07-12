@@ -3,7 +3,9 @@
 #include "OpenGLTexture.h"
 
 #define STB_IMAGE_IMPLEMENTATION
-#include <Stb/stb_image.h>
+#define STB_IMAGE_STATIC
+
+#include <stb_image.h>
 
 //#define STB_IMAGE_WRITE_IMPLEMENTATION
 //#include <Stb/stb_image_write.h>
@@ -31,7 +33,7 @@ namespace Engine {
 
 		unsigned char* data = stbi_load(path, (int*)&width, (int*)&height, &nrComponents, 0);
 
-		if ( data && !stbi_failure_reason() ) {
+		if ( data ) {
 			GLenum format;
 
 			if (nrComponents == 1)

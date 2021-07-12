@@ -12,7 +12,7 @@ namespace Engine {
 	/// </summary>
 	class RendererAPI {
 	public:
-		static enum class API {
+		enum class API {
 			None = 0,
 			OpenGL = 1
 		};

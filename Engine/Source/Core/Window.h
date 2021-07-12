@@ -25,7 +25,7 @@ namespace Engine {
 		struct WindowResizedEvent : Event { WindowData data; WindowResizedEvent(WindowData data) : data(data) {} };
 		struct WindowClosedEvent  : Event { WindowData data; WindowClosedEvent (WindowData data) : data(data) {} };
 
-		struct MouseMovedEvent    : Event { uint32_t x, y; MouseMovedEvent   (uint32_t x, uint32_t y) : x(x), y(y) {} };
+		struct MouseMovedEvent    : Event { double x, y; MouseMovedEvent   (double x, double y) : x(x), y(y) {} };
 		struct MouseScrolledEvent : Event { double x, y; MouseScrolledEvent(double x, double y) : x(x), y(y) {} };
 		struct MouseClickEvent    : Event { int key; MouseClickEvent(int key) : key(key) {} };
 		

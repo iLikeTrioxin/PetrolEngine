@@ -24,7 +24,7 @@
 #include <assimp/postprocess.h>
 
 // Other
-#include <EnTT/single_include/entt/entt.hpp>
+#include <entt/entt.hpp>
 #include <future>
 #include "Renderer/Material.h"
 
@@ -38,3 +38,5 @@ using Ptr = std::unique_ptr<T>;
 #else
 #define debug_log(x)
 #endif
+
+#define log_and_return(x, y) { debug_log(x); return y; }

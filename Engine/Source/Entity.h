@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Scene.h"
-#include "EnTT/single_include/entt/entt.hpp"
+#include <entt/entt.hpp>
 
 namespace Engine {
 
