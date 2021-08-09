@@ -32,6 +32,7 @@ target_link_libraries(Engine
     PRIVATE glfw
     PRIVATE assimp
     PRIVATE freetype
+	PRIVATE lua::lib
 )
 
 # include only libraries
@@ -39,6 +40,7 @@ target_include_directories(Engine
     PUBLIC Deps/glm
     PUBLIC Deps/stb
     PUBLIC Deps/entt/single_include
+    PUBLIC Engine/Source
 )
 
 add_executable             (Engine_test        Engine/Source/Main.cpp       )

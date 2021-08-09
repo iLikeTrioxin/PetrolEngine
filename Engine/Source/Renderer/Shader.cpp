@@ -74,6 +74,8 @@ namespace Engine {
 										 std::string&& vertexSrc,
 										 std::string&& fragmentSrc,
 										 std::string&& geometrySrc  ) {
+		LOG_FUNCTION();
+
 		// find shader with that name
 		auto isShaderInHash = loadedShaders.find(name);
 
@@ -94,6 +96,7 @@ namespace Engine {
 		return shader;
 	}
 	std::shared_ptr<Shader> Shader::create(std::string&& vertexSrc, std::string&& fragmentSrc, std::string&& geometrySrc){
+		LOG_FUNCTION();
 		switch (RendererAPI::get())
 		{
 			case RendererAPI::API::None  : return nullptr;

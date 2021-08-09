@@ -47,7 +47,6 @@ namespace Engine::Debuging {
 	public:
 		ScopeTimer(const char* name);
 		~ScopeTimer();
-		void Stop();
 	private:
 		const char* name;
 		std::chrono::time_point<std::chrono::steady_clock> startTimePoint;
@@ -58,6 +57,7 @@ namespace Engine::Debuging {
 #ifdef ENGINE_DEBUG
 #define LOG_SCOPE_LINE(name, line) Engine::Debuging::ScopeTimer timer##line(name)
 #define LOG_FUNCTION()  LOG_SCOPE_LINE(__FUNCTION__, __LINE__)
+#define DEBUG_OPENGL() { debug_log("Context:"<<__FUNCTION__<<"#"<<__LINE__); Renderer::getErrors(); }
 #define LOG_SCOPE(name) LOG_SCOPE_LINE(    name    , __LINE__)
 #else
 // If not debugging then replace those with nothing

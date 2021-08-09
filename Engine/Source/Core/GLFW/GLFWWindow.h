@@ -8,13 +8,15 @@ namespace Engine {
 	public:
 		GLFWWindow(uint32_t width, uint32_t height, std::string title);
 
-		virtual uint32_t getWidth   () override { return windowData.width ; };
-		virtual uint32_t getHeight  () override { return windowData.height; };
-		virtual bool     shouldClose() override { return glfwWindowShouldClose(window); };
-		virtual void     swapBuffers() override { glfwSwapBuffers(window); };
-		virtual void     close      () override { glfwSetWindowShouldClose(window, true); }
-		virtual int      init       () override;
-		virtual void     pollEvents () override { glfwPollEvents(); }
+		virtual bool shouldClose() override { return glfwWindowShouldClose(window)  ; };
+		virtual void swapBuffers() override { glfwSwapBuffers(window)               ; };
+		virtual void close      () override { glfwSetWindowShouldClose(window, true); };
+		virtual void pollEvents () override { glfwPollEvents()                      ; };
+
+		virtual int init() override;
+
+		virtual void setVSync(bool  enabled) override;
+		virtual void setIcon (Image image  ) override;
 
 		virtual bool isPressed(int key) override { return glfwGetKey(window, key); }
 

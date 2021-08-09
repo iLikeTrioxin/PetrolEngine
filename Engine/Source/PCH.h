@@ -26,6 +26,7 @@
 // Other
 #include <entt/entt.hpp>
 #include <future>
+#include "DebugTools.h"
 #include "Renderer/Material.h"
 
 template<typename T>

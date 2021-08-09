@@ -1,8 +1,10 @@
 #pragma once
 
+#include "../Core/Image.h"
+
 namespace Engine {
 
-	enum TextureType {
+	enum class TextureType {
 		NONE     = 0,
 		DIFFUSE  = 1,
 		NORMAL   = 2,
@@ -11,49 +13,57 @@ namespace Engine {
 	};
 
 	enum class TextureFormat {
-		NONE,
-
+		NONE = 0x0000,
+		
+		// Structure:
+		// C - type ( 1 - R, 2 - RG, 3 - RGB, 4 - RGBA, 5 - DEPTH)
+		// B - bits per channal
+		// A - type ( 0 - normal, 1 - float, 2 - int, 3 - uint)
+		// 
+		//   A B  C
+		//   | |  |
+		// 0x0 00 0
+		// 
+		// 
+		
 		// color formats
-		RGBA16UI,
-		RGBA8UI,
+		RED      = 0x0001,
 
-		RGBA16F,
-		RGBA32F,
+		RGBA16UI = 0x3104,
+		RGBA8UI  = 0x3084,
 
-		RGBA8,
-		RGBA16,
+		RGBA16F  = 0x1104,
+		RGBA32F  = 0x1204,
 
-		RGB8,
-		RGB8UI,
-		RGB16,
-		RGB16UI,
+		RGBA8    = 0x0084,
+		RGBA16   = 0x0104,
 
-		RG8,
-		RG8UI,
-		RG16,
-		RG16UI,
+		RGB8     = 0x0083,
+		RGB8UI   = 0x3083,
+		RGB16    = 0x0103,
+		RGB16UI  = 0x3103,
+
+		RG8      = 0x0082,
+		RG8UI    = 0x3082,
+		RG16     = 0x0102,
+		RG16UI   = 0x3102,
 
 		// Depth formats
-		DEPTH16,
-		DEPTH24,
-		DEPTH32,
-		DEPTH32F,
-
-		// Depth-Stencil formats
-		DEPTH24_STENCIL8,
-		DEPTH32F_STENCIL8,
-
-		// Stencil only
-		STENCIL_INDEX8,
+		DEPTH16  = 0x0085,
+		DEPTH24  = 0x0185,
+		DEPTH32  = 0x0205,
+		DEPTH32F = 0x1205
 	};
 
 
 	class Texture {
 	public:
 		TextureFormat format;
-		TextureType type;
+		TextureType   type  ;
 
 		virtual ~Texture() = default;
+
+		virtual void updateTextureImage(const void* data) = 0;
 
 		unsigned int getHeight() { return height; };
 		unsigned int getWidth () { return width ; };
@@ -62,12 +72,14 @@ namespace Engine {
 			return id;
 		}
 
-		//static std::shared_ptr<Texture> load(std::string path = "", TextureType type = TextureType::NONE, TextureFormat format = TextureFormat::NONE);
+		//static std::shared_ptr<Texture> load(std::string path = "", TextureType type = TextureType::NONE);
 
-		static std::shared_ptr<Texture> create(std::string path = "", TextureType type = TextureType::NONE, TextureFormat format = TextureFormat::NONE);
+		static std::shared_ptr<Texture> create(std::string path = "", TextureType type = TextureType::NONE);
+		static std::shared_ptr<Texture> create(Image& image, TextureType type = TextureType::NONE);
+		static std::shared_ptr<Texture> create(int width, int height, TextureType type, TextureFormat format);
 	protected:
 		unsigned int id;
-		unsigned int width = 0;
+		unsigned int width  = 0;
 		unsigned int height = 0;
 
 		static std::unordered_map<std::string, std::shared_ptr<Texture>> loadedTextures;

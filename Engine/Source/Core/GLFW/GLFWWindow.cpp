@@ -5,19 +5,33 @@
 
 namespace Engine {
 
-    GLFWWindow::GLFWWindow(uint32_t width, uint32_t height, std::string title) {
+    GLFWWindow::GLFWWindow(uint32_t width, uint32_t height, std::string title) { LOG_FUNCTION();
         this->windowData = { width, height, title };
     }
 
-    int GLFWWindow::init() {
+
+    void GLFWWindow::setVSync(bool enabled) { LOG_FUNCTION();
+        glfwSwapInterval(enabled);
+    }
+
+    void GLFWWindow::setIcon(Image image) { LOG_FUNCTION();
+        GLFWimage icons[1];
+        
+        icons[0].pixels = image.getData();
+
+        glfwSetWindowIcon(window, 1, icons);
+    }
+
+    int GLFWWindow::init() { LOG_FUNCTION();
         int success = glfwInit();
 
         if (!success)
             return 0;
-        
+
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+        glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
 
         window = glfwCreateWindow(windowData.width, windowData.height, windowData.title.c_str(), NULL, NULL);
 
@@ -51,9 +65,9 @@ namespace Engine {
 
         glfwSetKeyCallback(window, [](GLFWwindow* window, int key, int scancode, int action, int mods) {
                 switch (action) {
-                    case GLFW_PRESS  : EventStack::addEvent(new KeyPressedEvent (key)); break;
-                    case GLFW_RELEASE: EventStack::addEvent(new KeyReleasedEvent(key)); break;
-                    case GLFW_REPEAT : EventStack::addEvent(new KeyHoldenEvent  (key)); break;
+                case GLFW_PRESS  : EventStack::addEvent(new KeyPressedEvent (key, false)); break;
+                case GLFW_REPEAT : EventStack::addEvent(new KeyPressedEvent (key, true )); break;
+                case GLFW_RELEASE: EventStack::addEvent(new KeyReleasedEvent(key       )); break;
                 }
             }
         );
@@ -86,7 +100,7 @@ namespace Engine {
         );
 
         glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-
+        glfwMakeContextCurrent(window);
         return 0;
     }
 }

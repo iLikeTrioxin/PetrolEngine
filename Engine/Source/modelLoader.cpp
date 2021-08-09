@@ -1,6 +1,6 @@
 #include "PCH.h"
 #include "modelLoader.h"
-
+#include "DebugTools.h"
 #include "Components.h"
 #include "Scene.h"
 #include "./Renderer/Texture.h"
@@ -75,55 +75,60 @@ namespace Engine {
 		return model;
 	}
 	void modelLoader::texturesFromMaterial(aiMaterial* material, aiTextureType type, TextureType myType, std::vector< std::shared_ptr<Texture> >* textures) {
-		debug_log("[*] Detected " << material->GetTextureCount(type) << " textures of " << myType);
+		debug_log("[*] Detected " << material->GetTextureCount(type) << " textures of " << static_cast<int>(myType));
 
 		for (uint i = 0; i < (material->GetTextureCount(type)); i++) {
 			aiString path;
 			material->GetTexture(type, i, &path);
-			auto tex = Texture::create(std::string(path.C_Str()), myType);
+			auto image = Image(path.C_Str());
+			auto tex = Texture::create(image, myType);
 			textures->push_back(tex);
 		}
 	}
 	
 	void modelLoader::processMesh(aiMesh* mesh, const aiScene* scene, Mesh* outputMesh) {
 		std::lock_guard<std::mutex> lock(mutex);
-		outputMesh->vertices.reserve(mesh->mNumVertices);
-		outputMesh->indices .reserve(mesh->mNumVertices);
+		
+		std::vector<Vertex> vertices;
+		std::vector< uint > indices;
+
+		vertices.reserve(mesh->mNumVertices);
+		indices .reserve(mesh->mNumVertices);
 		
 		outputMesh->material.shader = shader;
 
 		for (uint i = 0; i < mesh->mNumVertices; i++) {
 			{
-				outputMesh->vertices.emplace_back();
+				vertices.emplace_back();
 			}
-			//debug_log("[can i] i: " << i << " and vert: " << outputMesh->vertices.size());
+			//debug_log("[can i] i: " << i << " and vert: " << vertices.size());
 
-			outputMesh->vertices[i].position.x = mesh->mVertices[i].x;
-			outputMesh->vertices[i].position.y = mesh->mVertices[i].y;
-			outputMesh->vertices[i].position.z = mesh->mVertices[i].z;
+			vertices[i].position.x = mesh->mVertices[i].x;
+			vertices[i].position.y = mesh->mVertices[i].y;
+			vertices[i].position.z = mesh->mVertices[i].z;
 			
 			if (mesh->HasNormals()) {
-				outputMesh->vertices[i].normal.x = mesh->mNormals[i].x;
-				outputMesh->vertices[i].normal.y = mesh->mNormals[i].y;
-				outputMesh->vertices[i].normal.z = mesh->mNormals[i].z;
+				vertices[i].normal.x = mesh->mNormals[i].x;
+				vertices[i].normal.y = mesh->mNormals[i].y;
+				vertices[i].normal.z = mesh->mNormals[i].z;
 			}
 			if (mesh->mTextureCoords[0]) {
-				outputMesh->vertices[i].texCoords.x = mesh->mTextureCoords[0][i].x;
-				outputMesh->vertices[i].texCoords.y = mesh->mTextureCoords[0][i].y;
+				vertices[i].texCoords.x = mesh->mTextureCoords[0][i].x;
+				vertices[i].texCoords.y = mesh->mTextureCoords[0][i].y;
 			}
 			else
 			{
-				outputMesh->vertices[i].texCoords.x = 0.0f;
-				outputMesh->vertices[i].texCoords.y = 0.0f;
+				vertices[i].texCoords.x = 0.0f;
+				vertices[i].texCoords.y = 0.0f;
 			}
 			if (mesh->HasTangentsAndBitangents()) {
-				outputMesh->vertices[i].tangent.x = mesh->mTangents[i].x;
-				outputMesh->vertices[i].tangent.y = mesh->mTangents[i].y;
-				outputMesh->vertices[i].tangent.z = mesh->mTangents[i].z;
+				vertices[i].tangent.x = mesh->mTangents[i].x;
+				vertices[i].tangent.y = mesh->mTangents[i].y;
+				vertices[i].tangent.z = mesh->mTangents[i].z;
 
-				outputMesh->vertices[i].bitangent.x = mesh->mBitangents[i].x;
-				outputMesh->vertices[i].bitangent.y = mesh->mBitangents[i].y;
-				outputMesh->vertices[i].bitangent.z = mesh->mBitangents[i].z;
+				vertices[i].bitangent.x = mesh->mBitangents[i].x;
+				vertices[i].bitangent.y = mesh->mBitangents[i].y;
+				vertices[i].bitangent.z = mesh->mBitangents[i].z;
 			}
 		}
 		
@@ -131,9 +136,12 @@ namespace Engine {
 			aiFace face = mesh->mFaces[i];
 
 			for (uint j = 0; j < face.mNumIndices; j++) {
-				outputMesh->indices.emplace_back(face.mIndices[j]);
+				indices.emplace_back(face.mIndices[j]);
 			}
 		}
+
+		outputMesh->vertexBuffer->setData(vertices.data(), vertices.size() * sizeof(Vertex));
+		outputMesh-> indexBuffer->setData(indices .data(), indices .size() * sizeof( uint ));
 		
 		aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
 		{
@@ -142,9 +150,7 @@ namespace Engine {
 			texturesFromMaterial(material, aiTextureType_HEIGHT  , TextureType::NORMAL  , &outputMesh->material.textures);
 			texturesFromMaterial(material, aiTextureType_SPECULAR, TextureType::SPECULAR, &outputMesh->material.textures);
 		}
-		outputMesh->initalizeBuffers();
-		outputMesh->fillBufferWithData();
-		
+
 		//debug_log("done 1");
 		//debug_log("[*] Textures: " << scene->HasTextures() << " -- " << scene->mNumTextures);
 	}

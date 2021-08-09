@@ -62,19 +62,13 @@ namespace Engine::Debuging {
 	}
 
 	// ScopeTimer
-	ScopeTimer::ScopeTimer(const char* name)
-		: name(name) {
-		startTimePoint = std::chrono::high_resolution_clock::now();
-	}
+	ScopeTimer::ScopeTimer(const char* name): name(name), startTimePoint(std::chrono::high_resolution_clock::now()) {}
 	ScopeTimer::~ScopeTimer() {
-		Stop();
-	}
-	void ScopeTimer::Stop() {
 		auto endTimePoint = std::chrono::high_resolution_clock::now();
-		
+
 		long long start = std::chrono::time_point_cast<TimeUnit>(startTimePoint).time_since_epoch().count();
 		long long end   = std::chrono::time_point_cast<TimeUnit>(  endTimePoint).time_since_epoch().count();
 
-		Logger::logFunction({std::this_thread::get_id(), std::string(name), start, end - start});
+		Logger::logFunction({ std::this_thread::get_id(), std::string(name), start, end - start });
 	}
 }

@@ -7,18 +7,26 @@
 #include "modelLoader.h"
 #include "DebugTools.h"
 #include "Renderer/Shader.h"
+#include "Renderer/Text.h"
 
 namespace Engine {
-
     Entity mainCamera = Entity();
 
     Game::Game() {
-        this->window = Window::create(600, 250, "No hejka");
+        this->window = Window::create(800, 500, "No hejka");
+
+        Image::flipImages(true);
 
         window->init();
-        Renderer::init();
+        window->setIcon(Image("../Engine/Resources/fuel_distributor_orginal.png"));
         
-        glfwSwapInterval(0);
+        Renderer::init();
+        Text::init("C:/Users/mpr19/Desktop/Poppins-Black.ttf");
+
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        
+        window->setVSync(false);
 
         auto basic = Shader::load(
             "default",
@@ -29,9 +37,7 @@ namespace Engine {
         basic->setInt  ("material.diffuse"  , 0  );
         basic->setInt  ("material.specular" , 0  );
         basic->setFloat("material.shininess", 1. );
-        basic->setFloat("light[1].lightType", 0  );
-        basic->setFloat("light[2].lightType", 0  );
-        basic->setFloat("light[3].lightType", 0  );
+        
         basic->setInt  ("light[0].lightType", 1  );
         basic->setVec3 ("light[0].direction", -1.0f, 0.0f, 1.0f);
         basic->setVec3 ("light[0].ambient"  , 0.2f, 0.2f, 0.2f);
@@ -63,47 +69,72 @@ namespace Engine {
         gameLoop();
     }
 
-    void Game::gameLoop() {
-        LOG_FUNCTION();
-
+    void Game::gameLoop() { LOG_FUNCTION();
         uint   iter = 0;
         double time = 0;
         
-        auto& camTra = mainCamera.getComponent<Transform>();
-        auto& camera = mainCamera.addComponent<Camera>();
-        auto& camMov = mainCamera.addComponent<Movement>(&camTra);
+        auto& camTra = mainCamera.getComponent<Transform>(       );
+        auto& camera = mainCamera.addComponent<  Camera >(       );
+        auto& camMov = mainCamera.addComponent< Movement>(&camTra);
 
         camera.updatePerspectiveMatrix(window->getAspectRatio());
+        
+        std::vector<double> deltaTimes;
+        deltaTimes.reserve(100);
+
+        struct sortDouble {
+            bool operator()(double a, double b) const { return a < b; }
+        };
+
+        double dotOnePercentLow = 0.1;
+        double    OnePercentLow = 0.1;
+        double average          = 0.1;
+        
+        uint idk = 0;
+        Renderer::getDeviceConstantValue(DeviceConstant::MAX_TEXTURE_IMAGE_UNITS, (void*) &idk);
+        debug_log("aaa:"<<std::to_string(idk));
         
         double prevoiusXCursorPos = cursorXPos;
         double prevoiusYCursorPos = cursorYPos;
         double previousFrame      = glfwGetTime();
         while (!window->shouldClose())
         {
-            LOG_SCOPE("Frame");
-            Renderer::clear();
-
-            if( window->isPressed(GLFW_KEY_ESCAPE) )
-                window->close();
-
             deltaXMousePos     = cursorXPos - prevoiusXCursorPos;
             deltaYMousePos     = cursorYPos - prevoiusYCursorPos;
             prevoiusXCursorPos = cursorXPos;
             prevoiusYCursorPos = cursorYPos;
 
             double currentFrame = glfwGetTime();
-            deltaTime           = currentFrame - previousFrame;
-            previousFrame       = currentFrame;
+            deltaTime = currentFrame - previousFrame;
+            previousFrame = currentFrame;
 
-            if (iter >= 100) {
-                std::cout<<(time / iter)<<std::endl;
-                time = 0;
-                iter = 0;
+            uint32_t frameCount = deltaTimes.size();
+            if (frameCount >= 100) {
+                std::sort(deltaTimes.begin(), deltaTimes.end(), sortDouble());
+                dotOnePercentLow = (deltaTimes.back() + dotOnePercentLow) * 0.5;
+
+                double sum = 0.0;
+                for (uint32_t i = 0; i < 10; i++) { sum += deltaTimes[frameCount - i - 1]; }
+                OnePercentLow = (OnePercentLow + (sum * 0.1)) * 0.5;
+                
+                sum = 0.0;
+                for (auto& e : deltaTimes) sum += e;
+
+                average = sum * 0.01;
+
+                deltaTimes.clear();
             }
+            
+            deltaTimes.push_back(deltaTime);
 
-            time += deltaTime;
-            iter += 1;
+            previousFrame = glfwGetTime();
 
+            LOG_SCOPE("Frame");
+            Renderer::clear();
+
+            if( window->isPressed(GLFW_KEY_ESCAPE) )
+                window->close();
+            
             if (window->isPressed(GLFW_KEY_R)) {
                 auto shad1 = ReadFile("../Engine/Resources/Shaders/shader.vert");
                 auto shad2 = ReadFile("../Engine/Resources/Shaders/shader.frag");
@@ -118,11 +149,29 @@ namespace Engine {
                     Renderer::OnWindowResize(w->data.width, w->data.height);
                 }
             }
+
             camMov.update(window);
             for (int i = 0; i < scenes.size(); i++)
                 scenes[i].update(window->getAspectRatio());
 
+            // display frame rate
+            {
+                LOG_SCOPE("D-F-R");
 
+                Transform a = Transform();
+
+                //a.position = { 10.f, 475.f, 0.f };
+                //Renderer::renderText(".1% LOW FPS: " + std::to_string(1.0 / dotOnePercentLow), a, camera, .4f);
+                //
+                //a.position = { 10.f, 450.f, 0.f };
+                //Renderer::renderText("1.% LOW FPS: " + std::to_string(1.0 / OnePercentLow), a, camera, .4f);
+
+                a.position = { 10.f, 425.f, 0.f };
+                Renderer::renderText( std::to_string(1.0 / average), a, camera, .4f);
+            }
+
+            EventStack::clear();
+            
             window->swapBuffers();
             window->pollEvents ();
         }

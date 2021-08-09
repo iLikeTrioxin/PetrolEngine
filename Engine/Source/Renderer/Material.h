@@ -6,9 +6,10 @@
 
 namespace Engine{
 
-	class Material
-	{
+	class Material {
 	public:
+		Material() = default;
+
 		std::vector< std::shared_ptr<Texture> > textures;
 		std::shared_ptr<Shader> shader;
 	};

@@ -3,6 +3,7 @@
 #include <string>
 #include <memory>
 
+#include "../Core/Image.h"
 #include "EventStack.h"
 
 namespace Engine {
@@ -29,26 +30,30 @@ namespace Engine {
 		struct MouseScrolledEvent : Event { double x, y; MouseScrolledEvent(double x, double y) : x(x), y(y) {} };
 		struct MouseClickEvent    : Event { int key; MouseClickEvent(int key) : key(key) {} };
 		
-		struct KeyTypedEvent    : Event { int key; KeyTypedEvent   (int key) : key(key) {} };
-		struct KeyPressedEvent  : Event { int key; KeyPressedEvent (int key) : key(key) {} };
-		struct KeyReleasedEvent : Event { int key; KeyReleasedEvent(int key) : key(key) {} };
-		struct KeyHoldenEvent   : Event { int key; KeyHoldenEvent  (int key) : key(key) {} };
+		struct KeyPressedEvent  : Event { int key; bool repeat; KeyPressedEvent (int key, bool repeat) : key(key), repeat(repeat) {} };
+		struct KeyReleasedEvent : Event { int key;              KeyReleasedEvent(int key             ) : key(key)                 {} };
+		struct KeyTypedEvent    : Event { int key;              KeyTypedEvent   (int key             ) : key(key)                 {} };
 
 	public:
-		WindowData windowData;
-		
 		static std::shared_ptr<Window> create(uint32_t width, uint32_t height, std::string title);
 		
-		virtual int      init       () = 0;
-		virtual void     swapBuffers() = 0;
-		virtual uint32_t getWidth   () = 0;
-		virtual uint32_t getHeight  () = 0;
-		virtual bool     shouldClose() = 0;
-		virtual void     close      () = 0;
-		virtual void     pollEvents () = 0;
+		uint32_t getWidth () { return windowData.width ; };
+		uint32_t getHeight() { return windowData.height; };
+		
+		virtual int  init       () = 0;
+		virtual void swapBuffers() = 0;
+		virtual bool shouldClose() = 0;
+		virtual void close      () = 0;
+		virtual void pollEvents () = 0;
+		
+		virtual void setVSync(bool  enabled) = 0;
+		virtual void setIcon (Image image  ) = 0;
 
 		virtual bool isPressed(int key) = 0;
 		
 		float getAspectRatio();
+
+	protected:
+		WindowData windowData;
 	};
 }

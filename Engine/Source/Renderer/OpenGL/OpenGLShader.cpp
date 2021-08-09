@@ -98,7 +98,7 @@ namespace Engine {
         {
             this->vertexShaderID = glCreateShader(GL_VERTEX_SHADER);
             
-            glShaderSource(vertexShaderID, 1, &vertexShaderSourceCode, NULL);
+            glShaderSource (vertexShaderID, 1, &vertexShaderSourceCode, NULL);
             glCompileShader(vertexShaderID);
 
             debug_log("VERTEX\n" << vertexShaderSourceCode << "\nVERTEX");

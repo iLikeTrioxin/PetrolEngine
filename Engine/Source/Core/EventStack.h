@@ -29,6 +29,19 @@ namespace Engine {
         }
 
         template<class T>
+        static void dispatched(T* _event) {
+            auto eventList = events.find(typeid(T));
+
+            if (eventList == events.end()) return;
+
+            eventList->second.remove( reinterpret_cast<Event*>(_event) );
+        }
+
+        static void clear() {
+            for (auto& event : events) event.second.clear();
+        }
+
+        template<class T>
         static T* addEvent(T* _event) {
             auto eventClassEvents = events.find(typeid(T));
 

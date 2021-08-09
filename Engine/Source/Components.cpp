@@ -1,4 +1,5 @@
-#include "PCH.h"
+#include <PCH.h>
+
 #include "Components.h"
 #include "Game.h"
 #include "./Renderer/Renderer.h"
@@ -18,14 +19,52 @@ namespace Engine {
         matrix  = glm::translate(matrix, this->position);
         matrix  = glm::scale(matrix, this->scale);
         matrix *= glm::toMat4(this->rotation);
-        
     }
 
     // Mesh
-         Mesh::Mesh(std::vector<Vertex> _vertices, std::vector<uint> _indices, Material _material) :
+    Mesh::Mesh() {
+        this->material     = Material();
+        
+        this->vertexBuffer = VertexBuffer::create({
+            { "position" , ShaderDataType::Float3 },
+            { "texCords" , ShaderDataType::Float2 },
+            { "normal"   , ShaderDataType::Float3 },
+            { "tangent"  , ShaderDataType::Float3 },
+            { "bitangent", ShaderDataType::Float3 }
+        });
+
+        this->indexBuffer = IndexBuffer::create();
+
+        this->vertexArray = VertexArray::create();
+
+        this->vertexArray->addVertexBuffer(vertexBuffer);
+        this->vertexArray-> setIndexBuffer( indexBuffer);
+    }
+    Mesh::Mesh(
+                const std::vector<Vertex>& vertices,
+                const std::vector< uint >& indices ,
+                Material material,
+                VertexLayout layout                  ) {
+        this->material = material;
+
+        this->vertexBuffer = VertexBuffer::create( layout, (void*) vertices.data(), (uint32_t) vertices.size() * sizeof(Vertex) );
+        this-> indexBuffer =  IndexBuffer::create(         (void*)  indices.data(), (uint32_t)  indices.size() * sizeof( uint ) );
+
+        this->vertexArray = VertexArray::create();
+
+        this->vertexArray->addVertexBuffer(vertexBuffer);
+        this->vertexArray->setIndexBuffer(indexBuffer);
+    }
+    /*
+        Mesh:: Mesh(std::vector<Vertex> _vertices, std::vector<uint> _indices, Material _material) :
         vertices(_vertices), indices(_indices), material(_material) {
         initalizeBuffers();
         fillBufferWithData();
+    }
+        Mesh::~Mesh() {
+        //glDeleteBuffers(1, &VAO);
+        glDeleteBuffers(1, &VBO);
+        //glDeleteBuffers(1, &EBO);
     }
 	void Mesh::initalizeBuffers() {
 		glGenVertexArrays(1, &VAO);
@@ -39,6 +78,7 @@ namespace Engine {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 
         glBufferData(GL_ARRAY_BUFFER        , sizeof(Vertex) * vertices.size(), vertices.data(), GL_STATIC_DRAW);
+
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof( uint ) * indices .size(), indices .data(), GL_STATIC_DRAW);
 
         glEnableVertexAttribArray(0);
@@ -50,13 +90,13 @@ namespace Engine {
         glEnableVertexAttribArray(2);
         glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, texCoords));
 
-        /*
-        glEnableVertexAttribArray(3);
-        glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(vertex), (void*)offsetof(vertex, tangent));
-
-        glEnableVertexAttribArray(4);
-        glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(vertex), (void*)offsetof(vertex, bitangent));
-        */
+        
+        //glEnableVertexAttribArray(3);
+        //glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(vertex), (void*)offsetof(vertex, tangent));
+        //
+        //glEnableVertexAttribArray(4);
+        //glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(vertex), (void*)offsetof(vertex, bitangent));
+        
 
         glBindVertexArray(0);
 
@@ -72,22 +112,19 @@ namespace Engine {
     uint Mesh::getEBO() {
         return EBO;
     }
+    */
 
     // Camera
          Camera::Camera(){
         updateCameraVectors();
     }
-    void Camera::updatePerspectiveMatrix(float aspectRatio) {
-        LOG_FUNCTION();
+    void Camera::updatePerspectiveMatrix(float aspectRatio) { LOG_FUNCTION();
         this->perspective = glm::perspective(glm::radians(Zoom), aspectRatio, near, far);
     }
-    void Camera::updateViewMatrix(const glm::vec3& position) {
-        LOG_FUNCTION();
+    void Camera::updateViewMatrix(const glm::vec3& position) { LOG_FUNCTION();
         this->view = glm::lookAt(position, position + front, up);
     }
-    void Camera::updateCameraVectors()
-    {
-        LOG_FUNCTION();
+    void Camera::updateCameraVectors() { LOG_FUNCTION();
         float x = cos(Pitch);
 
         front.x = cos( Yaw ) * x;
@@ -101,22 +138,17 @@ namespace Engine {
 
     // Movement
          Movement::Movement(Transform* trans) :
-        transform(trans) {};
-    void Movement::update(std::shared_ptr<Window> window){
-        LOG_FUNCTION();
+                            transform (trans) {};
+    void Movement::update(std::shared_ptr<Window> window) { LOG_FUNCTION();
         auto& camera = mainCamera.getComponent<Camera>();
 
-        currentSpeed = walkSpeed + (window->isPressed(GLFW_KEY_LEFT_SHIFT) * runSpeed);
+        float distance = (walkSpeed + (window->isPressed(GLFW_KEY_LEFT_SHIFT) * runSpeed)) * deltaTime;
         
-        if (window->isPressed(GLFW_KEY_W))
-            transform->position += camera.front * (float)deltaTime * currentSpeed;
-        if (window->isPressed(GLFW_KEY_S))
-            transform->position -= camera.front * (float)deltaTime * currentSpeed;
+        if (window->isPressed(GLFW_KEY_W)) transform->position += camera.front * distance;
+        if (window->isPressed(GLFW_KEY_S)) transform->position -= camera.front * distance;
 
-        if (window->isPressed(GLFW_KEY_A))
-            transform->position -= camera.right * (float)deltaTime * currentSpeed;
-        if (window->isPressed(GLFW_KEY_D))
-            transform->position += camera.right * (float)deltaTime * currentSpeed;
+        if (window->isPressed(GLFW_KEY_A)) transform->position -= camera.right * distance;
+        if (window->isPressed(GLFW_KEY_D)) transform->position += camera.right * distance;
 
         camera.Yaw   += (float)(deltaXMousePos * 0.005);
         camera.Pitch -= (float)(deltaYMousePos * 0.005);

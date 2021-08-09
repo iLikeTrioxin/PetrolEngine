@@ -1,4 +1,5 @@
-#include "PCH.h"
+#include <PCH.h>
+
 #include "Scene.h"
 #include "./Renderer/Renderer.h"
 #include "Components.h"
@@ -58,6 +59,7 @@ namespace Engine {
 				
 				Renderer::renderMesh(mesh, transform, cam);
 			}
+			
 		}
 	}
 }

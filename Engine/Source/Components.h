@@ -2,14 +2,30 @@
 
 #include "Entity.h"
 #include "Core/Window.h"
+#include <glm/vec2.hpp>
+#include <glm/vec3.hpp>
+
+#include "Renderer/VertexArray.h"
 
 namespace Engine {
 	struct Vertex {
 		glm::vec3 position;
-		glm::vec3 normal;
 		glm::vec2 texCoords;
+		glm::vec3 normal;
 		glm::vec3 tangent;
 		glm::vec3 bitangent;
+
+		Vertex(
+			glm::vec3 position  = glm::vec3(0.0f),
+			glm::vec2 texCoords = glm::vec2(0.0f),
+			glm::vec3 normal    = glm::vec3(0.0f),
+			glm::vec3 tangent   = glm::vec3(0.0f),
+			glm::vec3 bitangent = glm::vec3(0.0f) ):
+			position ( position  ),
+			texCoords( texCoords ),
+			normal   ( normal    ),
+			tangent  ( tangent   ),
+			bitangent( bitangent ) {}
 	};
 
 	class Entity;
@@ -24,12 +40,21 @@ namespace Engine {
 
 	class Transform {
 	public:
-		glm::mat4 transformation = glm::mat4(1.0f);
 		glm::vec3 position       = glm::vec3(0.0f, 0.0f, 0.0f);
 		glm::vec3 scale          = glm::vec3(1.0f, 1.0f, 1.0f);
-		glm::quat rotation       = glm::quat(1.0f, 0.0f, 0.0f, 0.0f);
+		glm::quat rotation       = glm::quat(0.0f, 0.0f, 0.0f, 0.0f);
+		glm::mat4 transformation = glm::mat4(1.0f);
 
-		Transform() = default;
+		//Transform() = default;
+		Transform(
+			glm::vec3 position       = glm::vec3(0.f)         ,
+			glm::vec3 scale          = glm::vec3(1.f)         ,
+			glm::quat rotation       = glm::quat(1.f, 0, 0, 0),
+			glm::mat4 transformation = glm::mat4(1.f)           ):
+					  position	    (position      ),
+					  scale		    (scale         ),
+					  rotation	    (rotation      ),
+					  transformation(transformation) {}
 
 		void updateTransformMatrix();
 
@@ -51,26 +76,26 @@ namespace Engine {
 
 	class Mesh {
 	public:
-		std::vector< Vertex > vertices;
-		std::vector<  uint  > indices;
+		std::shared_ptr<VertexBuffer> vertexBuffer;
+		std::shared_ptr< IndexBuffer>  indexBuffer;
+		std::shared_ptr< VertexArray>  vertexArray;
 		Material material;
 
-		Mesh() = default;
+		Mesh();
 		Mesh(
-			std::vector< Vertex > _vertices,
-			std::vector<  uint  > _indices,
-			Material _material);
+			const std::vector<Vertex>& vertices,
+			const std::vector< uint >& indices,
+			Material     material,
+			VertexLayout layout = {
+				{"position" , ShaderDataType::Float3},
+				{"texCords" , ShaderDataType::Float2},
+				{"normal"   , ShaderDataType::Float3},
+				{"tangent"  , ShaderDataType::Float3},
+				{"bitangent", ShaderDataType::Float3}
+			}
+		);
 
-		uint getVAO();
-		uint getVBO();
-		uint getEBO();
-		void initalizeBuffers();
-		void fillBufferWithData();
-
-	private:
-		uint VAO;
-		uint VBO;
-		uint EBO;
+		~Mesh() = default;
 	};
 
 	class Camera {
@@ -111,8 +136,6 @@ namespace Engine {
 		Movement(Transform* trans);
 
 		void update(std::shared_ptr<Window> window);
-	private:
-		float currentSpeed = 0.0f;
 	};
 	class ExternalScript {
 		virtual void onUpdate() = 0;
