@@ -1,0 +1,10 @@
+In this file I generally describe style with which I am writing this project.
+Those are totally subjective.
+
+ - Variable names are written with lower camel case.
+int someVariable;
+
+ - Class names are written using upper camel case.
+class SomeClass
+
+Files and directories are also named upper camel case.

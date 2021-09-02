@@ -12,11 +12,7 @@ namespace Engine {
     double deltaTime      = 0.0;
 
     std::shared_ptr<Window> Window::create(uint32_t width, uint32_t height, std::string title) {
-        switch ( RendererAPI::get() )
-        {
-            case RendererAPI::API::OpenGL: return std::make_shared<GLFWWindow>(width, height, title); break;
-            default                      : return nullptr                                           ; break;
-        }
+        return std::make_shared<GLFWWindow>(width, height, title);
     }
 
     float Window::getAspectRatio() {

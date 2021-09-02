@@ -8,7 +8,6 @@
 #include "DebugTools.h"
 #include "Renderer/Shader.h"
 #include "Renderer/Text.h"
-
 namespace Engine {
     Entity mainCamera = Entity();
 
@@ -18,11 +17,11 @@ namespace Engine {
         Image::flipImages(true);
 
         window->init();
-        window->setIcon(Image("../Engine/Resources/fuel_distributor_orginal.png"));
-        
-        Renderer::init();
-        Text::init("C:/Users/mpr19/Desktop/Poppins-Black.ttf");
+        //window->setIcon(Image("../Engine/Resources/fuel_distributor_original.png"));
 
+        Renderer::init(RendererAPI::API::Vulkan);
+        return;
+        Text::init("../Engine/Resources/Fonts/Poppins/Poppins-Black.ttf");
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         
@@ -167,7 +166,7 @@ namespace Engine {
                 //Renderer::renderText("1.% LOW FPS: " + std::to_string(1.0 / OnePercentLow), a, camera, .4f);
 
                 a.position = { 10.f, 425.f, 0.f };
-                Renderer::renderText( std::to_string(1.0 / average), a, camera, .4f);
+                //Renderer2D::renderText( std::to_string(1.0 / average), a, camera, .4f);
             }
 
             EventStack::clear();

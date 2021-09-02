@@ -6,7 +6,7 @@
 
 namespace Engine {
 
-	static enum class ShaderDataType {
+    enum class ShaderDataType {
 		None = 0,
 
 		Float,
@@ -88,8 +88,8 @@ namespace Engine {
 		
 		virtual void setData(void* data, uint32_t size) = 0;
 
-		VertexLayout getLayout() { return layout; }
-		uint32_t     getID    () { return ID    ; }
+		VertexLayout getLayout() const { return layout; }
+		uint32_t     getID    () const { return ID    ; }
 
 	protected:
 		VertexBuffer(VertexLayout layout): layout(layout), ID(0) {};

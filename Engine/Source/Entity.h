@@ -19,7 +19,7 @@ namespace Engine {
 
 		template<typename T>
 		void hasComponent() {
-			scene->sceneRegistry.has<T>(entity);
+			//scene->sceneRegistry.has<T>(entity);
 		}
 
 		template<typename T>

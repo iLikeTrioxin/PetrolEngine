@@ -1,3 +1,4 @@
+/*
 #include "PCH.h"
 #include "Console.h"
 
@@ -14,3 +15,4 @@ namespace Engine::Console {
 	Console& Console::Get() { return console; }
 	
 }
+*/

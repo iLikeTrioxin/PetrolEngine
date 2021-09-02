@@ -1,5 +1,5 @@
 #pragma once
-
+/*
 #include <vector>
 #include <string>
 
@@ -43,3 +43,4 @@ namespace Engine::Console {
 		Console() = default;
 	};
 }
+ */

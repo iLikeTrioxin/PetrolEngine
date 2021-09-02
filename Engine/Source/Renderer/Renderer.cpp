@@ -1,4 +1,4 @@
-#include "../PCH.h"
+#include <PCH.h>
 #include "Renderer.h"
 
 #include "OpenGL/OpenGLRenderer.h"
@@ -8,15 +8,50 @@
 #include "../DebugTools.h"
 
 namespace Engine {
-	std::unique_ptr<RendererAPI> Renderer::rendererAPI;
-	
-	Renderer Renderer::renderer;
-	RendererAPI::API RendererAPI::currentAPI = RendererAPI::API::OpenGL;
+	    Renderer     Renderer::renderer;
+	Ptr<RendererAPI> Renderer::rendererAPI;
+
+	struct Renderer2DData{
+
+	    uint32_t maxTextures = 32;
+	    std::vector<unsigned int> textures;
+	};
+
+	Renderer2DData renderer2DData;
+
+	void Renderer::renderText(const String& text, Transform& transform) { LOG_FUNCTION();
+	    rendererAPI->renderText(text, transform);
+	}
+
+	void Renderer::init(RendererAPI::API  targetAPI, bool debug){
+	    rendererAPI = RendererAPI::create(targetAPI);
+
+	    rendererAPI->init(debug);
+	    //RendererAPI::getInstance()->getDeviceConstantValue(DeviceConstant::MAX_TEXTURE_IMAGE_UNITS, &renderer2DData.maxTextures);
+
+	    //debug_log("[*] Textures: " + std::to_string(renderer2DData.maxTextures));
+	}
+
+	void Renderer::renderMesh(Mesh& m, Transform& t, Camera& c) { LOG_FUNCTION();
+	    rendererAPI->renderMesh(m, t, c);
+	}
+
+	void Renderer::clear() { LOG_FUNCTION();
+	    rendererAPI->clear();
+	}
+
+	void Renderer::OnWindowResize(uint32_t w, uint32_t h) { LOG_FUNCTION();
+	    rendererAPI->setViewport(0, 0, w, h);
+	}
+
+	void Renderer::getDeviceConstantValue(DeviceConstant d, void* o) { LOG_FUNCTION();
+	    rendererAPI->getDeviceConstantValue(d, o);
+	}
+
 
 	void Renderer::getErrors() {
-        GLenum err(glGetError());
-
-        while (err != GL_NO_ERROR) {
+	    GLenum err;
+        while ( (err = glGetError()) != GL_NO_ERROR) {
             std::string error;
             switch (err) {
             case GL_INVALID_ENUM                 : error = "GL_INVALID_ENUM"                 ; break;
@@ -34,15 +69,4 @@ namespace Engine {
             err = glGetError();
         }
 	}
-
-	std::unique_ptr<RendererAPI> RendererAPI::create() {
-		switch (currentAPI)
-		{
-		case API::None  : return nullptr;                            break;
-		case API::OpenGL: return std::make_unique<OpenGLRenderer>(); break;
-		}
-
-		return nullptr;
-	}
-	
 }

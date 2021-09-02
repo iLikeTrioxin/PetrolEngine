@@ -1,6 +1,7 @@
 #pragma once
 
 #define GLM_ENABLE_EXPERIMENTAL
+#define GLFW_INCLUDE_VULKAN
 
 // OpenGL
 #include <glm/gtc/matrix_transform.hpp>
@@ -28,13 +29,9 @@
 #include <future>
 #include "DebugTools.h"
 #include "Renderer/Material.h"
+#include "Aliases.h"
 
-template<typename T>
-using Ptr = std::unique_ptr<T>;
-
-#define uint unsigned int
-
-#ifdef _DEBUG
+#ifndef NDEBUG
 #define debug_log(x) std::cout<<x<<std::endl
 #else
 #define debug_log(x)

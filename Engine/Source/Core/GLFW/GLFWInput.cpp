@@ -1,4 +1,5 @@
-#include "../../PCH.h"
+/*
+#include <PCH.h>
 #include "GLFWWindow.h"
 
 #include "../../Renderer/GraphicsContext.h"
@@ -22,7 +23,7 @@ namespace Engine {
             return 0;
         }
 
-        if (GraphicsContext::create(window)->init(glfwGetProcAddress))
+        if (GraphicsContext::create(window)->init((void*) glfwGetProcAddress))
             return -1;
         
         glfwMakeContextCurrent   (window);
@@ -38,3 +39,4 @@ namespace Engine {
         return 0;
     }
 }
+ */

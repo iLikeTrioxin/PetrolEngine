@@ -14,8 +14,8 @@ namespace Engine {
 
 		virtual ~IndexBuffer() = default;
 
-		uint32_t getID  () { return ID  ; }
-		uint32_t getSize() { return size; }
+		uint32_t getID  () const { return ID  ; }
+		uint32_t getSize() const { return size; }
 
 	protected:
 		uint32_t size;

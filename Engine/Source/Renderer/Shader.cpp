@@ -10,7 +10,7 @@
 namespace Engine {
 	std::unordered_map<std::string, std::shared_ptr<Shader>> Shader::loadedShaders;
 	
-	auto getSourcesFromString(std::string& fileSource, std::string keyword = "#type") {
+	auto getSourcesFromString(std::string fileSource, std::string keyword = "#type") {
 		std::unordered_map<std::string, std::string> sources;
 
 		std::string lcSource; // lower case source because find would detect only lower case "#type"

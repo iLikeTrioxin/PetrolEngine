@@ -10,21 +10,21 @@ namespace Engine {
 
 	void initalizeTextureSettings(bool flipImage);
 
-	class OpenGLTexture : public Texture {
+	class VulkanTexture : public Texture {
 	public:
-		OpenGLTexture(
+		VulkanTexture(
 			int width,
 			int height,
 			TextureType   type   = TextureType  ::NONE,
 			TextureFormat format = TextureFormat::NONE
 		);
 
-		OpenGLTexture(
+		VulkanTexture(
 			const Image& image,
 			TextureType type = TextureType::NONE
 		);
 		
-		~OpenGLTexture();
+		~VulkanTexture();
 
 		virtual void updateTextureImage(const void* data) override;
 	private:

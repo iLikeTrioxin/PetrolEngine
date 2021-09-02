@@ -1,5 +1,5 @@
 #include "../PCH.h"
-#include "text.h"
+#include "Text.h"
 #include <iostream>
 #include <ft2build.h>
 #include FT_FREETYPE_H

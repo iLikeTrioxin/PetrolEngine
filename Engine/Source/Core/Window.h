@@ -37,8 +37,8 @@ namespace Engine {
 	public:
 		static std::shared_ptr<Window> create(uint32_t width, uint32_t height, std::string title);
 		
-		uint32_t getWidth () { return windowData.width ; };
-		uint32_t getHeight() { return windowData.height; };
+		uint32_t getWidth () const { return windowData.width ; };
+		uint32_t getHeight() const { return windowData.height; };
 		
 		virtual int  init       () = 0;
 		virtual void swapBuffers() = 0;
@@ -50,7 +50,10 @@ namespace Engine {
 		virtual void setIcon (Image image  ) = 0;
 
 		virtual bool isPressed(int key) = 0;
-		
+
+		// Vulkan specific
+		virtual void createWindowSurface(VkInstance instance, const VkAllocationCallbacks* allocation, VkSurfaceKHR* surface) = 0;
+
 		float getAspectRatio();
 
 	protected:

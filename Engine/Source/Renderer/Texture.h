@@ -65,17 +65,14 @@ namespace Engine {
 
 		virtual void updateTextureImage(const void* data) = 0;
 
-		unsigned int getHeight() { return height; };
-		unsigned int getWidth () { return width ; };
-
-		unsigned int getID() {
-			return id;
-		}
+		unsigned int getHeight() const { return height; }
+		unsigned int getWidth () const { return width ; }
+		unsigned int getID    () const { return id    ; }
 
 		//static std::shared_ptr<Texture> load(std::string path = "", TextureType type = TextureType::NONE);
 
-		static std::shared_ptr<Texture> create(std::string path = "", TextureType type = TextureType::NONE);
-		static std::shared_ptr<Texture> create(Image& image, TextureType type = TextureType::NONE);
+		static std::shared_ptr<Texture> create(const std::string& path, TextureType type = TextureType::NONE);
+		static std::shared_ptr<Texture> create(const Image& image, TextureType type = TextureType::NONE);
 		static std::shared_ptr<Texture> create(int width, int height, TextureType type, TextureFormat format);
 	protected:
 		unsigned int id;

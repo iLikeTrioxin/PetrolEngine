@@ -7,10 +7,7 @@
 
 namespace Engine {
 	std::unique_ptr<GraphicsContext> GraphicsContext::create(void* window) {
-		switch (RendererAPI::get())
-		{
-			case RendererAPI::API::None  : return nullptr;
-			case RendererAPI::API::OpenGL: return std::make_unique<OpenGLContext>();
-		}
+
+	    return std::make_unique<OpenGLContext>();
 	}
 }

@@ -1,10 +1,10 @@
 #include "../../PCH.h"
 
-#include "OpenGLTexture.h"
+#include "VulkanTexture.h"
 
 namespace Engine {
 
-	OpenGLTexture::OpenGLTexture(int width, int height, TextureType type, TextureFormat format) {
+	VulkanTexture::VulkanTexture(int width, int height, TextureType type, TextureFormat format) {
 		this->width  = width;
 		this->height = height;
 		this->format = format;
@@ -15,7 +15,7 @@ namespace Engine {
 		glGenTextures(1, &id);
 		glBindTexture(GL_TEXTURE_2D, id);
 
-		// Those are for DSA version (OpenGL 4.5 or higher)
+		// Those are for DSA version (Vulkan 4.5 or higher)
 		//	glCreateTextures(GL_TEXTURE_2D, 1, &id);
 		//	glTexStorage2D  (GL_TEXTURE_2D, 1, GLFormat, width, height);
 
@@ -25,11 +25,11 @@ namespace Engine {
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	}
 
-	OpenGLTexture::~OpenGLTexture() {
+	VulkanTexture::~VulkanTexture() {
 		glDeleteTextures(1, &id);
 	}
 
-	void OpenGLTexture::updateTextureImage(const void* data) {
+	void VulkanTexture::updateTextureImage(const void* data) {
 		auto GLFormat = textureFormatLookupTable.at(format);
 
 		//if(format == TextureFormat::RED) glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
@@ -42,7 +42,7 @@ namespace Engine {
 		// glTextureSubImage2D(id, 0, 0, 0, width, height, GLFormat, GL_UNSIGNED_BYTE, data);
 	}
 
-	OpenGLTexture::OpenGLTexture(const Image& image, TextureType type) {
+	VulkanTexture::VulkanTexture(const Image& image, TextureType type) {
 		this->type = type;
 		this->id   = 0;
 
@@ -62,7 +62,7 @@ namespace Engine {
 		glGenTextures(1, &id);
 		glBindTexture(GL_TEXTURE_2D, id);
 		
-		// Those are for DSA version (OpenGL 4.5 or higher)
+		// Those are for DSA version (Vulkan 4.5 or higher)
 		//	glCreateTextures(GL_TEXTURE_2D, 1, &id);
 		//	glTexStorage2D  (GL_TEXTURE_2D, 1, GLFormat, width, height);
 		

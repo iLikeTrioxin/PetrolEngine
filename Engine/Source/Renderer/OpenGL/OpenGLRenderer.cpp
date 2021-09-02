@@ -1,4 +1,4 @@
-#include "../../PCH.h"
+#include <PCH.h>
 
 #include "OpenGLRenderer.h"
 #include "../Texture.h"
@@ -6,40 +6,6 @@
 #include "../Text.h"
 
 namespace Engine {
-	//Renderer::~Renderer() {
-	//	for (unsigned int i = 0; i < loadedShaders.size(); i++) {
-	//		glDeleteProgram(loadedShaders[i].ID);
-	//	}
-	//}
-	//Shader& Renderer::loadShader(const char* vertexPath, const char* fragmentPath, const char* geometryPath) {
-	//	return get().internalLoadShader(vertexPath, fragmentPath, geometryPath);
-	//}
-	//Shader& Renderer::internalLoadShader(const char* vertexPath, const char* fragmentPath, const char* geometryPath) {
-	//	return loadedShaders.emplace_back(vertexPath, fragmentPath, geometryPath);
-	//}
-
-	/*
-	void OpenGLRenderer::internalCameraUpdate(Camera& camera) {
-		LOG_FUNCTION();
-		for (uint i = 0; i < loadedShaders.size(); i++) {
-			  loadedShaders[i].setMat4("pav", camera.perspective * camera.view);
-			//loadedShaders[i].setInt("material.diffuse", 0);
-			//loadedShaders[i].setInt("material.specular", 0);
-			//loadedShaders[i].setFloat("material.shininess", 1.0f);
-			//loadedShaders[i].setInt("light[0].lightType", 1);
-			//loadedShaders[i].setVec3("light[0].direction", -1.0f, 0.0f, 1.0f);
-			//loadedShaders[i].setVec3("light[0].ambient", 0.2f, 0.2f, 0.2f);
-			//loadedShaders[i].setVec3("light[0].diffuse", glm::vec3(1.0f, 1.0f, 1.0f));
-			//loadedShaders[i].setVec3("light[0].specular", 0.0f, 0.0f, 0.0f);
-			//loadedShaders[i].setFloat("light[1].lightType", 0);
-			//loadedShaders[i].setFloat("light[2].lightType", 0);
-			//loadedShaders[i].setFloat("light[3].lightType", 0);
-
-			//loadedShaders[i].setMat4("projection", camera.perspective);
-			//loadedShaders[i].setMat4(   "view"   , camera.view       );
-		}
-	}
-	*/
 
 	void OpenGLRenderer::getDeviceConstantValue(DeviceConstant deviceConstant, void* outputBuffer) {
 		auto OpenGLdeviceConstant = OpenGLDeviceConstants.find(deviceConstant);
@@ -51,11 +17,11 @@ namespace Engine {
 		glViewport(x, y, width, height);
 	}
 
-	int OpenGLRenderer::init() {
-		debug_log("[*] Initalizing OpenGL.");
+	int OpenGLRenderer::init(bool debug) {
+		debug_log("[*] Initializing OpenGL.");
 
 		if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-			debug_log("[!] Initalizing OpenGL failed.");
+			debug_log("[!] Initializing OpenGL failed.");
 			return 1;
 		}
 
@@ -66,7 +32,7 @@ namespace Engine {
 		return 0;
 	}
 
-	void OpenGLRenderer::renderText(const std::string& text, Transform& transform, Camera& camera, float scale) {
+	void OpenGLRenderer::renderText(const std::string& text, Transform& transform) {
 		LOG_FUNCTION();
 
 		auto shader = Shader::load(
@@ -80,7 +46,7 @@ namespace Engine {
 		static auto perv = glm::ortho(0.0f, 800.f, 0.0f, 500.f);
 		
 		{
-			LOG_SCOPE("Setting shader vars.");
+			LOG_SCOPE("Setting shader values.");
 
 			shader->setMat4("projection", perv);
 			shader->setInt("text", 0);
@@ -103,11 +69,11 @@ namespace Engine {
 			
 			glBindTexture(GL_TEXTURE_2D, ch.texture->getID());
 			
-			float xpos = x + ch.Bearing.x * scale;
-			float ypos = y - (ch.Size.y - ch.Bearing.y) * scale;
+			float xpos = x + ch.Bearing.x * transform.scale.x;
+			float ypos = y - (ch.Size.y - ch.Bearing.y) * transform.scale.y;
 
-			float w = ch.Size.x * scale;
-			float h = ch.Size.y * scale;
+			float w = ch.Size.x * transform.scale.x;
+			float h = ch.Size.y * transform.scale.y;
 
 			// update VBO for each character
 			
@@ -130,7 +96,7 @@ namespace Engine {
 			glDrawElements(GL_TRIANGLES, characterMesh.indexBuffer->getSize(), GL_UNSIGNED_INT, nullptr);
 
 			// now advance cursors for next glyph (note that advance is number of 1/64 pixels)
-			x += (ch.Advance >> 6) * scale; // bitshift by 6 to get value in pixels (2^6 = 64)
+			x += (ch.Advance >> 6) * transform.scale.x; // bitshift by 6 to get value in pixels (2^6 = 64)
 		}
 	}
 
@@ -155,11 +121,6 @@ namespace Engine {
 		shader->setVec3 ( "light[0].diffuse"  , glm::vec3(1.f, 1.f, 1.f) );
 		shader->setVec3 ( "light[0].specular" , 0.f, 0.f, 0.f            );
 
-		//shader->setFloat( "light[1].lightType", 0 );
-		//shader->setFloat( "light[2].lightType", 0 );
-		//shader->setFloat( "light[3].lightType", 0 );
-
-		
 		// if (currentShader != mesh.material.shader->ID) {
 		// 	mesh.material.shader->use();
 		// 	currentShader = mesh.material.shader->ID;

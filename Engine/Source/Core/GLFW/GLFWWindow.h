@@ -1,5 +1,7 @@
 #pragma once
 
+#define GLFW_INCLUDE_VULKAN
+
 #include "../../Core/Window.h"
 #include <GLFW/glfw3.h>
 
@@ -8,17 +10,20 @@ namespace Engine {
 	public:
 		GLFWWindow(uint32_t width, uint32_t height, std::string title);
 
-		virtual bool shouldClose() override { return glfwWindowShouldClose(window)  ; };
-		virtual void swapBuffers() override { glfwSwapBuffers(window)               ; };
-		virtual void close      () override { glfwSetWindowShouldClose(window, true); };
-		virtual void pollEvents () override { glfwPollEvents()                      ; };
+		bool shouldClose() override { return glfwWindowShouldClose(window)  ; };
+		void swapBuffers() override { glfwSwapBuffers(window)               ; };
+		void close      () override { glfwSetWindowShouldClose(window, true); };
+		void pollEvents () override { glfwPollEvents()                      ; };
 
-		virtual int init() override;
+		int init() override;
 
-		virtual void setVSync(bool  enabled) override;
-		virtual void setIcon (Image image  ) override;
+		void setVSync(bool  enabled) override;
+		void setIcon (Image image  ) override;
 
-		virtual bool isPressed(int key) override { return glfwGetKey(window, key); }
+		bool isPressed(int key) override { return glfwGetKey(window, key); }
+
+		// Vulkan specific
+		void createWindowSurface(VkInstance instance, const VkAllocationCallbacks* allocation, VkSurfaceKHR* surface) override;
 
 	private:
 		GLFWwindow* window;

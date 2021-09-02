@@ -14,14 +14,14 @@ namespace Engine {
 
 		static void flipImages(bool flip);
 		
-		unsigned char* getData() { return data; }
-		std::string    getPath() { return path; }
+		unsigned char* getData() const { return data; }
+		std::string    getPath() const { return path; }
 
-		uint8_t getComponentsNumber() { return componentsNumber; }
-		uint8_t getBitsPerChannel  () { return bitsPerChannel  ; }
-		bool    isHDR              () { return HDR             ; }
-		int     getWidth           () { return width           ; }
-		int     getHeight          () { return height          ; }
+		uint8_t getComponentsNumber() const { return componentsNumber; }
+		uint8_t getBitsPerChannel  () const { return bitsPerChannel  ; }
+		bool    isHDR              () const { return HDR             ; }
+		int     getWidth           () const { return width           ; }
+		int     getHeight          () const { return height          ; }
 
 	private:
 		std::string path;
