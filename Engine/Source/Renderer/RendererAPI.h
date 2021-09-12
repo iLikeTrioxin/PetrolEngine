@@ -3,6 +3,7 @@
 #include <memory>
 #include "../Components.h"
 #include "../DebugTools.h"
+#include <aliases.h>
 
 namespace Engine{
 

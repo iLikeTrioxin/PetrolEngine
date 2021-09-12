@@ -23,8 +23,13 @@ namespace Engine {
         glfwSetWindowIcon(window, 1, icons);
     }
 
-    void GLFWWindow::createWindowSurface(VkInstance i, const VkAllocationCallbacks* a, VkSurfaceKHR* s){
-        glfwCreateWindowSurface(i, window, a, s);
+    void GLFWWindow::createWindowSurface(void* i, const void* a, void* s){
+        glfwCreateWindowSurface(
+            *reinterpret_cast<VkInstance*>(i),
+            window,
+            reinterpret_cast<const VkAllocationCallbacks*>(a),
+            reinterpret_cast<      VkSurfaceKHR*         >(s)
+        );
     }
 
     int GLFWWindow::init() { LOG_FUNCTION();

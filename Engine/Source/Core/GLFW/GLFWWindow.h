@@ -23,7 +23,7 @@ namespace Engine {
 		bool isPressed(int key) override { return glfwGetKey(window, key); }
 
 		// Vulkan specific
-		void createWindowSurface(VkInstance instance, const VkAllocationCallbacks* allocation, VkSurfaceKHR* surface) override;
+		void createWindowSurface(void* instance, const void* allocation, void* surface) override;
 
 	private:
 		GLFWwindow* window;

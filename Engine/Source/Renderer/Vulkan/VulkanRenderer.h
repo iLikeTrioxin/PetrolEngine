@@ -27,9 +27,16 @@ namespace Engine {
 		};
 
     private:
-        const Vector<const char*> validationLayers{ "VK_LAYER_KHRONOS_validation" };
+        const Vector<const char*> validationLayers{ "VK_LAYER_KHRONOS_validation"    };
+        const Vector<const char*> deviceExtensions{  VK_KHR_SWAPCHAIN_EXTENSION_NAME };
+
+        bool checkDeviceExtensionSupport(VkPhysicalDevice device) const;
         Vector<const char*> getRequiredExtensions();
 
+        int  getDeviceScore  (VkPhysicalDevice device) const;
+        bool isDeviceSuitable(VkPhysicalDevice device) const;
+
+        SwapChainSupportDetails querySwapChainSupport(VkPhysicalDevice device);
         void   getPhysicalDevices();
         void createLogicalDevice ();
         bool checkValidationLayerSupport();

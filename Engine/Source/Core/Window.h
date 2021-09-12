@@ -52,7 +52,7 @@ namespace Engine {
 		virtual bool isPressed(int key) = 0;
 
 		// Vulkan specific
-		virtual void createWindowSurface(VkInstance instance, const VkAllocationCallbacks* allocation, VkSurfaceKHR* surface) = 0;
+		virtual void createWindowSurface(void* instance, const void* allocation, void* surface) = 0;
 
 		float getAspectRatio();
 
