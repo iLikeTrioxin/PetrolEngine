@@ -14,6 +14,7 @@
 // STD
 #include <filesystem>
 #include <iostream>
+#include <optional>
 #include <vector>
 #include <string>
 #include <memory>

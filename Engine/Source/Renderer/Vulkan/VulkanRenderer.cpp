@@ -29,8 +29,8 @@ void DestroyDebugUtilsMessengerEXT(      VkInstance               instance      
 namespace Engine {
 
     struct QueueFamilyIndices {
-        std::optional<uint32_t> graphicsFamily;
-        std::optional<uint32_t> presentFamily;
+        Optional<uint32_t> graphicsFamily;
+        Optional<uint32_t> presentFamily;
 
         bool isValid() const { return graphicsFamily.has_value() && presentFamily.has_value(); }
     };
@@ -41,6 +41,13 @@ namespace Engine {
         Vector<VkSurfaceFormatKHR> formats;
         Vector<VkPresentModeKHR  > presentModes;
     };
+
+    VkPresentModeKHR chooseSwapPresentMode(const Vector<VkPresentModeKHR>& availablePresentModes) {
+        for (const auto& PM : availablePresentModes)
+            if (PM == VK_PRESENT_MODE_MAILBOX_KHR) return PM;
+
+        return VK_PRESENT_MODE_FIFO_KHR;
+    }
 
     SwapChainSupportDetails VulkanRenderer::querySwapChainSupport(VkPhysicalDevice device) {
         SwapChainSupportDetails details;
@@ -102,7 +109,7 @@ namespace Engine {
         uint32_t layerCount;
         vkEnumerateInstanceLayerProperties(&layerCount, nullptr);
 
-        std::vector<VkLayerProperties> availableLayers(layerCount);
+        Vector<VkLayerProperties> availableLayers(layerCount);
         vkEnumerateInstanceLayerProperties(&layerCount, availableLayers.data());
 
         for (const char* layerName : validationLayers) {
@@ -144,7 +151,7 @@ namespace Engine {
         Vector<VkExtensionProperties> availableExtensions(extensionCount);
         vkEnumerateDeviceExtensionProperties(device, nullptr, &extensionCount, availableExtensions.data());
 
-        std::set<std::string> requiredExtensions(deviceExtensions.begin(), deviceExtensions.end());
+        Set<String> requiredExtensions(deviceExtensions.begin(), deviceExtensions.end());
 
         for(const auto& extension : availableExtensions)
             requiredExtensions.erase(extension.extensionName);
@@ -163,7 +170,7 @@ namespace Engine {
 
         if(deviceCount == 0) { debug_log("No vulkan suitable devices found. Aborting."); return; }
 
-        std::vector<VkPhysicalDevice> devices(deviceCount);
+        Vector<VkPhysicalDevice> devices(deviceCount);
 
         vkEnumeratePhysicalDevices(instance, &deviceCount, devices.data());
 
