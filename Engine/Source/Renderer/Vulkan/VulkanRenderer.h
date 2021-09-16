@@ -4,7 +4,20 @@
 #include <vulkan/vulkan.h>
 
 namespace Engine {
-	
+    struct QueueFamilyIndices {
+        Optional<uint32_t> graphicsFamily;
+        Optional<uint32_t> presentFamily;
+
+        bool isValid() const { return graphicsFamily.has_value() && presentFamily.has_value(); }
+    };
+
+    struct SwapChainSupportDetails {
+        VkSurfaceCapabilitiesKHR capabilities;
+
+        Vector<VkSurfaceFormatKHR> formats;
+        Vector<VkPresentModeKHR  > presentModes;
+    };
+
     class VulkanRenderer : public RendererAPI {
 	public:
 		// 2D stuff
@@ -27,16 +40,19 @@ namespace Engine {
 		};
 
     private:
-        const Vector<const char*> validationLayers{ "VK_LAYER_KHRONOS_validation"    };
-        const Vector<const char*> deviceExtensions{  VK_KHR_SWAPCHAIN_EXTENSION_NAME };
+        static Vector<const char*> validationLayers;
+        static Vector<const char*> deviceExtensions;
 
-        bool checkDeviceExtensionSupport(VkPhysicalDevice device) const;
-        Vector<const char*> getRequiredExtensions();
+        Vector<const char*> getRequiredExtensions() const;
+
+        static bool checkDeviceExtensionSupport(VkPhysicalDevice device);
 
         int  getDeviceScore  (VkPhysicalDevice device) const;
         bool isDeviceSuitable(VkPhysicalDevice device) const;
 
-        SwapChainSupportDetails querySwapChainSupport(VkPhysicalDevice device);
+        QueueFamilyIndices      findQueueFamilies    (VkPhysicalDevice device) const;
+        SwapChainSupportDetails querySwapChainSupport(VkPhysicalDevice device) const;
+
         void   getPhysicalDevices();
         void createLogicalDevice ();
         bool checkValidationLayerSupport();

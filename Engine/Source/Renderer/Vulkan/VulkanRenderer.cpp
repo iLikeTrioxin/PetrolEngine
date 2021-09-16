@@ -28,19 +28,8 @@ void DestroyDebugUtilsMessengerEXT(      VkInstance               instance      
 
 namespace Engine {
 
-    struct QueueFamilyIndices {
-        Optional<uint32_t> graphicsFamily;
-        Optional<uint32_t> presentFamily;
-
-        bool isValid() const { return graphicsFamily.has_value() && presentFamily.has_value(); }
-    };
-
-    struct SwapChainSupportDetails {
-        VkSurfaceCapabilitiesKHR capabilities;
-
-        Vector<VkSurfaceFormatKHR> formats;
-        Vector<VkPresentModeKHR  > presentModes;
-    };
+    Vector<const char*> VulkanRenderer::validationLayers{ "VK_LAYER_KHRONOS_validation"    };
+    Vector<const char*> VulkanRenderer::deviceExtensions{  VK_KHR_SWAPCHAIN_EXTENSION_NAME };
 
     VkPresentModeKHR chooseSwapPresentMode(const Vector<VkPresentModeKHR>& availablePresentModes) {
         for (const auto& PM : availablePresentModes)
@@ -49,7 +38,7 @@ namespace Engine {
         return VK_PRESENT_MODE_FIFO_KHR;
     }
 
-    SwapChainSupportDetails VulkanRenderer::querySwapChainSupport(VkPhysicalDevice device) {
+    SwapChainSupportDetails VulkanRenderer::querySwapChainSupport(VkPhysicalDevice device) const {
         SwapChainSupportDetails details;
 
         vkGetPhysicalDeviceSurfaceCapabilitiesKHR(device, surface, &details.capabilities);
@@ -73,7 +62,7 @@ namespace Engine {
         return details;
     }
 
-    QueueFamilyIndices findQueueFamilies(VkPhysicalDevice device) {
+    QueueFamilyIndices VulkanRenderer::findQueueFamilies(VkPhysicalDevice device) const {
         QueueFamilyIndices indices;
 
         uint32_t queueFamilyCount = 0;
@@ -132,7 +121,7 @@ namespace Engine {
     /// extension related |
     ///-------------------/
 
-    Vector<const char*> VulkanRenderer::getRequiredExtensions() {
+    Vector<const char*> VulkanRenderer::getRequiredExtensions() const {
         uint32_t glfwExtensionCount = 0;
         const char** glfwExtensions;
         glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
@@ -144,7 +133,7 @@ namespace Engine {
         return extensions;
     }
 
-    bool VulkanRenderer::checkDeviceExtensionSupport(VkPhysicalDevice device) const {
+    bool VulkanRenderer::checkDeviceExtensionSupport(VkPhysicalDevice device) {
         uint32_t extensionCount;
         vkEnumerateDeviceExtensionProperties(device, nullptr, &extensionCount, nullptr);
 
