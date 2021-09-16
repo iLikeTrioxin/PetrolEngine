@@ -52,13 +52,27 @@ namespace Engine {
 
         QueueFamilyIndices      findQueueFamilies    (VkPhysicalDevice device) const;
         SwapChainSupportDetails querySwapChainSupport(VkPhysicalDevice device) const;
+        VkShaderModule createShaderModule(const std::vector<char>& code);
 
+        VkSurfaceFormatKHR chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats);
+
+        void createSwapChain(Window* window);
+
+        VkExtent2D       chooseSwapExtent     (const VkSurfaceCapabilitiesKHR& capabilities, Window* window);
+        VkPresentModeKHR chooseSwapPresentMode(const Vector<VkPresentModeKHR>& availablePresentModes);
+
+        void   createImageViews();
         void   getPhysicalDevices();
         void createLogicalDevice ();
         bool checkValidationLayerSupport();
 
         ~VulkanRenderer();
 
+        Vector<VkImageView>      swapChainImageViews;
+        Vector<VkImage>          swapChainImages;
+        VkExtent2D               swapChainExtent;
+        VkFormat                 swapChainImageFormat;
+        VkSwapchainKHR           swapChain;
         VkQueue                  graphicsQueue  = VK_NULL_HANDLE;
         VkDevice                 logicalDevice  = VK_NULL_HANDLE;
         VkInstance               instance       = VK_NULL_HANDLE;
