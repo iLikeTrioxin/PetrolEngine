@@ -2,6 +2,9 @@
 
 using uint = unsigned int;
 
+using  int64 =          long long int;
+using uint64 = unsigned long long int;
+
 // std related aliases
 
 using String = std::string;
