@@ -2,7 +2,7 @@
 
 #include "VulkanVertexArray.h"
 
-namespace Engine {
+namespace PetrolEngine {
 	static GLenum ShaderDataTypeToVulkanBaseType(ShaderDataType type) {
 		switch (type)
 		{

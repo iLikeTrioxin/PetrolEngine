@@ -2,7 +2,7 @@
 
 #include "../Renderer.h"
 
-namespace Engine {
+namespace PetrolEngine {
 	
 	class OpenGLRenderer : public RendererAPI {
 	public:

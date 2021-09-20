@@ -5,7 +5,7 @@
 
 #include "OpenGL/OpenGLIndexBuffer.h"
 
-namespace Engine {
+namespace PetrolEngine {
 	std::shared_ptr<IndexBuffer> IndexBuffer::create(void* data, uint32_t size) {
 		switch (RendererAPI::get())
 		{

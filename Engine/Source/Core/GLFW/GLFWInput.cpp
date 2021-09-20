@@ -4,7 +4,7 @@
 
 #include "../../Renderer/GraphicsContext.h"
 
-namespace Engine {
+namespace PetrolEngine {
 
     int   GLFWWindow::init() {
         int success = glfwInit();

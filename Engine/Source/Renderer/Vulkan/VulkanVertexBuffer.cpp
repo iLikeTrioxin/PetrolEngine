@@ -2,7 +2,7 @@
 
 #include "VulkanVertexBuffer.h"
 
-namespace Engine {
+namespace PetrolEngine {
 	VulkanVertexBuffer::VulkanVertexBuffer(VertexLayout layout, void* data, uint32_t size): VertexBuffer(layout) {
 		LOG_FUNCTION();
 		

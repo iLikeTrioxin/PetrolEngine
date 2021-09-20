@@ -3,7 +3,7 @@
 #include "Scene.h"
 #include <entt/entt.hpp>
 
-namespace Engine {
+namespace PetrolEngine {
 
 	class Scene;
 

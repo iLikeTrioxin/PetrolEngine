@@ -2,7 +2,7 @@
 
 #include <vector>
 
-namespace Engine {
+namespace PetrolEngine {
 	class Layer {
 	public:
 		virtual void layerBody() = 0;

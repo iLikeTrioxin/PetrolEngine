@@ -2,7 +2,7 @@
 
 #include <glm/vec3.hpp>
 
-namespace Engine::Physics {
+namespace PetrolEngine::Physics {
 	class Collider {
 	public:
 

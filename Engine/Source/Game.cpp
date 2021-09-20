@@ -1,4 +1,5 @@
-#include "PCH.h"
+#include <PCH.h>
+
 #include "Game.h"
 #include "Core/Files.h"
 #include "Components.h"
@@ -8,7 +9,8 @@
 #include "DebugTools.h"
 #include "Renderer/Shader.h"
 #include "Renderer/Text.h"
-namespace Engine {
+
+namespace PetrolEngine {
     Entity mainCamera = Entity();
 
     Game::Game() {

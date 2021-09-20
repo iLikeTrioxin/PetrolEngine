@@ -4,7 +4,7 @@
 #include <map>
 #include <memory>
 
-namespace Engine {
+namespace PetrolEngine {
     class Texture;
 
     class Text {

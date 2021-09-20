@@ -7,14 +7,14 @@
 #include "../Core/Window.h"
 #include "../DebugTools.h"
 
-namespace Engine {
+namespace PetrolEngine {
 	    Renderer     Renderer::renderer;
 	Ptr<RendererAPI> Renderer::rendererAPI;
 
 	struct Renderer2DData{
 
 	    uint32_t maxTextures = 32;
-	    std::vector<unsigned int> textures;
+	    Vector<unsigned int> textures;
 	};
 
 	Renderer2DData renderer2DData;

@@ -1,8 +1,8 @@
-#include "../../PCH.h"
+#include <PCH.h>
 
 #include "OpenGLTexture.h"
 
-namespace Engine {
+namespace PetrolEngine {
 
 	OpenGLTexture::OpenGLTexture(int width, int height, TextureType type, TextureFormat format) {
 		this->width  = width;

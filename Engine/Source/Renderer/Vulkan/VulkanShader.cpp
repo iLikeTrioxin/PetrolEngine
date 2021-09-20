@@ -11,7 +11,7 @@
 // 1. I use here propertie of glShaderXXX(shader) which is stated at khronos site "A value of 0 for shader will be silently ignored."
 //
 
-namespace Engine {
+namespace PetrolEngine {
 
     int VulkanShader::recompileShader( const char* vertexShaderSourceCode  ,
                                        const char* fragmentShaderSourceCode,

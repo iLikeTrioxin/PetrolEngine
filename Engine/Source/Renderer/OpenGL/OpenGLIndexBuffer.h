@@ -2,7 +2,7 @@
 
 #include "../IndexBuffer.h"
 
-namespace Engine {
+namespace PetrolEngine {
 	class OpenGLIndexBuffer : public IndexBuffer {
 	public:
 		OpenGLIndexBuffer();

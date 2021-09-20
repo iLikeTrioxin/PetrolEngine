@@ -2,7 +2,7 @@
 
 #include "VulkanIndexBuffer.h"
 
-namespace Engine {
+namespace PetrolEngine {
 
     /*
     OpenGLIndexBuffer::OpenGLIndexBuffer(void* data, uint32_t size) {

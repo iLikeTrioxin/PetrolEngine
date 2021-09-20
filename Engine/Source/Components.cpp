@@ -6,10 +6,10 @@
 #include "./Core/Window.h"
 #include "DebugTools.h"
 
-namespace Engine {
+namespace PetrolEngine {
 
     // Tag
-   Tag::Tag(std::string _name, entt::entity _parent) :
+   Tag::Tag(String _name, entt::entity _parent) :
         name(_name), parent(_parent) {};
 
     // Transform
@@ -41,10 +41,10 @@ namespace Engine {
         this->vertexArray-> setIndexBuffer( indexBuffer);
     }
     Mesh::Mesh(
-                const std::vector<Vertex>& vertices,
-                const std::vector< uint >& indices ,
-                Material material,
-                VertexLayout layout                  ) {
+                const Vector<Vertex>& vertices,
+                const Vector< uint >& indices ,
+                Material material             ,
+                VertexLayout layout            ) {
         this->material = material;
 
         this->vertexBuffer = VertexBuffer::create( layout, (void*) vertices.data(), (uint32_t) vertices.size() * sizeof(Vertex) );
@@ -56,7 +56,7 @@ namespace Engine {
         this->vertexArray->setIndexBuffer(indexBuffer);
     }
     /*
-        Mesh:: Mesh(std::vector<Vertex> _vertices, std::vector<uint> _indices, Material _material) :
+        Mesh:: Mesh(Vector<Vertex> _vertices, Vector<uint> _indices, Material _material) :
         vertices(_vertices), indices(_indices), material(_material) {
         initalizeBuffers();
         fillBufferWithData();

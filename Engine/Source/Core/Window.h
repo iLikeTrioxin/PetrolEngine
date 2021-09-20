@@ -6,7 +6,7 @@
 #include "../Core/Image.h"
 #include "EventStack.h"
 
-namespace Engine {
+namespace PetrolEngine {
 
 	extern double deltaXMousePos;
 	extern double deltaYMousePos;

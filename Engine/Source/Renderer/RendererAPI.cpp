@@ -3,7 +3,7 @@
 #include "OpenGL/OpenGLRenderer.h"
 #include "Vulkan/VulkanRenderer.h"
 
-namespace Engine{
+namespace PetrolEngine{
 
     RendererAPI::API RendererAPI:: currentAPI = RendererAPI::API::None;
 

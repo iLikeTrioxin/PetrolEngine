@@ -1,10 +1,12 @@
+#include <PCH.h>
+
 #include "Texture.h"
 #include "OpenGL/OpenGLTexture.h"
 #include "RendererAPI.h"
 
-namespace Engine {
+namespace PetrolEngine {
 	
-	std::shared_ptr<Texture> Texture::create(const std::string& path, TextureType type) {
+	std::shared_ptr<Texture> Texture::create(const String& path, TextureType type) {
 	    auto image = Image(path);
 		switch (RendererAPI::get())
 		{

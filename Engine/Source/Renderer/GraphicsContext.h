@@ -2,7 +2,7 @@
 
 #include <memory>
 
-namespace Engine {
+namespace PetrolEngine {
 
 	/// <summary>
 	/// Interface for setting loader for graphics API 

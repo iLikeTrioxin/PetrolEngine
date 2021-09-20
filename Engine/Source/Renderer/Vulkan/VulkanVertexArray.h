@@ -2,7 +2,7 @@
 
 #include "../VertexArray.h"
 
-namespace Engine {
+namespace PetrolEngine {
 	class VulkanVertexArray : public VertexArray {
 	public:
 		VulkanVertexArray();

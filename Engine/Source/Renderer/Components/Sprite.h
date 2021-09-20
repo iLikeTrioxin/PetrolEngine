@@ -1,6 +1,6 @@
 #pragma once
 
-namespace Engine{
+namespace PetrolEngine{
 
     class Sprite{
     public:

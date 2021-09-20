@@ -2,7 +2,7 @@
 
 #include "OpenGLVertexArray.h"
 
-namespace Engine {
+namespace PetrolEngine {
 	static GLenum ShaderDataTypeToOpenGLBaseType(ShaderDataType type) {
 		switch (type)
 		{

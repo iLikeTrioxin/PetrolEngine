@@ -2,7 +2,7 @@
 
 #include "../Core/Image.h"
 
-namespace Engine {
+namespace PetrolEngine {
 
 	enum class TextureType {
 		NONE     = 0,
@@ -17,7 +17,7 @@ namespace Engine {
 		
 		// Structure:
 		// C - type ( 1 - R, 2 - RG, 3 - RGB, 4 - RGBA, 5 - DEPTH)
-		// B - bits per channal
+		// B - bits per channel
 		// A - type ( 0 - normal, 1 - float, 2 - int, 3 - uint)
 		// 
 		//   A B  C

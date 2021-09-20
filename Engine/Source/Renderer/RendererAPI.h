@@ -5,7 +5,7 @@
 #include "../DebugTools.h"
 #include <aliases.h>
 
-namespace Engine{
+namespace PetrolEngine{
 
     enum class DeviceConstant {
         None,

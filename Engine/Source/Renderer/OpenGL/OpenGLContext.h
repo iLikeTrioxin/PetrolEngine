@@ -2,7 +2,7 @@
 
 #include "../GraphicsContext.h"
 
-namespace Engine {
+namespace PetrolEngine {
 	class OpenGLContext : public GraphicsContext {
 	public:
 		int init(void* loaderProc) override;

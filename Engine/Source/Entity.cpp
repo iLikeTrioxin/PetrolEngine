@@ -4,7 +4,7 @@
 #include "Scene.h"
 #include "Components.h"
 
-namespace Engine {
+namespace PetrolEngine {
 	Entity::Entity(entt::entity _entity, Scene* _scene) :
 		entity(_entity), scene(_scene) {};
 	entt::entity Entity::getID() {

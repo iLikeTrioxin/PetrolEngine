@@ -2,7 +2,7 @@
 
 #include "RendererAPI.h"
 
-namespace Engine {
+namespace PetrolEngine {
 
     /*
      * Renderer class is just alias for functions from RendererAPI (like Renderer2D)

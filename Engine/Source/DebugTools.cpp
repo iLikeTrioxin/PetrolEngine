@@ -2,7 +2,7 @@
 #include <iostream>
 #include <sstream>
 #include <iomanip>
-namespace Engine::Debuging {
+namespace PetrolEngine::Debuging {
 
 	// Logger
 	Logger Logger::logger;

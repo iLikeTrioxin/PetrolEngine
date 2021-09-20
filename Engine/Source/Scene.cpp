@@ -7,7 +7,7 @@
 #include "Entity.h"
 #include "DebugTools.h"
 
-namespace Engine {
+namespace PetrolEngine {
 	
 	Entity Scene::createEntity(const char* name) {
 		Entity entity = { sceneRegistry.create(), this };

@@ -4,7 +4,7 @@
 #include <vector>
 #include <memory>
 
-namespace Engine {
+namespace PetrolEngine {
 	class IndexBuffer {
 	public:
 		static std::shared_ptr<IndexBuffer> create();

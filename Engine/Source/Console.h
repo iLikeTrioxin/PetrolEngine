@@ -3,7 +3,7 @@
 #include <vector>
 #include <string>
 
-namespace Engine::Console {
+namespace PetrolEngine::Console {
 	class IConsoleVariable
 	{
 	public:

@@ -1,17 +1,19 @@
-#include "../PCH.h"
+#include <PCH.h>
+
 #include "Text.h"
 #include <iostream>
 #include <ft2build.h>
+
 #include FT_FREETYPE_H
 
-namespace Engine {
+namespace PetrolEngine {
 	std::map<char, Text::Character> Text::characters;
 
     Text::Character Text::get(char character) {
         return characters[character];
     }
 
-	void Text::init(std::string fontPath) {
+	void Text::init(String fontPath) {
         FT_Library ft;
 
         if (FT_Error error = FT_Init_FreeType(&ft)) {

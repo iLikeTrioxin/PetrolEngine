@@ -2,7 +2,7 @@
 
 #include <entt/entt.hpp>
 
-namespace Engine
+namespace PetrolEngine
 {
 	class Entity;
 	class Window;

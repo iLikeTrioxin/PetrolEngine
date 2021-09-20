@@ -2,7 +2,7 @@
 #include "Files.h"
 #include <fstream>
 
-namespace Engine {
+namespace PetrolEngine {
     std::string ReadFile(const std::string& filepath)
     {
         std::string result;

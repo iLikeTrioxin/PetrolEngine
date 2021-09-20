@@ -8,7 +8,7 @@
 #include "VertexBuffer.h"
 #include  "IndexBuffer.h"
 
-namespace Engine {
+namespace PetrolEngine {
 	class VertexArray {
 	public:
 		

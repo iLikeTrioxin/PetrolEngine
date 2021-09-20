@@ -1,4 +1,5 @@
-#include "PCH.h"
+#include <PCH.h>
+
 #include "modelLoader.h"
 #include "DebugTools.h"
 #include "Components.h"
@@ -6,7 +7,7 @@
 #include "./Renderer/Texture.h"
 #include "Entity.h"
 
-namespace Engine {
+namespace PetrolEngine {
 
 	std::mutex modelLoader::mutex;
 	modelLoader modelLoader::modelLoaderInstance;
@@ -28,7 +29,7 @@ namespace Engine {
 		const aiScene* scene = importer.ReadFile(filename, aiProcess_GenSmoothNormals | aiProcess_Triangulate);
 		//  aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace
 		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
-			std::cout << "ERROR::ASSIMP:: " << importer.GetErrorString() << std::endl;
+            debug_log("ERROR::ASSIMP:: " << importer.GetErrorString());
 			return Entity();
 		}
 
@@ -54,7 +55,7 @@ namespace Engine {
 		const aiScene* scene = importer.ReadFile(_path, aiProcess_GenNormals);
 		//  aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace
 		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
-			std::cout << "ERROR::ASSIMP:: " << importer.GetErrorString() << std::endl;
+            debug_log("ERROR::ASSIMP:: " << importer.GetErrorString());
 			return Entity();
 		}
 

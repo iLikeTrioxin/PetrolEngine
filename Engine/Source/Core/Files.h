@@ -1,5 +1,5 @@
 #pragma once
 
-namespace Engine {
+namespace PetrolEngine {
 	std::string ReadFile(const std::string& filepath);
 }

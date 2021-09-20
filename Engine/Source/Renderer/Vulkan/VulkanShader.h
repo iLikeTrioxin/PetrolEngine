@@ -5,7 +5,7 @@
 #include <fstream>
 #include <glm/glm.hpp>
 
-namespace Engine {
+namespace PetrolEngine {
     static const char* defaultVertexShaderPath   = "C:/Users/mpr19/Desktop/Engine/Engine/Resources/Shaders/shader.frag";
     static const char* defaultFragmentShaderPath = "C:/Users/mpr19/Desktop/Engine/Engine/Resources/Shaders/shader.vert";
 

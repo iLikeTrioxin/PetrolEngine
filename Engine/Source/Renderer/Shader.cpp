@@ -1,4 +1,4 @@
-#include "../PCH.h"
+#include <PCH.h>
 
 #include "Shader.h"
 #include "Renderer.h"
@@ -7,13 +7,13 @@
 #include <fstream>
 #include "../Core/Files.h"
 
-namespace Engine {
-	std::unordered_map<std::string, std::shared_ptr<Shader>> Shader::loadedShaders;
+namespace PetrolEngine {
+	std::unordered_map<String, std::shared_ptr<Shader>> Shader::loadedShaders;
 	
-	auto getSourcesFromString(std::string fileSource, std::string keyword = "#type") {
-		std::unordered_map<std::string, std::string> sources;
+	auto getSourcesFromString(String fileSource, String keyword = "#type") {
+		std::unordered_map<String, String> sources;
 
-		std::string lcSource; // lower case source because find would detect only lower case "#type"
+		String lcSource; // lower case source because find would detect only lower case "#type"
 		
 		lcSource.resize(fileSource.length());
 
@@ -36,7 +36,7 @@ namespace Engine {
 
 		return sources;
 	}
-	std::shared_ptr<Shader> Shader::load(std::string path) {
+	std::shared_ptr<Shader> Shader::load(String path) {
 		// check if shader with that path wasn't already loaded
 		auto isShaderInHash = loadedShaders.find(path);
 

@@ -3,7 +3,7 @@
 #include "../Renderer.h"
 #include <vulkan/vulkan.h>
 
-namespace Engine {
+namespace PetrolEngine {
     struct QueueFamilyIndices {
         Optional<uint32_t> graphicsFamily;
         Optional<uint32_t> presentFamily;

@@ -4,7 +4,7 @@
 #include <iostream>
 #include "DebugTools.h"
 
-namespace Engine::Math {
+namespace PetrolEngine::Math {
 
 	const uint64_t OneAsInt = 0x3F800000;
 	const float    ScaleUp = 0x00800000;
@@ -97,7 +97,7 @@ namespace Engine::Math {
 		input.reserve(iters);
 
 		// Set directory for logger
-		Engine::Debuging::Logger::setOutputFile(outputPath);
+        PetrolEngine::Debuging::Logger::setOutputFile(outputPath);
 
 		for (uint32_t i = 0; i < iters; i++)
 			input.emplace_back((i / 100) + 1); // + 1 becouse Sqrt, iSqrt... does not support 0 and below

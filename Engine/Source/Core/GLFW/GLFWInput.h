@@ -3,7 +3,7 @@
 #include "../../Core/Window.h"
 #include <GLFW/glfw3.h>
 
-namespace Engine {
+namespace PetrolEngine {
 	class GLFWWindow : public Window {
 	public:
 		uint32_t getWidth   () override { return windowData.width ; };

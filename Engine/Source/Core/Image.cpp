@@ -5,7 +5,7 @@
 
 #include <stb_image.h>
 
-namespace Engine {
+namespace PetrolEngine {
 	
 	Image::Image(const std::string&& path) : Image(path.c_str()) {};
 	Image::Image(const std::string&  path) : Image(path.c_str()) {};

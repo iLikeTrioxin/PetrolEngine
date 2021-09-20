@@ -12,7 +12,7 @@ ToDo:
 int main()
 {
     std::cout << "df\n";
-    Engine::Game game;
+    PetrolEngine::Game game;
     //std::cout << "ja" << std::endl;
     glfwTerminate();
     return 0;

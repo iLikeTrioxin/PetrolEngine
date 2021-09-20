@@ -2,7 +2,7 @@
 
 #include "Renderer/Texture.h"
 
-namespace Engine {
+namespace PetrolEngine {
 
 	class Scene;
 	class Entity;

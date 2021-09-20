@@ -6,7 +6,7 @@
 #include <unordered_map>
 #include <typeindex>
 
-namespace Engine {
+namespace PetrolEngine {
 
     // Event manager
     class EventStack {

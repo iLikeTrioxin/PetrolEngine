@@ -4,7 +4,7 @@
 #include "Renderer.h"
 #include "OpenGL/OpenGLVertexArray.h"
 
-namespace Engine {
+namespace PetrolEngine {
 	std::shared_ptr<VertexArray> VertexArray::create() {
 		switch (RendererAPI::get())
 		{

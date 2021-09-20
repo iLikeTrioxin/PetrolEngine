@@ -1,6 +1,6 @@
 #include "layerStack.h"
 
-namespace Engine {
+namespace PetrolEngine {
 	std::vector<std::shared_ptr<Layer>> LayerStack::layers;
 
 	void LayerStack::execute() {

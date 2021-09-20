@@ -4,7 +4,7 @@
 #include "Shader.h"
 #include <vector>
 
-namespace Engine{
+namespace PetrolEngine {
 
 	class Material {
 	public:

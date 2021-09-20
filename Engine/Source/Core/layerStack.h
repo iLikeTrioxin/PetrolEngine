@@ -4,7 +4,7 @@
 #include "layer.h"
 #include <memory>
 
-namespace Engine {
+namespace PetrolEngine {
 	class LayerStack {
 	public:
 		static void execute();

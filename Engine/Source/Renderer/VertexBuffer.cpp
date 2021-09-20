@@ -5,7 +5,7 @@
 
 #include "OpenGL/OpenGLVertexBuffer.h"
 
-namespace Engine {
+namespace PetrolEngine {
 	std::shared_ptr<VertexBuffer> VertexBuffer::create(VertexLayout layout, void* data, uint32_t size){
 		switch (RendererAPI::get())
 		{

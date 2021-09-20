@@ -3,7 +3,7 @@
 
 int main()
 {
-    Engine::Game a = Engine::Game();
+    PetrolEngine::Game a = PetrolEngine::Game();
     return 0;
 }
 

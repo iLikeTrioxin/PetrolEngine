@@ -6,7 +6,7 @@
 // Messy code - repair it
 //
 
-namespace Engine {
+namespace PetrolEngine {
 
 	void initalizeTextureSettings(bool flipImage);
 

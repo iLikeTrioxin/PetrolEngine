@@ -7,7 +7,7 @@
 
 #include <glm/glm.hpp>
 
-namespace Engine {
+namespace PetrolEngine {
     class Shader {
     public:
         uint32_t ID;

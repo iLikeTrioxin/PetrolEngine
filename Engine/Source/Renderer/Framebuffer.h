@@ -3,9 +3,8 @@
 #include <string>
 #include <memory>
 
-namespace Engine {
-	
-	};
+namespace PetrolEngine {
+
 	class FramebufferImageFormat {
 	public:
 		enum class Formats{
@@ -26,6 +25,7 @@ namespace Engine {
 
 		} format;
 	};
+
 	class Framebuffer {
 	public:
 

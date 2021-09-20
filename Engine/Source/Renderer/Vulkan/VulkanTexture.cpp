@@ -1,8 +1,8 @@
-#include "../../PCH.h"
+#include <PCH.h>
 
 #include "VulkanTexture.h"
 
-namespace Engine {
+namespace PetrolEngine {
 
 	VulkanTexture::VulkanTexture(int width, int height, TextureType type, TextureFormat format) {
 		this->width  = width;

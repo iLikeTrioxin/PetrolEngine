@@ -3,7 +3,7 @@
 #include "../Renderer/Renderer.h"
 #include "GLFW/GLFWWindow.h"
 
-namespace Engine {
+namespace PetrolEngine {
 
     double deltaXMousePos = 0.0;
     double deltaYMousePos = 0.0;

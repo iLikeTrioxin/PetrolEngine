@@ -5,7 +5,7 @@
 #include "../../Core/Window.h"
 #include <GLFW/glfw3.h>
 
-namespace Engine {
+namespace PetrolEngine {
 	class GLFWWindow : public Window {
 	public:
 		GLFWWindow(uint32_t width, uint32_t height, std::string title);

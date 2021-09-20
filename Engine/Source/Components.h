@@ -7,7 +7,7 @@
 
 #include "Renderer/VertexArray.h"
 
-namespace Engine {
+namespace PetrolEngine {
 	struct Vertex {
 		glm::vec3 position;
 		glm::vec2 texCoords;

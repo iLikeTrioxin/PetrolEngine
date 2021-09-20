@@ -5,7 +5,7 @@
 #include "../../Core/Files.h"
 #include "../Text.h"
 
-namespace Engine {
+namespace PetrolEngine {
 
 	void OpenGLRenderer::getDeviceConstantValue(DeviceConstant deviceConstant, void* outputBuffer) {
 		auto OpenGLdeviceConstant = OpenGLDeviceConstants.find(deviceConstant);

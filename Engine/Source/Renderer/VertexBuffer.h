@@ -4,7 +4,7 @@
 #include <vector>
 #include <memory>
 
-namespace Engine {
+namespace PetrolEngine {
 
     enum class ShaderDataType {
 		None = 0,

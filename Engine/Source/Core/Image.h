@@ -2,7 +2,7 @@
 
 #include <string>
 
-namespace Engine {
+namespace PetrolEngine {
 
 	class Image {
 	public:

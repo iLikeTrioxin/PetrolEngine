@@ -7,7 +7,7 @@
 #include "./Renderer/Shader.h"
 #include "Entity.h"
 
-namespace Engine {
+namespace PetrolEngine {
 	extern Entity mainCamera;
 
 	class Game {

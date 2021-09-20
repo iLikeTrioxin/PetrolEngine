@@ -2,7 +2,7 @@
 
 #include "OpenGLIndexBuffer.h"
 
-namespace Engine {
+namespace PetrolEngine {
 	OpenGLIndexBuffer::OpenGLIndexBuffer(void* data, uint32_t size) {
 		LOG_FUNCTION();
 		

@@ -2,7 +2,7 @@
 
 #include "../VertexBuffer.h"
 
-namespace Engine {
+namespace PetrolEngine {
 	class VulkanVertexBuffer : public VertexBuffer {
 	public:
 		VulkanVertexBuffer(VertexLayout layout);

@@ -3,7 +3,7 @@
 
 #include "../../Renderer/GraphicsContext.h"
 
-namespace Engine {
+namespace PetrolEngine {
 
     GLFWWindow::GLFWWindow(uint32_t width, uint32_t height, std::string title) { LOG_FUNCTION();
         this->windowData = { width, height, title };

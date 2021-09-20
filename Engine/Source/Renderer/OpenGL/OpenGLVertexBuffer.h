@@ -2,7 +2,7 @@
 
 #include "../VertexBuffer.h"
 
-namespace Engine {
+namespace PetrolEngine {
 	class OpenGLVertexBuffer : public VertexBuffer {
 	public:
 		OpenGLVertexBuffer(VertexLayout layout);
