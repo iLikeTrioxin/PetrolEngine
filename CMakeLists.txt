@@ -26,8 +26,9 @@ target_link_libraries(Engine
     PRIVATE glfw
     PRIVATE assimp
     PRIVATE freetype
-	PRIVATE lua::lib
-	PRIVATE ${Vulkan_LIBRARIES}
+    PRIVATE shaderc
+    PRIVATE lua::lib
+    PRIVATE ${Vulkan_LIBRARIES}
 )
 
 # include only libraries
