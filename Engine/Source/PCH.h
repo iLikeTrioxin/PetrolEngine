@@ -8,9 +8,9 @@
 #include <glm/gtx/quaternion.hpp>
 #include <glm/gtc/quaternion.hpp>
 #include <glm/glm.hpp>
+///#include <glad/glad.h>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-
 // STD
 #include <filesystem>
 #include <iostream>
