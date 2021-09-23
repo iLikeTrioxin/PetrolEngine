@@ -25,7 +25,9 @@ add_subdirectory(glfw)
 set( SHADERC_SKIP_TESTS    ON  CACHE BOOL "Skip building tests"    FORCE )
 set( SHADERC_SKIP_EXAMPLES ON  CACHE BOOL "Skip building examples" FORCE )
 
-execute_process(COMMAND python3 ${CMAKE_SOURCE_DIR}/Deps/shaderc/utils/git-sync-deps COMMAND_ECHO STDOUT)
+find_package (Python COMPONENTS Interpreter Development)
+
+execute_process(COMMAND ${Python_EXECUTABLE} ${CMAKE_SOURCE_DIR}/Deps/shaderc/utils/git-sync-deps COMMAND_ECHO STDOUT)
 
 add_subdirectory(shaderc)
 

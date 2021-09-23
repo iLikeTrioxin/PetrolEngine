@@ -14,21 +14,20 @@ namespace PetrolEngine {
     Entity mainCamera = Entity();
 
     Game::Game() {
+        std::filesystem::current_path("C:/Users/2TPE/Desktop/PetrolEngine/build");
+
         this->window = Window::create(800, 500, "No hejka");
 
         Image::flipImages(true);
 
         window->init();
-        //window->setIcon(Image("../Engine/Resources/fuel_distributor_original.png"));
+        //window->setIcon(Image("C:/Users/2TPE/Desktop/PetrolEngine/Engine/Resources/cobweb.png"));
 
-        Renderer::init(RendererAPI::API::Vulkan);
-        return;
+        Renderer::init(RendererAPI::API::OpenGL);
         Text::init("../Engine/Resources/Fonts/Poppins/Poppins-Black.ttf");
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         
         window->setVSync(false);
-
+         
         auto basic = Shader::load(
             "default",
             ReadFile("../Engine/Resources/Shaders/shader.vert"),

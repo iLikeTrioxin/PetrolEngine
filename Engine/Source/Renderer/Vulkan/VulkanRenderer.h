@@ -39,6 +39,7 @@ namespace PetrolEngine {
 			{DeviceConstant::MAX_TEXTURE_IMAGE_UNITS, GL_MAX_TEXTURE_IMAGE_UNITS}
 		};
 
+        ~VulkanRenderer();
     private:
         static Vector<const char*> validationLayers;
         static Vector<const char*> deviceExtensions;
@@ -65,8 +66,6 @@ namespace PetrolEngine {
         void   getPhysicalDevices();
         void createLogicalDevice ();
         bool checkValidationLayerSupport();
-
-        ~VulkanRenderer();
 
         Vector<VkImageView>      swapChainImageViews;
         Vector<VkImage>          swapChainImages;
