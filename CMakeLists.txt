@@ -11,7 +11,6 @@ File(GLOB_RECURSE RESOURCE_FILES Engine/Resources/*.*)
 source_group(TREE ${CMAKE_SOURCE_DIR}/Engine FILES ${SOURCE_FILES} ${HEADER_FILES} ${RESOURCE_FILES})
 
 add_library                (Engine ${SOURCE_FILES} ${HEADER_FILES} ${RESOURCE_FILES} )
-target_precompile_headers  (Engine PRIVATE "Engine/Source/PCH.h"    )
 
 if(NOT WIN32)
 
@@ -28,8 +27,8 @@ target_link_libraries(Engine
     PRIVATE glad
     PRIVATE glfw
     PRIVATE assimp
-    PRIVATE freetype
     PRIVATE shaderc
+    PRIVATE freetype
     PRIVATE lua::lib
     PRIVATE ${Vulkan_LIBRARIES}
 )
@@ -42,6 +41,8 @@ target_include_directories(Engine
     PUBLIC Engine/Source
 	PUBLIC ${Vulkan_INCLUDE_DIRS}
 )
+
+target_precompile_headers  ( Engine PRIVATE $<INSTALL_INTERFACE:Engine/Source/PCH.h> )
 
 add_executable             (Engine_test        Engine/Source/Main.cpp   )
 target_include_directories (Engine_test PUBLIC Engine/Source            )
