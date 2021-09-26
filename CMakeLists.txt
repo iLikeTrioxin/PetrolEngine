@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.5)
 
 project(Engine)
 
-set (CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 17)
 
 File(GLOB_RECURSE SOURCE_FILES   Engine/Source/*.cpp )
 File(GLOB_RECURSE HEADER_FILES   Engine/Source/*.h   )

@@ -49,7 +49,7 @@ namespace PetrolEngine::Debuging {
 		~ScopeTimer();
 	private:
 		const char* name;
-		std::chrono::time_point<std::chrono::steady_clock> startTimePoint;
+		std::chrono::time_point<std::chrono::system_clock> startTimePoint;
 	};
 };
 

@@ -1,8 +1,11 @@
-#include <vector>
+#include <Aliases.h>
+
 #include <chrono>
 #include <thread>
 #include <iostream>
 #include "DebugTools.h"
+
+// TODO repair unsafe conversions and add logging
 
 namespace PetrolEngine::Math {
 
@@ -11,8 +14,8 @@ namespace PetrolEngine::Math {
 	const float    ScaleDown = 1.0f / ScaleUp;
 
 	template<typename InputVector, typename T>
-	void benchmarkFunction2D(InputVector& in, size_t vectorSize, T& function, std::string nameForLog) {
-		// delay becouse in release mode log scope was called in the same ms, so graphs would be overlaping
+	void benchmarkFunction2D(InputVector& in, size_t vectorSize, T& function, String nameForLog) {
+		// delay because in release mode log scope was called in the same ms, so graphs would be overlapping
 		// and gives a moment to rest for cpu
 		std::this_thread::sleep_for(std::chrono::milliseconds(100));
 
@@ -39,7 +42,8 @@ namespace PetrolEngine::Math {
 	}
 
 	inline float NegateFloat(float& f) {
-		return TreatAs<unsigned int, float>(*reinterpret_cast<int*>(&f) ^ 0x80000000);
+        //debug_log((sizeof(float) != sizeof(uint32)));
+		return TreatAs<uint32, float>(*reinterpret_cast<uint32*>(&f) ^ 0x80000000);
 	}
 
 
@@ -92,7 +96,7 @@ namespace PetrolEngine::Math {
 		return x;
 	}
 
-	void testMathFunctions(size_t iters = 100000, std::string&& outputPath = "C:/Users/mpr19/Desktop/dash/build/Debug/Result.json") {
+	void testMathFunctions(size_t iters = 100000, std::string&& outputPath = "Result.json") {
 		std::vector<float> input;
 		input.reserve(iters);
 
@@ -103,20 +107,20 @@ namespace PetrolEngine::Math {
 			input.emplace_back((i / 100) + 1); // + 1 becouse Sqrt, iSqrt... does not support 0 and below
 
 		{
-			std::cout << "math sqrt to cpp sqrt accuracy: " << compareAccuracy(input, iters, sqrtl, Sqrt) << std::endl;
+			std::cout << "math sqrt      to cpp sqrt accuracy: " << compareAccuracy(input, iters, sqrtl, Sqrt) << std::endl;
 			std::cout << "math sqrt + NS to cpp sqrt accuracy: " << compareAccuracy(input, iters, sqrtl, SqrtRep) << std::endl;
 
 			LOG_SCOPE("sqrt");
 
 			benchmarkFunction2D(input, iters, sqrtf, "cpp sqrt");
 			benchmarkFunction2D(input, iters, SqrtRep, "'math' sqrt + newton step");
-			benchmarkFunction2D(input, iters, Sqrt, "'math' sqrt");
+			benchmarkFunction2D(input, iters, Sqrt   , "'math' sqrt");
 		}
 		{
 			auto normal_iSqrt = [](float x) {return 1.0f / std::sqrtf(x); };
 
 			std::cout << "math quake iSqrt to cpp iSqrt accuracy: " << compareAccuracy(input, iters, normal_iSqrt, Quake_iSqrt) << std::endl;
-			std::cout << "math iSqrt to cpp iSqrt accuracy: " << compareAccuracy(input, iters, normal_iSqrt, iSqrt) << std::endl;
+			std::cout << "math       iSqrt to cpp iSqrt accuracy: " << compareAccuracy(input, iters, normal_iSqrt, iSqrt) << std::endl;
 
 			LOG_SCOPE("isqrt");
 

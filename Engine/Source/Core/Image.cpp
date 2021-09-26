@@ -1,9 +1,12 @@
+#include <PCH.h>
+
 #include "Image.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #define STB_IMAGE_STATIC
 
 #include <stb_image.h>
+#include <filesystem>
 
 namespace PetrolEngine {
 	
@@ -12,9 +15,9 @@ namespace PetrolEngine {
 
 	Image::Image(const char* _path) {
 		this->path = std::string(_path);
-		std::string a = std::filesystem::current_path().string();
+
 		data = stbi_load(_path, &width, &height, (int*)&componentsNumber, 0);
-		auto ab= stbi_failure_reason();
+
 		if (!data) { debug_log("[!] Failed to load image from " << path); return; }
 
 		this->bitsPerChannel = stbi_is_16_bit(_path) ? 16 : 8;

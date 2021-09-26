@@ -2,6 +2,8 @@
 
 #include "../Renderer.h"
 
+#include <glad/glad.h>
+
 namespace PetrolEngine {
 	
 	class OpenGLRenderer : public RendererAPI {

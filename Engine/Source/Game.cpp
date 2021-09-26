@@ -14,7 +14,7 @@ namespace PetrolEngine {
     Entity mainCamera = Entity();
 
     Game::Game() {
-        std::filesystem::current_path("C:/Users/2TPE/Desktop/PetrolEngine/build");
+        //std::filesystem::current_path("C:/Users/2TPE/Desktop/PetrolEngine/build");
 
         this->window = Window::create(800, 500, "No hejka");
 
@@ -56,7 +56,10 @@ namespace PetrolEngine {
         auto& ka = b.getComponent<Transform>();
         ka.position.z -= 10;
         ka.rotation = glm::quat(glm::radians(glm::vec3(0.0f, 180.0f, 0.0f)));
-        
+
+        ExternalScript* s = new rotatee(&ka);
+        b.addComponent<ExternalScript*>(s);
+
         //scenes[0].sceneRegistry.view<Transform>().each([&](Transform& trans) {
         //    trans.updateTransformMatrix();
         //    });

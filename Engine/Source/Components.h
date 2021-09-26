@@ -2,9 +2,13 @@
 
 #include "Entity.h"
 #include "Core/Window.h"
+
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
+#include <glm/matrix.hpp>
+#include <glm/gtc/quaternion.hpp>
 
+#include "Renderer/Material.h"
 #include "Renderer/VertexArray.h"
 
 namespace PetrolEngine {
@@ -138,8 +142,24 @@ namespace PetrolEngine {
 		void update(std::shared_ptr<Window> window);
 	};
 	class ExternalScript {
-		virtual void onUpdate() = 0;
-		virtual void onStart () = 0;
+    public:
+		virtual void onUpdate() {  };
+		virtual void onStart () {  };
+
+        ExternalScript() = default;
 	};
+
+    class rotatee : public ExternalScript{
+    public:
+        Transform* transform;
+        float d = 0;
+
+        rotatee(Transform* transform): transform(transform) {}
+        virtual void onUpdate() override {
+            d += deltaTime;
+            transform->rotation = glm::quat(glm::radians(glm::vec3(0.0f, d*32, 0.0f)));
+            transform->updateTransformMatrix();
+        }
+    };
 
 }

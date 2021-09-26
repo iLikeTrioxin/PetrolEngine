@@ -31,11 +31,3 @@
 #include "DebugTools.h"
 #include "Renderer/Material.h"
 #include "Aliases.h"
-
-#ifndef NDEBUG
-#define debug_log(x) std::cout<<x<<std::endl
-#else
-#define debug_log(x)
-#endif
-
-#define log_and_return(x, y) { debug_log(x); return y; }

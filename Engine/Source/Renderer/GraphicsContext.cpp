@@ -7,7 +7,6 @@
 
 namespace PetrolEngine {
 	std::unique_ptr<GraphicsContext> GraphicsContext::create(void* window) {
-
-	    return std::make_unique<OpenGLContext>();
+	    return std::make_unique<OpenGLContext>(window);
 	}
 }

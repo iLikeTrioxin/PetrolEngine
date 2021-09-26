@@ -8,7 +8,6 @@
 #include "DebugTools.h"
 
 namespace PetrolEngine {
-	
 	Entity Scene::createEntity(const char* name) {
 		Entity entity = { sceneRegistry.create(), this };
 		
@@ -61,5 +60,11 @@ namespace PetrolEngine {
 			}
 			
 		}
-	}
+
+        auto scripts = sceneRegistry.group<ExternalScript*>(entt::get<Transform>);
+
+        for(auto& script : scripts){
+            scripts.get<ExternalScript*>(script)->onUpdate();
+        }
+    }
 }

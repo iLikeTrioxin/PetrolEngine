@@ -1,4 +1,5 @@
-#include "../../PCH.h"
+#include <PCH.h>
+
 #include "GLFWWindow.h"
 
 #include "../../Renderer/GraphicsContext.h"
@@ -38,17 +39,14 @@ namespace PetrolEngine {
         if (!success)
             return 0;
 
-        //glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-        //glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-        //glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
         //glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
+
         window = glfwCreateWindow(windowData.width, windowData.height, windowData.title.c_str(), nullptr, nullptr);
 
-        if (!window) {
-            debug_log("window failed to create");
-            glfwTerminate();
-            return 0;
-        }
+        if (!window) { debug_log("window failed to create"); glfwTerminate(); return 0; }
 
         if (GraphicsContext::create(window)->init((void*) glfwGetProcAddress))
             return -1;
@@ -109,7 +107,7 @@ namespace PetrolEngine {
             }
         );
 
-        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+        //glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
         glfwMakeContextCurrent(window);
         return 0;
     }

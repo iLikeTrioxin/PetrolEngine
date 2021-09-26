@@ -14,5 +14,7 @@ namespace PetrolEngine {
 		virtual int init(void* loaderProc = nullptr) = 0;
 
 		static std::unique_ptr<GraphicsContext> create(void* window);
+
+        void* window;
 	};
 }
