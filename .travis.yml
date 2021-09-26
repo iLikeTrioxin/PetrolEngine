@@ -1,4 +1,4 @@
-dist: FreeBSD
+dist: Trusty
 sudo: required
 language:
   - cpp
@@ -15,8 +15,8 @@ addons:
       - xorg-dev
 
 # the install step will take care of deploying a newer cmake version
-#install:    
-#  - sudo apt-get -y install cmake
+install:    
+  - sudo apt-get -y install cmake
 #  - cd ${TRAVIS_BUILD_DIR}
 before_install:
     - eval "CC=gcc-7 && CXX=g++-7"
