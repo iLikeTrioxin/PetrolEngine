@@ -1,4 +1,4 @@
-dist: trusty
+dist: FreeBSD
 sudo: required
 language:
   - cpp
