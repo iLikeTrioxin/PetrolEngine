@@ -9,7 +9,6 @@ addons:
     sources:
       - kalakris-cmake
     packages:
-      - python3
       - cmake-data
       - cmake
       - gcc-7
