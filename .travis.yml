@@ -19,7 +19,8 @@ addons:
 
 # the install step will take care of deploying a newer cmake version
 install:
-  - pip install --upgrade cmake
+  - sudo apt install --upgrade python3
+  - pip3 install --upgrade cmake
 #  - sudo apt install -y cmake
 #  - cd ${TRAVIS_BUILD_DIR}
 before_script:
