@@ -13,12 +13,18 @@ addons:
       - g++-7
       - xorg-dev
 
+python:
+  - "3.7"
+before_install:
+  - sudo add-apt-repository ppa:george-edison55/cmake-3.x --yes
+  - sudo apt-get update -q
 # the install step will take care of deploying a newer cmake version
 install:
-  - cd $HOME
-  - wget https://cmake.org/files/v3.12/cmake-3.12.0-Linux-x86_64.sh
-  - sudo sh cmake-3.12.0-Linux-x86_64.sh --prefix=/usr/local --exclude-subdir
-  - cd ${TRAVIS_BUILD_DIR}
+  - sudo apt-get install cmake
+#  - cd $HOME
+#  - wget https://cmake.org/files/v3.12/cmake-3.12.0-Linux-x86_64.sh
+#  - sudo sh cmake-3.12.0-Linux-x86_64.sh --prefix=/usr/local --exclude-subdir
+#  - cd ${TRAVIS_BUILD_DIR}
 before_script:
   # create a build folder for the out-of-source build
   - mkdir build
@@ -27,7 +33,7 @@ before_script:
   # run cmake; here we assume that the project's
   # top-level CMakeLists.txt is located at '..'
   - ls /usr/local/cmake/bin
-  - /usr/local/cmake/bin/cmake ..
+  - cmake ..
 
 script:
   # once CMake has done its job we just build using make as usual
