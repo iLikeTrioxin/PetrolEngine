@@ -16,8 +16,8 @@ addons:
       - xorg-dev
 
 # the install step will take care of deploying a newer cmake version
-install:    
-  - sudo apt install -y cmake
+#install:    
+#  - sudo apt install -y cmake
 #  - cd ${TRAVIS_BUILD_DIR}
 before_install:
   - |
