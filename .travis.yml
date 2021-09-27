@@ -12,7 +12,7 @@ addons:
       - xorg-dev
 
 install:
-  - sudo pkg install -y vulkan-headers
+  - sudo pkg install -y vulkan-headers libxinerama
 
 before_script:
   - mkdir build
