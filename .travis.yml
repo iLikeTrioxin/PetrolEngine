@@ -9,7 +9,6 @@ addons:
     sources:
       - ubuntu-toolchain-r-test
     packages:
-      - libxinerama
       - gcc-7
       - g++-7
       - cmake
@@ -17,7 +16,7 @@ addons:
 
 # the install step will take care of deploying a newer cmake version
 install:    
-  - sudo pkg install -y libxinerama
+  - sudo pkg install -y libxinerama libxcursor
 #  - cd ${TRAVIS_BUILD_DIR}
 #before_install:
 #    - export CC=gcc-7 CXX=g++-7
