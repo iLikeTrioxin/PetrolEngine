@@ -9,14 +9,14 @@ addons:
     sources:
       - ubuntu-toolchain-r-test
     packages:
-      - python3
+      - python3.6
       - python3-pip
       - gcc-7
       - g++-7
       - xorg-dev
 
 python:
-  - "3.7"
+  - "3.6"
 #before_install:
 #  - sudo add-apt-repository ppa:george-edison55/cmake-3.x --yes
 #  - sudo apt-get update -q
