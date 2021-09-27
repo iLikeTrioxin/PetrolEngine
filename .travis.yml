@@ -3,6 +3,12 @@ sudo: required
 language: cpp
 compiler: gcc
 python: 3.6
+matrix:
+  exclude:
+   - python: "2.7"
+   - python: "3.3"
+   - python: "3.4"
+   - python: "3.5"
 addons:
   apt:
     sources:
