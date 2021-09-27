@@ -7,8 +7,11 @@ compiler:
 addons:
   apt:
     sources:
+      - ubuntu-toolchain-r-test
       - kalakris-cmake
     packages:
+      - python3
+      - cmake-data
       - cmake
       - gcc-7
       - g++-7
