@@ -1,20 +1,12 @@
-dist: Trusty
+dist: FreeBSD
 sudo: required
 language: cpp
 compiler: gcc
-python: 3.6
-matrix:
-  exclude:
-   - python: "2.7"
-   - python: "3.3"
-   - python: "3.4"
-   - python: "3.5"
 addons:
   apt:
     sources:
       - ubuntu-toolchain-r-test
     packages:
-      - python3-pip
       - gcc-7
       - g++-7
       - xorg-dev
@@ -23,8 +15,7 @@ addons:
 #  - sudo apt-get update -q
 # the install step will take care of deploying a newer cmake version
 install:
-  - sudo pip3 install --upgrade scikit-build
-  - sudo pip3 install --upgrade cmake
+  - pkg install vulkan-headers
 #  - cd $HOME
 #  - wget https://cmake.org/files/v3.12/cmake-3.12.0-Linux-x86_64.sh
 #  - sudo sh cmake-3.12.0-Linux-x86_64.sh --prefix=/usr/local --exclude-subdir
