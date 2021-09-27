@@ -42,7 +42,11 @@ target_include_directories(Engine
 	PUBLIC ${Vulkan_INCLUDE_DIRS}
 )
 
+if(${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.16")
+
 target_precompile_headers  ( Engine PRIVATE $<INSTALL_INTERFACE:Engine/Source/PCH.h> )
+
+endif()
 
 add_executable             (Engine_test        Engine/Source/Main.cpp   )
 target_include_directories (Engine_test PUBLIC Engine/Source            )
