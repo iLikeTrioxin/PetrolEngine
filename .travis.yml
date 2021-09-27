@@ -17,7 +17,7 @@ addons:
 
 # the install step will take care of deploying a newer cmake version
 install:    
-  - sudo apt -y install libxinerama
+  - sudo pkg install -y libxinerama
 #  - cd ${TRAVIS_BUILD_DIR}
 #before_install:
 #    - export CC=gcc-7 CXX=g++-7
