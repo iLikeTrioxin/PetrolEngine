@@ -15,9 +15,9 @@ addons:
 
 python:
   - "3.7"
-before_install:
+#before_install:
 #  - sudo add-apt-repository ppa:george-edison55/cmake-3.x --yes
-  - sudo apt-get update -q
+#  - sudo apt-get update -q
 # the install step will take care of deploying a newer cmake version
 install:
   - pip install --upgrade cmake
