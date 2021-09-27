@@ -9,7 +9,6 @@ addons:
     sources:
       - kalakris-cmake
     packages:
-      - cmake-data
       - cmake
       - gcc-7
       - g++-7
