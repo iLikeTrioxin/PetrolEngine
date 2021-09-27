@@ -18,8 +18,8 @@ addons:
 #install:    
 #  - sudo apt-get -y install cmake
 #  - cd ${TRAVIS_BUILD_DIR}
-before_install:
-    - export CC=gcc-7 CXX=g++-7
+#before_install:
+#    - export CC=gcc-7 CXX=g++-7
 
 before_script:
   # create a build folder for the out-of-source build
