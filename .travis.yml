@@ -26,8 +26,8 @@ before_script:
   - cd build
   # run cmake; here we assume that the project's
   # top-level CMakeLists.txt is located at '..'
-  - ls /usr/local/cmake
-  - /usr/local/cmake/cmake ..
+  - ls /usr/local/cmake/bin
+  - /usr/local/cmake/bin/cmake ..
 
 script:
   # once CMake has done its job we just build using make as usual
