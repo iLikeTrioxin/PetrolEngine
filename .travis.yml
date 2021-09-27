@@ -22,7 +22,8 @@ python:
 #  - sudo apt-get update -q
 # the install step will take care of deploying a newer cmake version
 install:
-  - pip3 install --upgrade cmake
+  - sudo pip3 install --upgrade scikit-build
+  - sudo pip3 install --upgrade cmake
 #  - cd $HOME
 #  - wget https://cmake.org/files/v3.12/cmake-3.12.0-Linux-x86_64.sh
 #  - sudo sh cmake-3.12.0-Linux-x86_64.sh --prefix=/usr/local --exclude-subdir
