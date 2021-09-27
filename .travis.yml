@@ -5,24 +5,20 @@ language:
 compiler:
   - gcc
 addons:
-  snaps:
-    - name: cmake
-    - confinement: classic
-    - #channel: latest/candidate
-    - channel: 3.18/candidate
-    - #channel: 3.17/beta
   apt:
     sources:
-      - ubuntu-toolchain-r-test
       - kalakris-cmake
     packages:
+      - python3
+      - cmake-data
+      - cmake
       - gcc-7
       - g++-7
-      - cmake
       - xorg-dev
 
 # the install step will take care of deploying a newer cmake version
-#install:    
+install:
+  - pip install --upgrade cmake
 #  - sudo apt install -y cmake
 #  - cd ${TRAVIS_BUILD_DIR}
 before_script:
