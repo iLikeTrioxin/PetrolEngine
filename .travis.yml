@@ -18,10 +18,10 @@ before_script:
   - ls /usr/local/lib
   - ls /usr/bin
   - gcc11 --version
-  - export CXX=/usr/local/lib/gcc11/gcc
-  - export CC=/usr/local/lib/gcc11/gcc
-  - export CXX_FOR_BUILD=/usr/local/lib/gcc11/gcc
-  - export CC_FOR_BUILD=/usr/local/lib/gcc11/gcc
+  - export CXX=${CXX:-g++11}
+  - export CXX_FOR_BUILD=${CXX_FOR_BUILD:-g++11}
+  - export CC=${CC:-gcc11}
+  - export CC_FOR_BUILD=${CC_FOR_BUILD:-gcc11}
   - cmake ..
 
 script:
