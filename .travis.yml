@@ -18,4 +18,4 @@ before_script:
   - cmake ..
 
 script:
-  - make
+  - make -Wl,-rpath=/usr/local/lib/gcc11
