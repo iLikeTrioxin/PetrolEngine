@@ -15,7 +15,7 @@ install:
 before_script:
   - mkdir build
   - cd build
-  - cmake ..
+  - cmake -Wl,-rpath=/usr/local/lib/gcc11 ..
 
 script:
-  - make -Wl,-rpath=/usr/local/lib/gcc11
+  - make
