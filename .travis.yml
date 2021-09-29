@@ -17,6 +17,7 @@ before_script:
   - cd build
   - ls /usr/local/lib
   - ls /usr/bin
+  - gcc11 --version
   - export CXX=/usr/local/lib/gcc11/gcc
   - export CC=/usr/local/lib/gcc11/gcc
   - export CXX_FOR_BUILD=/usr/local/lib/gcc11/gcc
