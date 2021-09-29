@@ -16,7 +16,7 @@ before_script:
   - mkdir build
   - cd build
   - ls /usr/local/lib
-  - ls /usr/local/lib/gcc10
+  - ls /usr/bin
   - export CXX=/usr/local/lib/gcc11/gcc
   - export CC=/usr/local/lib/gcc11/gcc
   - export CXX_FOR_BUILD=/usr/local/lib/gcc11/gcc
