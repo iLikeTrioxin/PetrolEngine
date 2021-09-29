@@ -1,14 +1,14 @@
 ## Engine
-It's my own 3d graphics engine written fooo self-educatiooooon.
+It's my own 3D graphics engine written for self-education.
 
 # Build
 Clone respository
 ```
-git clone https://github.com/iLikeTrioxin/PetrolEngine
+git clone --recursive https://github.com/iLikeTrioxin/PetrolEngine
 ```
 then create build folder inside and generate project files
 ```
-cd Engine
+cd PetrolEngine
 mkdir build
 cd build
 cmake ..
