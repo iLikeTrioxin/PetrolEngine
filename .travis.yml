@@ -15,6 +15,7 @@ install:
 before_script:
   - mkdir build
   - cd build
+  - ls /usr/local/lib
   - export CXX=/usr/local/lib/g++11
   - export CC=/usr/local/lib/gcc11
   - export CXX_FOR_BUILD=/usr/local/lib/g++11
