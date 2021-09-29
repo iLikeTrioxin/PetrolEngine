@@ -22,7 +22,7 @@ before_script:
   - export CXX_FOR_BUILD=${CXX_FOR_BUILD:-g++11}
   - export CC=${CC:-gcc11}
   - export CC_FOR_BUILD=${CC_FOR_BUILD:-gcc11}
-  - cmake ..
+  - cmake -D CMAKE_C_COMPILER=gcc11 -D CMAKE_CXX_COMPILER=g++11 ..
 
 script:
   - make
