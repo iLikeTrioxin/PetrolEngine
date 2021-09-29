@@ -15,13 +15,6 @@ install:
 before_script:
   - mkdir build
   - cd build
-  - ls /usr/local/lib
-  - ls /usr/bin
-  - gcc11 --version
-  - export CXX=${CXX:-g++11}
-  - export CXX_FOR_BUILD=${CXX_FOR_BUILD:-g++11}
-  - export CC=${CC:-gcc11}
-  - export CC_FOR_BUILD=${CC_FOR_BUILD:-gcc11}
   - cmake -D CMAKE_C_COMPILER=gcc11 -D CMAKE_CXX_COMPILER=g++11 ..
 
 script:
