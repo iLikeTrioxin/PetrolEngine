@@ -1,7 +1,7 @@
 dist: FreeBSD
 sudo: required
 language: cpp
-compiler: gcc
+compiler: gcc11
 addons:
   apt:
     sources:
@@ -10,12 +10,12 @@ addons:
       - xorg-dev
 
 install:
-  - sudo pkg install -y gcc11 vulkan-loader vulkan-headers vulkan-extension-layer vulkan-tools libxinerama libxcursor
+  - sudo pkg install -y vulkan-loader vulkan-headers vulkan-extension-layer vulkan-tools libxinerama libxcursor
 
 before_script:
   - mkdir build
   - cd build
-  - cmake -Wl,-rpath=/usr/local/lib/gcc11 ..
+  - cmake ..
 
 script:
   - make
