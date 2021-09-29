@@ -1,13 +1,9 @@
 dist: FreeBSD
+
 sudo: required
+
 language: cpp
 compiler: gcc
-addons:
-  apt:
-    sources:
-      - ubuntu-toolchain-r-test
-    packages:
-      - xorg-dev
 
 install:
   - sudo pkg install -y gcc11 vulkan-loader vulkan-headers vulkan-extension-layer vulkan-tools libxinerama libxcursor
