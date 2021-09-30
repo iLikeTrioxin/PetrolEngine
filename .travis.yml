@@ -5,13 +5,18 @@ sudo: required
 language: cpp
 compiler: gcc
 
+cache:
+  directories:
+    
+
 install:
-  - sudo pkg install -y gcc11 vulkan-loader vulkan-headers vulkan-extension-layer vulkan-tools libxinerama libxcursor
+  #- sudo pkg install -y gcc11 vulkan-loader vulkan-headers vulkan-extension-layer vulkan-tools libxinerama libxcursor
 
 before_script:
   - mkdir build
   - cd build
-  - cmake -D CMAKE_C_COMPILER=gcc11 -D CMAKE_CXX_COMPILER=g++11 ..
+  - pwd
+  #- cmake -D CMAKE_C_COMPILER=gcc11 -D CMAKE_CXX_COMPILER=g++11 ..
 
 script:
-  - make
+  #- make
