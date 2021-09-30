@@ -16,6 +16,8 @@ before_script:
   - mkdir build
   - cd build
   - pwd
+  - cd $TRAVIS_BUILD_DIR
+  - pwd
   #- cmake -D CMAKE_C_COMPILER=gcc11 -D CMAKE_CXX_COMPILER=g++11 ..
 
 script:
