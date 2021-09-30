@@ -11,13 +11,33 @@ using uint64 = unsigned long long;
 
 // TODO replace std containers with my own (as i want to get the rid of most dependencies)
 
-#ifndef NDEBUG
+#if defined(NDEBUG)
 #define debug_log(x) std::cout<<x<<std::endl
 #else
 #define debug_log(x)
 #endif
 
 #define log_and_return(x, y) { debug_log(x); return y; }
+
+/* TODO: figure out if should those be implemented
+
+#if defined(SSEs)
+#define writeWOC8B(x) _mm_stream_si64(x)
+#endif
+
+#if defined(SSE)
+#define prefetch(x) _mm_prefetch(x)
+#define writeWOC16B(x, y) _mm_stream_ps(x, y)
+#endif
+
+#if defined(SSE2)
+#define writeWOC4B (x, y) _mm_stream_si32(x, y)
+#define writeWOC16B(x, y) _mm_stream_pd  (x, y)
+/// I can't find out what this differ from '_mm_stream_pd', so :/
+//#define writeWOC16B(x, y) _mm_stream_si128(x, y)
+#endif
+
+ */
 
 //
 // std related aliases
@@ -52,3 +72,43 @@ using TypeIndex = std::type_index;
 #include <list>
 template<typename T>
 using List = std::list<T>;
+
+
+#if defined(__GNUC__)
+
+#define PURE       __attribute  ((         const        ))
+#define FASTCALL   __attribute  ((       fastcall       ))
+#define INTERNAL   __attribute__((visibility("internal")))
+#define RESTRICT   __restrict
+#define VECTORCALL
+
+#elif defined(__clang__)
+
+#define PURE       __attribute((  const ))
+#define FASTCALL   __attribute((fastcall))
+#define INTERNAL  __attribute__((visibility("internal")))
+#define RESTRICT   __restrict
+#define VECTORCALL __vectorcall
+
+#elif defined(__INTEL_COMPILER)
+
+#if defined(__linux__)
+#define PURE __attribute((const))
+#else
+#define PURE
+#endif
+
+#define FASTCALL   __attribute((fastcall))
+#define INTERNAL   __attribute__((visibility("internal")))
+#define RESTRICT   __restrict
+#define VECTORCALL __vectorcall
+
+#else
+
+#define PURE
+#define FASTCALL
+#define INTERNAL
+#define RESTRICT
+#define VECTORCALL
+
+#endif

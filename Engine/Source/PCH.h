@@ -1,16 +1,21 @@
 #pragma once
 
 #define GLM_ENABLE_EXPERIMENTAL
-#define GLFW_INCLUDE_VULKAN
+//#define GLFW_INCLUDE_VULKAN
 
-// OpenGL
+// Math
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/quaternion.hpp>
 #include <glm/gtc/quaternion.hpp>
 #include <glm/glm.hpp>
-///#include <glad/glad.h>
+
+// Standard renderers
 #include <glad/glad.h>
+#include <vulkan/vulkan.h>
+
+// Windowing libs
 #include <GLFW/glfw3.h>
+
 // STD
 #include <filesystem>
 #include <iostream>
@@ -19,15 +24,17 @@
 #include <string>
 #include <memory>
 #include <thread>
+#include <future>
 
 // Assimp
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
-// Other
+// ECS library (Entity-Component System)
 #include <entt/entt.hpp>
-#include <future>
+
+// Engine insides
 #include "DebugTools.h"
 #include "Renderer/Material.h"
 #include "Aliases.h"

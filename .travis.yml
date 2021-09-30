@@ -18,4 +18,4 @@ before_script:
   - cmake -D CMAKE_C_COMPILER=gcc11 -D CMAKE_CXX_COMPILER=g++11 ..
 
 script:
-  - make
+  - make -j 2

@@ -8,15 +8,8 @@ namespace PetrolEngine{
 
     };
 
-    template<typename T>
     class Component{
         Entity* entity;
-    };
-
-    template<typename T>
-    class ComponentPool{
-    public:
-        Vector<T> components;
     };
 
     // Entity-Component System
@@ -25,8 +18,8 @@ namespace PetrolEngine{
 
         template<typename T>
         Vector<T> getView(){
-            ComponentPool<T>* t = reinterpret_cast<ComponentPool<T>*>( unorderedMap[typeid(T)] );
-            return *t;
+            T* t = reinterpret_cast<T*>( unorderedMap[typeid(T)] );
+            return t;
         }
     };
 }
