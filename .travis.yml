@@ -1,16 +1,15 @@
 dist: FreeBSD
 
-sudo: required
-
 language: cpp
 compiler: gcc
 
+sudo : required
 cache:
   directories:
-    
+    - build/Deps
 
 install:
-  #- sudo pkg install -y gcc11 vulkan-loader vulkan-headers vulkan-extension-layer vulkan-tools libxinerama libxcursor
+  - sudo pkg install -y gcc11 vulkan-loader vulkan-headers vulkan-extension-layer vulkan-tools libxinerama libxcursor
 
 before_script:
   - mkdir build
@@ -18,7 +17,7 @@ before_script:
   - pwd
   - cd $TRAVIS_BUILD_DIR
   - pwd
-  #- cmake -D CMAKE_C_COMPILER=gcc11 -D CMAKE_CXX_COMPILER=g++11 ..
+  - cmake -D CMAKE_C_COMPILER=gcc11 -D CMAKE_CXX_COMPILER=g++11 ..
 
 script:
-  #- make
+  - make
