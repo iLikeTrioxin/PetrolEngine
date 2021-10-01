@@ -73,6 +73,9 @@ using TypeIndex = std::type_index;
 template<typename T>
 using List = std::list<T>;
 
+// c++ macros
+#define LINE __LINE__
+//#define FILE __FILE__
 
 #if defined(__GNUC__)
 
