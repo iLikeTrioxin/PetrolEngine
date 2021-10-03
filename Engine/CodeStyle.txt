@@ -7,4 +7,8 @@ int someVariable;
  - Class names are written using upper camel case.
 class SomeClass
 
-Files and directories are also named upper camel case.
+ - Files and directories are also named upper camel case.
+PetrolEngine/Deps/Xyz.cpp
+
+ - Macros are upper case with words seperated with '_'
+ DEBUG_LOG(msg)

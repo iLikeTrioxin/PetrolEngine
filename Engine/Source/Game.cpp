@@ -15,6 +15,10 @@ namespace PetrolEngine {
 
     Game::Game() {
         //std::filesystem::current_path("C:/Users/2TPE/Desktop/PetrolEngine/build");
+        DEBUG_LOG("Size of int8  is " << sizeof(int8 ));
+        DEBUG_LOG("Size of int16 is " << sizeof(int16));
+        DEBUG_LOG("Size of int32 is " << sizeof(int32));
+        DEBUG_LOG("Size of int64 is " << sizeof(int64));
 
         this->window = Window::create(800, 500, "No hejka");
 
@@ -95,7 +99,7 @@ namespace PetrolEngine {
         
         uint idk = 0;
         Renderer::getDeviceConstantValue(DeviceConstant::MAX_TEXTURE_IMAGE_UNITS, (void*) &idk);
-        debug_log("aaa:"<<std::to_string(idk));
+        DEBUG_LOG("aaa:"<<std::to_string(idk));
         
         double prevoiusXCursorPos = cursorXPos;
         double prevoiusYCursorPos = cursorYPos;

@@ -4,23 +4,22 @@
 
 namespace PetrolEngine {
 	static GLenum ShaderDataTypeToVulkanBaseType(ShaderDataType type) {
-		switch (type)
-		{
-		case ShaderDataType::Float : return GL_FLOAT;
-		case ShaderDataType::Float2: return GL_FLOAT;
-		case ShaderDataType::Float3: return GL_FLOAT;
-		case ShaderDataType::Float4: return GL_FLOAT;
+		switch (type) {
+		    case ShaderDataType::Float :
+		    case ShaderDataType::Float2:
+		    case ShaderDataType::Float3:
+		    case ShaderDataType::Float4:
+		    case ShaderDataType::Mat3  :
+		    case ShaderDataType::Mat4  : return GL_FLOAT;
 
-		case ShaderDataType::Mat3: return GL_FLOAT;
-		case ShaderDataType::Mat4: return GL_FLOAT;
-		
-		case ShaderDataType::Int : return GL_INT;
-		case ShaderDataType::Int2: return GL_INT;
-		case ShaderDataType::Int3: return GL_INT;
-		case ShaderDataType::Int4: return GL_INT;
-		
-		case ShaderDataType::Bool: return GL_BOOL;
-		}
+		    case ShaderDataType::Int   :
+		    case ShaderDataType::Int2  :
+		    case ShaderDataType::Int3  :
+		    case ShaderDataType::Int4  : return GL_INT;
+
+		    case ShaderDataType::Bool  : return GL_BOOL;
+            default                    : return GL_NONE;
+        }
 	}
 
 	VulkanVertexArray::VulkanVertexArray() {
@@ -44,34 +43,33 @@ namespace PetrolEngine {
 
 		glBindVertexArray(ID);
 		glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer->getID());
-	
+
 		auto vertexLayout = vertexBuffer->getLayout();
 		
-		uint32_t layoutSize = 0;
+		int layoutSize = 0;
 		for (auto& element : vertexLayout.elements) layoutSize += ShaderDataTypeSize(element.type);
 		
-		uint32_t offset = 0;
-		uint32_t index  = 0;
+        uint64 offset = 0;
+		uint32 index  = 0;
 		for ( auto& element : vertexLayout.elements ) {
 			switch (auto& type = element.type)
 			{
-			case ShaderDataType::None: debug_log("[!] None type element detected in vertex array."); break;
+			case ShaderDataType::None: DEBUG_LOG("[!] None type element detected in vertex array."); break;
 
 			case ShaderDataType::Mat3:
 			case ShaderDataType::Mat4: {
-				int8_t count = GetComponentCount(type);
+				int count = GetComponentCount(type);
 
-				for (uint8_t i = 0; i < count; i++)
+				for (uint i = 0; i < count; i++)
 				{
 					glEnableVertexAttribArray(index);
-
 					glVertexAttribPointer(
 						index,
 						count,
 						ShaderDataTypeToVulkanBaseType(type),
 						GL_FALSE,
 						layoutSize,
-						(void*)(offset + (sizeof(float) * count * i))
+						(void*)(offset + (sizeof(float) * (uint)count * i))
 					);
 
 					glVertexAttribDivisor(index, 1);
@@ -125,9 +123,7 @@ namespace PetrolEngine {
 		this->vertexBuffers.push_back(vertexBuffer);
 	}
 
-	VulkanVertexArray::~VulkanVertexArray() {
-		LOG_FUNCTION();
-
+	VulkanVertexArray::~VulkanVertexArray() { LOG_FUNCTION();
 		glDeleteBuffers(1, &ID);
 	}
 }

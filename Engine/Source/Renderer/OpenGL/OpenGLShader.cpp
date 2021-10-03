@@ -16,7 +16,7 @@ namespace PetrolEngine {
     int OpenGLShader::recompileShader( const char* vertexShaderSourceCode  ,
                                        const char* fragmentShaderSourceCode,
                                        const char* geometryShaderSourceCode ) {
-        debug_log("started");
+        DEBUG_LOG("started");
         uint32_t   newVertexShaderID = 0,
                  newFragmentShaderID = 0,
                  newGeometryShaderID = 0;
@@ -101,7 +101,7 @@ namespace PetrolEngine {
             glShaderSource (vertexShaderID, 1, &vertexShaderSourceCode, NULL);
             glCompileShader(vertexShaderID);
 
-            debug_log("VERTEX\n" << vertexShaderSourceCode << "\nVERTEX");
+            DEBUG_LOG("VERTEX\n" << vertexShaderSourceCode << "\nVERTEX");
 
             checkShaderCompileErrors(vertexShaderID, "VERTEX");
 
@@ -115,7 +115,7 @@ namespace PetrolEngine {
             glShaderSource(fragmentShaderID, 1, &fragmentShaderSourceCode, NULL);
             glCompileShader(fragmentShaderID);
 
-            debug_log("FRAGMENT\n" << fragmentShaderSourceCode << "\nFRAGMENT");
+            DEBUG_LOG("FRAGMENT\n" << fragmentShaderSourceCode << "\nFRAGMENT");
 
             checkShaderCompileErrors(fragmentShaderID, "FRAGMENT");
 
@@ -129,8 +129,8 @@ namespace PetrolEngine {
 
             glShaderSource (geometryShaderID, 1, &geometryShaderSourceCode, NULL);
             glCompileShader(geometryShaderID);
-            
-            debug_log("GEOMETRY\n" << geometryShaderSourceCode << "\nGEOMETRY");
+
+            DEBUG_LOG("GEOMETRY\n" << geometryShaderSourceCode << "\nGEOMETRY");
 
             checkShaderCompileErrors(geometryShaderID, "GEOMETRY");
             
@@ -205,7 +205,7 @@ namespace PetrolEngine {
 
         glGetProgramInfoLog(shader, 1024, NULL, infoLog);
 
-        debug_log( "ERROR::PROGRAM_LINKING_ERROR: " << infoLog );
+        DEBUG_LOG( "ERROR::PROGRAM_LINKING_ERROR: " << infoLog );
 
         return 1;
     }
@@ -221,7 +221,7 @@ namespace PetrolEngine {
 
         glGetShaderInfoLog(shader, 1024, NULL, infoLog);
 
-        debug_log( "ERROR::SHADER_COMPILATION_ERROR(" << type << "): " << infoLog );
+        DEBUG_LOG( "ERROR::SHADER_COMPILATION_ERROR(" << type << "): " << infoLog );
 
         return 1;
     }

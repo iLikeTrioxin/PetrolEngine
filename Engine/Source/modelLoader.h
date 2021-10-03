@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Renderer/Texture.h"
+#include "Renderer/Shader.h"
 
 namespace PetrolEngine {
 

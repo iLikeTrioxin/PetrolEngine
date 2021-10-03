@@ -6,9 +6,6 @@
 #include <glm/glm.hpp>
 
 namespace PetrolEngine {
-    static const char* defaultVertexShaderPath   = "C:/Users/mpr19/Desktop/Engine/Engine/Resources/Shaders/shader.frag";
-    static const char* defaultFragmentShaderPath = "C:/Users/mpr19/Desktop/Engine/Engine/Resources/Shaders/shader.vert";
-
     class OpenGLShader : public Shader {
     public:
         OpenGLShader( const char* vertexShaderSourceCode   = nullptr,

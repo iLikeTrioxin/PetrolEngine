@@ -42,7 +42,7 @@ namespace PetrolEngine::Math {
 	}
 
 	inline float NegateFloat(float& f) {
-        //debug_log((sizeof(float) != sizeof(uint32)));
+        //DEBUG_LOG((sizeof(float) != sizeof(uint32)));
 		return TreatAs<uint32, float>(*reinterpret_cast<uint32*>(&f) ^ 0x80000000);
 	}
 

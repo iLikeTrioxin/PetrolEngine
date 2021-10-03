@@ -29,11 +29,11 @@ namespace PetrolEngine {
 		const aiScene* scene = importer.ReadFile(filename, aiProcess_GenSmoothNormals | aiProcess_Triangulate);
 		//  aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace
 		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
-            debug_log("ERROR::ASSIMP:: " << importer.GetErrorString());
+            DEBUG_LOG("ERROR::ASSIMP:: " << importer.GetErrorString());
 			return Entity();
 		}
 
-		debug_log("[*] Running down the Root node of model(" << _path << ")");
+        DEBUG_LOG("[*] Running down the Root node of model(" << _path << ")");
 	
 		Entity model = _scene->createEntity(filename.c_str());
 
@@ -55,11 +55,11 @@ namespace PetrolEngine {
 		const aiScene* scene = importer.ReadFile(_path, aiProcess_GenNormals);
 		//  aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace
 		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
-            debug_log("ERROR::ASSIMP:: " << importer.GetErrorString());
+            DEBUG_LOG("ERROR::ASSIMP:: " << importer.GetErrorString());
 			return Entity();
 		}
 
-		debug_log("[*] Running down the Root node of model(" << _path << ")");
+        DEBUG_LOG("[*] Running down the Root node of model(" << _path << ")");
 
 		std::string fileName(_path);
 
@@ -76,7 +76,7 @@ namespace PetrolEngine {
 		return model;
 	}
 	void modelLoader::texturesFromMaterial(aiMaterial* material, aiTextureType type, TextureType myType, std::vector< std::shared_ptr<Texture> >* textures) {
-		debug_log("[*] Detected " << material->GetTextureCount(type) << " textures of " << static_cast<int>(myType));
+        DEBUG_LOG("[*] Detected " << material->GetTextureCount(type) << " textures of " << static_cast<int>(myType));
 
 		for (uint i = 0; i < (material->GetTextureCount(type)); i++) {
 			aiString path;
@@ -102,7 +102,7 @@ namespace PetrolEngine {
 			{
 				vertices.emplace_back();
 			}
-			//debug_log("[can i] i: " << i << " and vert: " << vertices.size());
+			//DEBUG_LOG("[can i] i: " << i << " and vert: " << vertices.size());
 
 			vertices[i].position.x = mesh->mVertices[i].x;
 			vertices[i].position.y = mesh->mVertices[i].y;
@@ -152,8 +152,8 @@ namespace PetrolEngine {
 			texturesFromMaterial(material, aiTextureType_SPECULAR, TextureType::SPECULAR, &outputMesh->material.textures);
 		}
 
-		//debug_log("done 1");
-		//debug_log("[*] Textures: " << scene->HasTextures() << " -- " << scene->mNumTextures);
+		//DEBUG_LOG("done 1");
+		//DEBUG_LOG("[*] Textures: " << scene->HasTextures() << " -- " << scene->mNumTextures);
 	}
 	void modelLoader::processNode(aiNode* node, const aiScene* _scene, Entity parent) {
 		for (uint i = 0; i < node->mNumMeshes; i++) {

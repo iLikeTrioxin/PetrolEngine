@@ -279,7 +279,7 @@ namespace PetrolEngine {
 
         vkEnumeratePhysicalDevices(instance, &deviceCount, nullptr);
 
-        if(deviceCount == 0) { debug_log("No vulkan suitable devices found. Aborting."); return; }
+        if(deviceCount == 0) { DEBUG_LOG("No vulkan suitable devices found. Aborting."); return; }
 
         Vector<VkPhysicalDevice> devices(deviceCount);
 
@@ -485,7 +485,7 @@ namespace PetrolEngine {
         }
 
         if (vkCreateDevice(physicalDevice, &createInfo, nullptr, &logicalDevice) != VK_SUCCESS) {
-            debug_log("couldn't create logical device");
+            DEBUG_LOG("couldn't create logical device");
         }
 
         vkGetDeviceQueue(logicalDevice, indices.graphicsFamily.value(), 0, &graphicsQueue);

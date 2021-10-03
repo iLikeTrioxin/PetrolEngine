@@ -4,6 +4,7 @@
 #include <iostream>
 #include <ft2build.h>
 
+#include "Texture.h"
 #include FT_FREETYPE_H
 
 namespace PetrolEngine {
@@ -17,13 +18,13 @@ namespace PetrolEngine {
         FT_Library ft;
 
         if (FT_Error error = FT_Init_FreeType(&ft)) {
-            debug_log("[!] FREETYPE ERROR: Could not init FreeType Library (error code:" << error << ")");
+            DEBUG_LOG("[!] FREETYPE ERROR: Could not init FreeType Library (error code:" << error << ")");
             return;
         }
 
         FT_Face face;
         if (FT_Error error = FT_New_Face(ft, fontPath.c_str(), 0, &face)) {
-            debug_log("[!] FREETYPE ERROR: Failed to load font (error code:" << error << ")");
+            DEBUG_LOG("[!] FREETYPE ERROR: Failed to load font (error code:" << error << ")");
             return;
         }
 
@@ -42,7 +43,7 @@ namespace PetrolEngine {
 
             // load character glyph 
             if (FT_Error error = FT_Load_Char(face, c, FT_LOAD_RENDER)) {
-                debug_log("[!] FREETYTPE ERROR: Failed to load Glyph with ASCII ID " << (uint) c << " (error code:" << error << ")");
+                DEBUG_LOG("[!] FREETYTPE ERROR: Failed to load Glyph with ASCII ID " << (uint) c << " (error code:" << error << ")");
                 continue;
             }
 

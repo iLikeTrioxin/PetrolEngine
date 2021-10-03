@@ -18,10 +18,10 @@ namespace PetrolEngine {
 	}
 
 	int OpenGLRenderer::init(bool debug) {
-		debug_log("[*] Initializing OpenGL.");
+        DEBUG_LOG("[*] Initializing OpenGL.");
 
 		if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-			debug_log("[!] Initializing OpenGL failed.");
+            DEBUG_LOG("[!] Initializing OpenGL failed.");
 			return 1;
 		}
 

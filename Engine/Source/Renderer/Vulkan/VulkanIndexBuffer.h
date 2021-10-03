@@ -8,8 +8,8 @@ namespace PetrolEngine {
 		VulkanIndexBuffer();
 		VulkanIndexBuffer(void* data, uint32_t size);
 
-		virtual void setData(void* data, uint32_t size) override;
+		void setData(void* data, uint32_t size) override;
 
-		~VulkanIndexBuffer();
+		~VulkanIndexBuffer() override;
 	};
 }

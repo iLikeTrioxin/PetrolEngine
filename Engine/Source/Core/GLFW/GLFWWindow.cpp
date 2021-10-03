@@ -46,7 +46,7 @@ namespace PetrolEngine {
 
         window = glfwCreateWindow(windowData.width, windowData.height, windowData.title.c_str(), nullptr, nullptr);
 
-        if (!window) { debug_log("window failed to create"); glfwTerminate(); return 0; }
+        if (!window) { DEBUG_LOG("window failed to create"); glfwTerminate(); return 0; }
 
         if (GraphicsContext::create(window)->init((void*) glfwGetProcAddress))
             return -1;

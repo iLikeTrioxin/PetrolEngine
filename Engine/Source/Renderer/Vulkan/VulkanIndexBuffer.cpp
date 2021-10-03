@@ -39,4 +39,17 @@ namespace PetrolEngine {
 		glDeleteBuffers(1, &ID);
 	}
      */
+    VulkanIndexBuffer::VulkanIndexBuffer() = default;
+
+    VulkanIndexBuffer::VulkanIndexBuffer(void* data, uint32_t size){
+
+    }
+
+    void VulkanIndexBuffer::setData(void* data, uint32_t size) {
+
+    }
+
+    VulkanIndexBuffer::~VulkanIndexBuffer() {
+
+    }
 }

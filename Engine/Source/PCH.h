@@ -36,5 +36,4 @@
 
 // Engine insides
 #include "DebugTools.h"
-#include "Renderer/Material.h"
 #include "Aliases.h"

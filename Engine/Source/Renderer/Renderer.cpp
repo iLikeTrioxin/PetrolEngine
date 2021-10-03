@@ -1,6 +1,6 @@
 #include <PCH.h>
 #include "Renderer.h"
-
+#include <iostream>
 #include "OpenGL/OpenGLRenderer.h"
 
 #include "../Components.h"
@@ -29,7 +29,7 @@ namespace PetrolEngine {
 	    rendererAPI->init(debug);
 	    //RendererAPI::getInstance()->getDeviceConstantValue(DeviceConstant::MAX_TEXTURE_IMAGE_UNITS, &renderer2DData.maxTextures);
 
-	    //debug_log("[*] Textures: " + std::to_string(renderer2DData.maxTextures));
+	    //DEBUG_LOG("[*] Textures: " + std::to_string(renderer2DData.maxTextures));
 	}
 
 	void Renderer::renderMesh(Mesh& m, Transform& t, Camera& c) { LOG_FUNCTION();
@@ -65,7 +65,7 @@ namespace PetrolEngine {
 
             default: error = "Unknown error"; break;
             }
-            debug_log("[!] error here:" << error);
+            DEBUG_LOG("[!] error here:" << error);
             err = glGetError();
         }
 	}

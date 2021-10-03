@@ -7,8 +7,8 @@ namespace PetrolEngine {
 	public:
 		OpenGLVertexArray();
 
-		virtual void addVertexBuffer(std::shared_ptr<VertexBuffer> vertexBuffer) override;
-		virtual void  setIndexBuffer(std::shared_ptr< IndexBuffer>  indexBuffer) override;
+		void addVertexBuffer(std::shared_ptr<VertexBuffer> vertexBuffer) override;
+		void  setIndexBuffer(std::shared_ptr< IndexBuffer>  indexBuffer) override;
 
 		~OpenGLVertexArray();
 	};

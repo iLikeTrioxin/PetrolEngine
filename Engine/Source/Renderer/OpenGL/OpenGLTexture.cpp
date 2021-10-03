@@ -46,7 +46,7 @@ namespace PetrolEngine {
 		this->type = type;
 		this->id   = 0;
 
-		if (!image.getData()) { debug_log("[!] Texture failed to load at path: " << image.getPath()); return; }
+		if (!image.getData()) { DEBUG_LOG("[!] Texture failed to load at path: " << image.getPath()); return; }
 
 		this->width  = image.getWidth();
 		this->height = image.getHeight();

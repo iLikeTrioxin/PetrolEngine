@@ -19,14 +19,14 @@ namespace PetrolEngine {
 			TextureFormat format = TextureFormat::NONE
 		);
 
-		OpenGLTexture(
+		explicit OpenGLTexture(
 			const Image& image,
 			TextureType type = TextureType::NONE
 		);
 		
-		~OpenGLTexture();
+		~OpenGLTexture() override;
 
-		virtual void updateTextureImage(const void* data) override;
+		void updateTextureImage(const void* data) override;
 	private:
 		const std::unordered_map<TextureFormat, std::pair<GLuint, GLuint>> textureFormatLookupTable{
 			{TextureFormat::RGBA16, {GL_RGBA, GL_RGBA16}},

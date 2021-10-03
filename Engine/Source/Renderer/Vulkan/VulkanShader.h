@@ -6,36 +6,33 @@
 #include <glm/glm.hpp>
 
 namespace PetrolEngine {
-    static const char* defaultVertexShaderPath   = "C:/Users/mpr19/Desktop/Engine/Engine/Resources/Shaders/shader.frag";
-    static const char* defaultFragmentShaderPath = "C:/Users/mpr19/Desktop/Engine/Engine/Resources/Shaders/shader.vert";
-
     class VulkanShader : public Shader {
     public:
         VulkanShader( const char* vertexShaderSourceCode   = nullptr,
                       const char* fragmentShaderSourceCode = nullptr,
                       const char* geometryShaderSourceCode = nullptr );
         
-        ~VulkanShader();
+        ~VulkanShader() override;
 
-        virtual int recompileShader(const char* vertexShaderSourceCode   = nullptr,
-                                    const char* fragmentShaderSourceCode = nullptr,
-                                    const char* geometryShaderSourceCode = nullptr ) override;
+        int recompileShader(const char* vertexShaderSourceCode  ,
+                            const char* fragmentShaderSourceCode,
+                            const char* geometryShaderSourceCode ) override;
 
-        virtual void setBool (const std::string& name, bool  value                       ) override;
-        virtual void setInt  (const std::string& name, int   value                       ) override;
-        virtual void setFloat(const std::string& name, float value                       ) override;
-        virtual void setVec2 (const std::string& name, const glm::vec2& value            ) override;
-        virtual void setVec2 (const std::string& name, float x, float y                  ) override;
-        virtual void setVec3 (const std::string& name, const glm::vec3& value            ) override;
-        virtual void setVec3 (const std::string& name, float x, float y, float z         ) override;
-        virtual void setVec4 (const std::string& name, const glm::vec4& value            ) override;
-        virtual void setVec4 (const std::string& name, float x, float y, float z, float w) override;
-        virtual void setMat2 (const std::string& name, const glm::mat2& mat              ) override;
-        virtual void setMat3 (const std::string& name, const glm::mat3& mat              ) override;
-        virtual void setMat4 (const std::string& name, const glm::mat4& mat              ) override;
+        void setBool (const String& name, bool  value                       ) override;
+        void setInt  (const String& name, int   value                       ) override;
+        void setFloat(const String& name, float value                       ) override;
+        void setVec2 (const String& name, const glm::vec2& value            ) override;
+        void setVec2 (const String& name, float x, float y                  ) override;
+        void setVec3 (const String& name, const glm::vec3& value            ) override;
+        void setVec3 (const String& name, float x, float y, float z         ) override;
+        void setVec4 (const String& name, const glm::vec4& value            ) override;
+        void setVec4 (const String& name, float x, float y, float z, float w) override;
+        void setMat2 (const String& name, const glm::mat2& mat              ) override;
+        void setMat3 (const String& name, const glm::mat3& mat              ) override;
+        void setMat4 (const String& name, const glm::mat4& mat              ) override;
 
     private:
-        int checkShaderCompileErrors(GLuint shader, std::string type);
-        int checkProgramCompileErrors(GLuint shader);
+        int checkShaderCompileErrors (GLuint shader, String type);
+        int checkProgramCompileErrors(GLuint shader             );
     };
 }

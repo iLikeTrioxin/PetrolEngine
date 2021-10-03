@@ -20,6 +20,7 @@ namespace PetrolEngine {
 		case ShaderDataType::Int4: return GL_INT;
 		
 		case ShaderDataType::Bool: return GL_BOOL;
+        default                  : return GL_NONE;
 		}
 	}
 
@@ -47,21 +48,21 @@ namespace PetrolEngine {
 	
 		auto vertexLayout = vertexBuffer->getLayout();
 		
-		uint32_t layoutSize = 0;
+		int layoutSize = 0;
 		for (auto& element : vertexLayout.elements) layoutSize += ShaderDataTypeSize(element.type);
 		
-		uint32_t offset = 0;
-		uint32_t index  = 0;
+		uint32 offset = 0;
+		uint32 index  = 0;
 		for ( auto& element : vertexLayout.elements ) {
 			switch (auto& type = element.type)
 			{
-			case ShaderDataType::None: debug_log("[!] None type element detected in vertex array."); break;
+			case ShaderDataType::None: DEBUG_LOG("[!] None type element detected in vertex array."); break;
 
 			case ShaderDataType::Mat3:
 			case ShaderDataType::Mat4: {
-				int8_t count = GetComponentCount(type);
+				int count = GetComponentCount(type);
 
-				for (uint8_t i = 0; i < count; i++)
+				for (uint i = 0; i < count; i++)
 				{
 					glEnableVertexAttribArray(index);
 
@@ -71,7 +72,7 @@ namespace PetrolEngine {
 						ShaderDataTypeToOpenGLBaseType(type),
 						GL_FALSE,
 						layoutSize,
-						(void*)(offset + (sizeof(float) * count * i))
+						(void*)(offset + (sizeof(float) * (uint)count * i))
 					);
 
 					glVertexAttribDivisor(index, 1);

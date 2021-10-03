@@ -18,12 +18,12 @@ namespace PetrolEngine {
 
 		data = stbi_load(_path, &width, &height, (int*)&componentsNumber, 0);
 
-		if (!data) { debug_log("[!] Failed to load image from " << path); return; }
+		if (!data) { DEBUG_LOG("[!] Failed to load image from " << path); return; }
 
 		this->bitsPerChannel = stbi_is_16_bit(_path) ? 16 : 8;
 		this->HDR = stbi_is_hdr(_path);
 
-		debug_log("[*] Loaded image from " << path << " with size of " << strlen((const char*)data));
+        DEBUG_LOG("[*] Loaded image from " << path << " with size of " << strlen((const char*)data));
 	}
 
 	Image::~Image() {

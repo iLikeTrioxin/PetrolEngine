@@ -1,8 +1,11 @@
+#include <PCH.h>
+
 #include "DebugTools.h"
+
 #include <iostream>
-#include <sstream>
 #include <iomanip>
-namespace PetrolEngine::Debuging {
+
+namespace PetrolEngine::Debugging {
 
 	// Logger
 	Logger Logger::logger;
@@ -58,7 +61,7 @@ namespace PetrolEngine::Debuging {
 		get().outputStream.open(filePath);
 
 		// Write header for the file
-		get().log(std::string("{\"otherData\": {},\"traceEvents\":[{}"));
+		get().log(R"({"otherData":{},"traceEvents":[{})");
 	}
 
 	// ScopeTimer
