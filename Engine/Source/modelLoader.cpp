@@ -88,9 +88,7 @@ namespace PetrolEngine {
 	}
 	
 	void modelLoader::processMesh(aiMesh* mesh, const aiScene* scene, Mesh* outputMesh) {
-		std::lock_guard<std::mutex> lock(mutex);
-		
-		std::vector<Vertex> vertices;
+        std::vector<Vertex> vertices;
 		std::vector< uint > indices;
 
 		vertices.reserve(mesh->mNumVertices);
@@ -165,8 +163,6 @@ namespace PetrolEngine {
 			Mesh*  mesh = &meshEntity.addComponent<Mesh>();
 			
 			modelLoader::Get().processMesh(_mesh_, _scene, mesh);
-			//meshProcesses.push_back(std::move(std::async([](aiMesh* mesh, const aiScene* scene, Mesh* outputMesh) {modelLoader::Get().processMesh(mesh, scene, outputMesh);}, _mesh_, _scene, mesh)));
-			//meshProcesses.back().wait();
 		}
 		for (uint i = 0; i < node->mNumChildren; i++) {
 			processNode(node->mChildren[i], _scene, parent);

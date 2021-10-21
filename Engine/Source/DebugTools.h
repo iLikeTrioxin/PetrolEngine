@@ -6,6 +6,12 @@
 #include <mutex>
 #include <fstream>
 
+#if defined(__linux__)
+#define clock std::chrono::system_clock
+#else
+#define clock std::chrono::steady_clock
+#endif
+
 namespace PetrolEngine::Debugging {
 
 	using TimeUnit = std::chrono::microseconds;
@@ -43,6 +49,7 @@ namespace PetrolEngine::Debugging {
 		~ScopeTimer();
 	private:
 		const char* name;
-		std::chrono::time_point<std::chrono::steady_clock> startTimePoint;
+
+		std::chrono::time_point<clock> startTimePoint;
 	};
 };

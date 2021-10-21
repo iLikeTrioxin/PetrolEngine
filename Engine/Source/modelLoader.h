@@ -3,6 +3,9 @@
 #include "Renderer/Texture.h"
 #include "Renderer/Shader.h"
 
+#include <future>
+#include <assimp/scene.h>
+
 namespace PetrolEngine {
 
 	class Scene;

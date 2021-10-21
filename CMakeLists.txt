@@ -33,12 +33,14 @@ target_link_libraries(Engine
     PRIVATE ${Vulkan_LIBRARIES}
 )
 
-# include only libraries
 target_include_directories(Engine
     PUBLIC Deps/glm
+    PUBLIC Deps/glfw/include
+    PUBLIC Deps/assimp/include
     PUBLIC Deps/stb
     PUBLIC Deps/entt/single_include
     PUBLIC Engine/Source
+    PUBLIC ${CMAKE_CURRENT_BINARY_DIR}/Deps/assimp/include
 	PUBLIC ${Vulkan_INCLUDE_DIRS}
 )
 
