@@ -141,6 +141,7 @@ namespace PetrolEngine {
 
 		void update(std::shared_ptr<Window> window);
 	};
+
 	class ExternalScript {
     public:
 		virtual void onUpdate() {  };

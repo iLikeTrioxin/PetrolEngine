@@ -10,11 +10,11 @@ File(GLOB_RECURSE RESOURCE_FILES Engine/Resources/*.*)
 
 source_group(TREE ${CMAKE_SOURCE_DIR}/Engine FILES ${SOURCE_FILES} ${HEADER_FILES} ${RESOURCE_FILES})
 
-add_library                (Engine ${SOURCE_FILES} ${HEADER_FILES} ${RESOURCE_FILES} )
+add_library(Engine ${SOURCE_FILES} ${HEADER_FILES} ${RESOURCE_FILES} )
 
-if(NOT WIN32)
+if(UNIX)
 
-target_link_libraries(Engine PUBLIC pthread dl)
+target_link_libraries (Engine PUBLIC pthread dl)
 target_compile_options(Engine PUBLIC -Wl,-rpath -Wl,.)
 
 endif()

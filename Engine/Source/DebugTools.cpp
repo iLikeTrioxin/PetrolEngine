@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include <iomanip>
+#include <sstream>
 
 namespace PetrolEngine::Debugging {
 

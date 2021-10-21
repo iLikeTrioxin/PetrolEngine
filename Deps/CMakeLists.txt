@@ -27,7 +27,7 @@ set( SHADERC_SKIP_EXAMPLES ON  CACHE BOOL "Skip building examples" FORCE )
 
 find_package (Python COMPONENTS Interpreter Development)
 
-execute_process(COMMAND ${Python_EXECUTABLE} ${CMAKE_SOURCE_DIR}/Deps/shaderc/utils/git-sync-deps COMMAND_ECHO STDOUT)
+execute_process(COMMAND ${Python_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/Deps/shaderc/utils/git-sync-deps COMMAND_ECHO STDOUT)
 
 add_subdirectory(shaderc)
 
