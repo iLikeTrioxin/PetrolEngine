@@ -1,8 +1,8 @@
 This file describes how you can contribute to this respository.
 
 I describe here those topics:
-    - General contribution info (lines  8-18)
-    - Prefered code style       (lines 20-41)
+    - General contribution info
+    - Prefered code style      
 
 
 //
@@ -26,7 +26,6 @@ before:
     - all caps    case (ex. ALLCAPSCASE)
 
 
-
 Variable names are written with lower camel case.
     int someVariable;
 
@@ -38,3 +37,9 @@ Files and directories are also named upper camel case.
 
 Macros are all caps with words seperated with '_'
     DEBUG_LOG(msg)
+
+Internal includes like Rednerer/Renderer.h are in ""
+    #include "Rednerer/Renderer.h"
+
+External includes like GLFW/glfw3.h are in <>
+    #include <GLFW/glfw3.h>
