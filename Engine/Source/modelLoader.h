@@ -12,16 +12,16 @@ namespace PetrolEngine {
 	class Entity;
 	class Mesh;
 
-	class modelLoader
+	class ModelLoader
 	{
 	public:
 		std::shared_ptr<Shader> shader;
-		static modelLoader& Get();
+		static ModelLoader& Get();
 		static Entity loadModel(const char* _path, Scene*  _scene);
 		static Entity loadModel(const char* _path, Entity& _parent);
 		
 	private:
-		static modelLoader modelLoaderInstance;
+		static ModelLoader modelLoader;
 		static std::mutex mutex;
 
 		void processMesh(aiMesh* mesh, const aiScene* scene, Mesh*  outputMesh);
@@ -29,6 +29,6 @@ namespace PetrolEngine {
 		void processNode(aiNode* node, const aiScene* scene, Entity parent);
 		std::vector<std::future<void>> meshProcesses;
 		
-		modelLoader() = default;
+		ModelLoader() = default;
 	};
 }

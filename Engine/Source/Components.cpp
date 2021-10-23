@@ -1,7 +1,6 @@
 #include <PCH.h>
 
 #include "Components.h"
-#include "Game.h"
 #include "./Renderer/Renderer.h"
 #include "./Core/Window.h"
 #include "DebugTools.h"
@@ -139,8 +138,8 @@ namespace PetrolEngine {
     // Movement
          Movement::Movement(Transform* trans) :
                             transform (trans) {};
-    void Movement::update(std::shared_ptr<Window> window) { LOG_FUNCTION();
-        auto& camera = mainCamera.getComponent<Camera>();
+    void Movement::update(std::shared_ptr<Window> window, Entity cam) { LOG_FUNCTION();
+        auto& camera = cam.getComponent<Camera>();
 
         float distance = (walkSpeed + (window->isPressed(GLFW_KEY_LEFT_SHIFT) * runSpeed)) * deltaTime;
         

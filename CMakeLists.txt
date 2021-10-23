@@ -49,15 +49,3 @@ if(${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.16")
 target_precompile_headers  ( Engine PRIVATE $<INSTALL_INTERFACE:Engine/Source/PCH.h> )
 
 endif()
-
-add_executable             (Engine_test        Engine/Source/Main.cpp   )
-target_include_directories (Engine_test PUBLIC Engine/Source            )
-target_include_directories (Engine_test PUBLIC ${DEPENDENCY_INCLUDE_DIR})
-target_link_libraries      (Engine_test Engine                          )
-
-
-target_include_directories(Engine_test
-    PUBLIC Deps/glm
-    PUBLIC Deps/stb
-    PUBLIC Deps/entt/single_include
-)

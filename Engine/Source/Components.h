@@ -139,7 +139,7 @@ namespace PetrolEngine {
 
 		Movement(Transform* trans);
 
-		void update(std::shared_ptr<Window> window);
+		void update(std::shared_ptr<Window> window, Entity cam);
 	};
 
 	class ExternalScript {

@@ -9,14 +9,12 @@
 
 namespace PetrolEngine {
 
-	std::mutex modelLoader::mutex;
-	modelLoader modelLoader::modelLoaderInstance;
+	std::mutex  ModelLoader::mutex;
+	ModelLoader ModelLoader::modelLoader;
 
-	modelLoader& modelLoader::Get() {
-		return modelLoaderInstance;
-	}
+	ModelLoader& ModelLoader::Get() { return modelLoader; }
 
-	Entity modelLoader::loadModel(const char* _path, Scene* _scene) {
+	Entity ModelLoader::loadModel(const char* _path, Scene* _scene) {
 		auto pPath = std::filesystem::current_path();
 		auto path  = std::filesystem::path(_path);
 		
@@ -37,19 +35,17 @@ namespace PetrolEngine {
 	
 		Entity model = _scene->createEntity(filename.c_str());
 
-		modelLoaderInstance.processNode(scene->mRootNode, scene, model);
+		modelLoader.processNode(scene->mRootNode, scene, model);
 
-		for (uint i = 0; i < modelLoaderInstance.meshProcesses.size(); i++) {
-			modelLoaderInstance.meshProcesses[i].wait();
-		}
+		for (auto& process : modelLoader.meshProcesses) process.wait();
 
-		modelLoaderInstance.meshProcesses.clear();
+		modelLoader.meshProcesses.clear();
 
 		std::filesystem::current_path(pPath);
 
 		return model;
 	}
-	Entity modelLoader::loadModel(const char* _path, Entity& _parent) {
+	Entity ModelLoader::loadModel(const char* _path, Entity& _parent) {
 
 		Assimp::Importer importer;
 		const aiScene* scene = importer.ReadFile(_path, aiProcess_GenNormals);
@@ -65,17 +61,15 @@ namespace PetrolEngine {
 
 		Entity model = _parent.getScene()->createEntity(fileName.substr(fileName.find_last_of("\\/") + 1).c_str(), _parent.getID());
 
-		modelLoaderInstance.processNode(scene->mRootNode, scene, model);
+		modelLoader.processNode(scene->mRootNode, scene, model);
 
-		for (uint i = 0; i < modelLoaderInstance.meshProcesses.size(); i++) {
-			modelLoaderInstance.meshProcesses[i].wait();
-		}
+		for (auto& process : modelLoader.meshProcesses) process.wait();
 
-		modelLoaderInstance.meshProcesses.clear();
+		modelLoader.meshProcesses.clear();
 
 		return model;
 	}
-	void modelLoader::texturesFromMaterial(aiMaterial* material, aiTextureType type, TextureType myType, std::vector< std::shared_ptr<Texture> >* textures) {
+	void ModelLoader::texturesFromMaterial(aiMaterial* material, aiTextureType type, TextureType myType, std::vector< std::shared_ptr<Texture> >* textures) {
         DEBUG_LOG("[*] Detected " << material->GetTextureCount(type) << " textures of " << static_cast<int>(myType));
 
 		for (uint i = 0; i < (material->GetTextureCount(type)); i++) {
@@ -87,7 +81,7 @@ namespace PetrolEngine {
 		}
 	}
 	
-	void modelLoader::processMesh(aiMesh* mesh, const aiScene* scene, Mesh* outputMesh) {
+	void ModelLoader::processMesh(aiMesh* mesh, const aiScene* scene, Mesh* outputMesh) {
         std::vector<Vertex> vertices;
 		std::vector< uint > indices;
 
@@ -153,7 +147,7 @@ namespace PetrolEngine {
 		//DEBUG_LOG("done 1");
 		//DEBUG_LOG("[*] Textures: " << scene->HasTextures() << " -- " << scene->mNumTextures);
 	}
-	void modelLoader::processNode(aiNode* node, const aiScene* _scene, Entity parent) {
+	void ModelLoader::processNode(aiNode* node, const aiScene* _scene, Entity parent) {
 		for (uint i = 0; i < node->mNumMeshes; i++) {
 			aiMesh* _mesh_ = _scene->mMeshes[node->mMeshes[i]];
 			const char* name = (node->mName.length == 0) ? "New node" : node->mName.C_Str();
@@ -162,7 +156,7 @@ namespace PetrolEngine {
 			Entity meshEntity = scene->createEntity(name, parent.getID());
 			Mesh*  mesh = &meshEntity.addComponent<Mesh>();
 			
-			modelLoader::Get().processMesh(_mesh_, _scene, mesh);
+			ModelLoader::processMesh(_mesh_, _scene, mesh);
 		}
 		for (uint i = 0; i < node->mNumChildren; i++) {
 			processNode(node->mChildren[i], _scene, parent);
