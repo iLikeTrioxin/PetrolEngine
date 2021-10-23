@@ -15,12 +15,24 @@
 
 stages:          # List of stages for jobs, and their order of execution
   - install
+  - build-pending
   - build
 
 install-job:
   stage: install
   script:
     - git submodule update --init --recursive
+
+build-pending-job:
+  stage: build-pending
+  script:
+    - export REPO="PetrolEngine"
+    - export COMMIT_SHA=$CI_COMMIT_SHA
+    - export CONTEXT="ci/gitlab"
+    - export DESC="Pipeline pending on GitLab"
+    - export URL=$CI_PIPELINE_URL
+    - export STATE="pending"
+    - python3 -c 'from github import Github;from os import getenv;Github(getenv("TOKEN")).get_user().get_repo(getenv("REPO")).get_commit(sha=getenv("COMMIT_SHA")).create_status(state=getenv("STATE"),target_url=getenv("URL"),description=getenv("DESC"),context=getenv("CONTEXT"))'
 
 build-job:       # This job runs in the build stage, which runs first.
   stage: build
@@ -30,3 +42,12 @@ build-job:       # This job runs in the build stage, which runs first.
     - cmake ..
     - make -j 2
     - echo "Compile complete."
+  after-script:
+    - export CONTEXT="ci/gitlab"
+    - export COMMIT_SHA=$CI_COMMIT_SHA
+    - export URL=$CI_PIPELINE_URL
+    - export REPO="PetrolEngine"
+    - if [ $CI_JOB_STATUS == success ]; then export DESC="Pipeline passed on GitLab"; else export DESC="Pipeline failed on GitLab"; fi
+    - if [ $CI_JOB_STATUS == success ]; then export STATE="success"                 ; else export STATE="failure"                 ; fi
+    - python3 -c 'from github import Github;from os import getenv;Github(getenv("TOKEN")).get_user().get_repo(getenv("REPO")).get_commit(sha=getenv("COMMIT_SHA")).create_status(state=getenv("STATE"),target_url=getenv("URL"),description=getenv("DESC"),context=getenv("CONTEXT"))'
+
