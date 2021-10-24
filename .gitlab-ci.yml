@@ -1,16 +1,23 @@
 stages:
   - install
-  - build-pending
   - build
 
 install-job:
   stage: install
+  cache:
+    key: $CI_COMMIT_REF_SLUG
+    paths:
+      - Deps/
   script:
     - git submodule update --init --recursive
 
-build-pending-job:
-  stage: build-pending
-  script:
+build-job:
+  stage: build
+  artifacts:
+    paths:
+      - CMakeFiles/
+    expire_in: 1 week
+  before_script:
     - export REPO="PetrolEngine"
     - export COMMIT_SHA=$CI_COMMIT_SHA
     - export CONTEXT="ci/gitlab"
@@ -18,9 +25,6 @@ build-pending-job:
     - export URL=$CI_PIPELINE_URL
     - export STATE="pending"
     - python3 -c 'from github import Github;from os import getenv;Github(getenv("TOKEN")).get_user().get_repo(getenv("REPO")).get_commit(sha=getenv("COMMIT_SHA")).create_status(state=getenv("STATE"),target_url=getenv("URL"),description=getenv("DESC"),context=getenv("CONTEXT"))'
-
-build-job:
-  stage: build
   script:
     - mkdir -p build
     - cd build
