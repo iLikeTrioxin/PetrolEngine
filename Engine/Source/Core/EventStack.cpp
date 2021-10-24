@@ -2,5 +2,7 @@
 #include "EventStack.h"
 
 namespace PetrolEngine {
-	std::unordered_map<std::type_index, std::list<Event*>> EventStack::events;
+    const Vector<Event*> EventStack::emptyEventList = {};
+
+    std::unordered_map<std::type_index, Vector<Event*>> EventStack::events;
 }

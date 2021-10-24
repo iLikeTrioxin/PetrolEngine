@@ -51,7 +51,7 @@ namespace PetrolEngine {
 		int layoutSize = 0;
 		for (auto& element : vertexLayout.elements) layoutSize += ShaderDataTypeSize(element.type);
 		
-		uint32 offset = 0;
+		uint64 offset = 0;
 		uint32 index  = 0;
 		for ( auto& element : vertexLayout.elements ) {
 			switch (auto& type = element.type)

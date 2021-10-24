@@ -105,8 +105,8 @@ namespace PetrolEngine {
 	std::shared_ptr<Shader> Shader::create(String&& vertexSrc, String&& fragmentSrc, String&& geometrySrc){ LOG_FUNCTION();
 		switch (RendererAPI::get())
 		{
-            case RendererAPI::API::OpenGL: return std::make_shared<OpenGLShader>( vertexSrc .c_str(), fragmentSrc.c_str() );
-            case RendererAPI::API::Vulkan: return std::make_shared<VulkanShader>( vertexSrc .c_str(), fragmentSrc.c_str() );
+            case RendererAPI::API::OpenGL: return std::make_shared<OpenGLShader>( vertexSrc .c_str(), fragmentSrc.c_str(), nullptr );
+            case RendererAPI::API::Vulkan: return std::make_shared<VulkanShader>( vertexSrc .c_str(), fragmentSrc.c_str(), nullptr );
 			default: return nullptr;
 		}
 	}

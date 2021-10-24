@@ -14,19 +14,19 @@ namespace PetrolEngine {
     public:
         template<class T>
         static bool checkEvents() {
-            return events.find(typeid(T)) == events.end() ? false : true;
+            return events.find(typeid(T)) != events.end();
         }
 
         template<class T>
-        static List<T*>* getEvents() {
+        static Vector<T*>& getEvents() {
             // I believe that typeid is resolved here on compile time, but I'm not sure,
             // so it is something to check later.
             auto eventList = events.find(typeid(T));
 
             if (eventList == events.end())
-                return nullptr;
+                return *reinterpret_cast<Vector<T*>*>(const_cast<Vector<Event*>*>(&emptyEventList));
 
-            return reinterpret_cast<List<T*>*>(&eventList->second);
+            return *reinterpret_cast<Vector<T*>*>(&eventList->second);
         }
 
         template<class T>
@@ -35,7 +35,7 @@ namespace PetrolEngine {
 
             if (eventList == events.end()) return;
 
-            eventList->second.remove( reinterpret_cast<Event*>(_event) );
+            //eventList->second.remove( reinterpret_cast<Event*>(_event) );
         }
 
         static void clear() {
@@ -46,16 +46,17 @@ namespace PetrolEngine {
         static T* addEvent(T* _event) {
             auto eventClassEvents = events.find(typeid(T));
 
-            // If there wasn't list of this event class create new
+            // If there wasn't Vector of this event class create new
             // Else reinterpret any Event-inherited class into Event and push
             if (eventClassEvents == events.end())
-                events.emplace<TypeIndex, List<Event*>>(typeid(T), { _event });
+                events.emplace<TypeIndex, Vector<Event*>>(typeid(T), { _event });
             else
                 eventClassEvents->second.push_back(reinterpret_cast<Event*>(_event));
             
             return _event;
         }
     private:
-        static UnorderedMap<TypeIndex, List<Event*>> events;
+        static UnorderedMap<TypeIndex, Vector<Event*>> events;
+        static const Vector<Event*> emptyEventList;
     };
 }

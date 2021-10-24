@@ -120,9 +120,15 @@ using List = std::list<T>;
 #include <ostream>
 #include "DebugTools.h"
 
+#include <iostream>
+
 #if defined(PETROL_ENGINE_DEBUG)
 
-#define LOG_SCOPE(name) PetrolEngine::Debugging::ScopeTimer timer##CURRENT_LINE(name)
+// I don't know why but this redirect is required to work on every compiler
+#define LOG_SCOPE_LINE2(name, line) PetrolEngine::Debugging::ScopeTimer timer##line(name)
+#define LOG_SCOPE_LINE(name, line) LOG_SCOPE_LINE2(name, line)
+
+#define LOG_SCOPE(name) LOG_SCOPE_LINE(name, __LINE__)
 #define LOG_FUNCTION() LOG_SCOPE(CURRENT_FUNCTION)
 #define DEBUG_LOG(msg) std::cout<<msg<<std::endl
 
@@ -153,3 +159,4 @@ using uint64 = unsigned long long;
 
 template<typename from, typename to>
 constexpr to CastTo(from& in) { return *reinterpret_cast<to*>(&in); }
+

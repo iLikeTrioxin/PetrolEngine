@@ -157,40 +157,40 @@ namespace PetrolEngine {
         glDeleteProgram(this->ID);
     }
 
-    void OpenGLShader::setVec4(const std::string& name, float x, float y, float z, float w) {
+    void OpenGLShader::setVec4(const String& name, float x, float y, float z, float w) {
         glUniform4f(glGetUniformLocation(ID, name.c_str()), x, y, z, w);
     }
-    void OpenGLShader::setBool(const std::string& name, bool     value) {
-        glUniform1i(glGetUniformLocation(ID, name.c_str()), (int)value);
+    void OpenGLShader::setBool(const String& name, bool     x) {
+        glUniform1i(glGetUniformLocation(ID, name.c_str()), (int)x);
     }
-    void OpenGLShader::setInt(const std::string& name, int      value) {
-        glUniform1i(glGetUniformLocation(ID, name.c_str()), value);
+    void OpenGLShader::setInt(const String& name, int      x) {
+        glUniform1i(glGetUniformLocation(ID, name.c_str()), x);
     }
-    void OpenGLShader::setFloat(const std::string& name, float     value) {
-        glUniform1f(glGetUniformLocation(ID, name.c_str()), value);
+    void OpenGLShader::setFloat(const String& name, float     x) {
+        glUniform1f(glGetUniformLocation(ID, name.c_str()), x);
     }
-    void OpenGLShader::setVec2(const std::string& name, const glm::vec2& value) {
-        glUniform2fv(glGetUniformLocation(ID, name.c_str()), 1, &value[0]);
+    void OpenGLShader::setVec2(const String& name, const glm::vec2& x) {
+        glUniform2fv(glGetUniformLocation(ID, name.c_str()), 1, &x[0]);
     }
-    void OpenGLShader::setVec2(const std::string& name, float x, float    y) {
+    void OpenGLShader::setVec2(const String& name, float x, float    y) {
         glUniform2f(glGetUniformLocation(ID, name.c_str()), x, y);
     }
-    void OpenGLShader::setVec3(const std::string& name, const glm::vec3& value) {
-        glUniform3fv(glGetUniformLocation(ID, name.c_str()), 1, &value[0]);
+    void OpenGLShader::setVec3(const String& name, const glm::vec3& x) {
+        glUniform3fv(glGetUniformLocation(ID, name.c_str()), 1, &x[0]);
     }
-    void OpenGLShader::setVec3(const std::string& name, float x, float y, float z) {
+    void OpenGLShader::setVec3(const String& name, float x, float y, float z) {
         glUniform3f(glGetUniformLocation(ID, name.c_str()), x, y, z);
     }
-    void OpenGLShader::setVec4(const std::string& name, const glm::vec4& value) {
-        glUniform4fv(glGetUniformLocation(ID, name.c_str()), 1, &value[0]);
+    void OpenGLShader::setVec4(const String& name, const glm::vec4& x) {
+        glUniform4fv(glGetUniformLocation(ID, name.c_str()), 1, &x[0]);
     }
-    void OpenGLShader::setMat2(const std::string& name, const glm::mat2& mat) {
+    void OpenGLShader::setMat2(const String& name, const glm::mat2& mat) {
         glUniformMatrix2fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &mat[0][0]);
     }
-    void OpenGLShader::setMat3(const std::string& name, const glm::mat3& mat) {
+    void OpenGLShader::setMat3(const String& name, const glm::mat3& mat) {
         glUniformMatrix3fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &mat[0][0]);
     }
-    void OpenGLShader::setMat4(const std::string& name, const glm::mat4& mat) {
+    void OpenGLShader::setMat4(const String& name, const glm::mat4& mat) {
         glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &mat[0][0]);
     }
 
@@ -210,7 +210,7 @@ namespace PetrolEngine {
         return 1;
     }
 
-    int OpenGLShader::checkShaderCompileErrors(GLuint shader, std::string type) {
+    int OpenGLShader::checkShaderCompileErrors(GLuint shader, String type) {
         GLint success;
         GLchar infoLog[1024];
 
