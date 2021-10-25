@@ -1,5 +1,5 @@
 ## Engine
-It's my own 3D graphics engine written for self-education.
+It's my 3D graphics engine written for self-education.
 
 # Build
 Clone respository
