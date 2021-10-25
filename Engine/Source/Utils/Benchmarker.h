@@ -16,13 +16,15 @@ namespace PetrolEngine{
         double(*timeFunction)() = nullptr;
         void frameDone();
 
-        explicit Benchmarker(void* _timeFunction) : timeFunction(reinterpret_cast<double(*)()>(_timeFunction)), previousTimePoint(timeFunction()) {}
+        explicit Benchmarker(void* _timeFunction) : timeFunction(reinterpret_cast<double(*)()>(_timeFunction)), previousTimePoint(timeFunction()) { deltaTimes.reserve(1000); }
 
         double    getOnePercentLow();
         double getDotOnePercentLow();
         double getAVG();
         double getMax();
         double getMin();
+
+        void clear();
 
     private:
         std::vector<double> deltaTimes;

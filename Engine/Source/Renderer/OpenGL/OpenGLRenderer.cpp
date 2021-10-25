@@ -37,8 +37,8 @@ namespace PetrolEngine {
 
 		auto shader = Shader::load(
 			"textShader",
-			ReadFile("../Engine/Resources/Shaders/textShader.vert"),
-			ReadFile("../Engine/Resources/Shaders/textShader.frag")
+			ReadFile("../Hei/Resources/Shaders/textShader.vert"),
+			ReadFile("../Hei/Resources/Shaders/textShader.frag")
 		);
 
 		glUseProgram(shader->ID);

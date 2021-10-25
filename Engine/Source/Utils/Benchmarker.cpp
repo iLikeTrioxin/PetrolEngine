@@ -5,11 +5,15 @@
 namespace PetrolEngine{
 
     struct sortDouble {
-        bool operator()(double a, double b) const { return a < b; }
+        bool operator()(double a, double b) const { return a > b; }
     };
 
     void Benchmarker::frameDone() {
-        deltaTimes.emplace_back(timeFunction());
+        double currentTimePoint = timeFunction();
+        
+        deltaTimes.emplace_back(currentTimePoint - previousTimePoint);
+
+        previousTimePoint = currentTimePoint;
         sorted = false;
     }
 
@@ -24,7 +28,7 @@ namespace PetrolEngine{
         double a4 = 0.0;
 
         // this loop can skip up to 3 frames (that small mistake is acceptable)
-        for(int i=0; i < dotOnePercentSize; i+=4){
+        for(uint64 i=0; i < dotOnePercentSize; i+=4){
             a1 += deltaTimes[i + 0];
             a2 += deltaTimes[i + 1];
             a3 += deltaTimes[i + 2];
@@ -45,7 +49,7 @@ namespace PetrolEngine{
         double a4 = 0.0;
 
         // this loop can skip up to 3 frames (that small mistake is acceptable)
-        for(int i=0; i < onePercentSize; i+=4){
+        for(uint64 i=0; i < onePercentSize; i+=4){
             a1 += deltaTimes[i + 0];
             a2 += deltaTimes[i + 1];
             a3 += deltaTimes[i + 2];
@@ -60,16 +64,18 @@ namespace PetrolEngine{
         double a2 = 0.0;
         double a3 = 0.0;
         double a4 = 0.0;
+        
+        int size = deltaTimes.size() - (deltaTimes.size() % 4);
 
         // this loop can skip up to 3 frames (that small mistake is acceptable)
-        for(int i=0; i < deltaTimes.size(); i+=4){
+        for(uint64 i=0; i < size; i+=4){
             a1 += deltaTimes[i + 0];
             a2 += deltaTimes[i + 1];
             a3 += deltaTimes[i + 2];
             a4 += deltaTimes[i + 3];
         }
 
-        return ( (a1 + a2) + (a3 + a4) ) / deltaTimes.size();
+        return ( (a1 + a2) + (a3 + a4) ) / size;
     }
 
     double Benchmarker::getMax() {
@@ -82,6 +88,10 @@ namespace PetrolEngine{
         if(!sorted) { std::sort(deltaTimes.begin(), deltaTimes.end(), sortDouble()); sorted = true; }
 
         return deltaTimes.front();
+    }
+
+    void Benchmarker::clear() {
+        deltaTimes.clear();
     }
 
 }

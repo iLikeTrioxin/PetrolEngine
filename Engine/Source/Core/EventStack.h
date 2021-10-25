@@ -30,12 +30,12 @@ namespace PetrolEngine {
         }
 
         template<class T>
-        static void dispatched(T* _event) {
+        static void popFront() {
             auto eventList = events.find(typeid(T));
 
             if (eventList == events.end()) return;
 
-            //eventList->second.remove( reinterpret_cast<Event*>(_event) );
+            eventList->second.erase(eventList->second.begin());
         }
 
         static void clear() {
