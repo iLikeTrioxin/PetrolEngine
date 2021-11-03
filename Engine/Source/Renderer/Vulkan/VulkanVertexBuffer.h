@@ -6,10 +6,10 @@ namespace PetrolEngine {
 	class VulkanVertexBuffer : public VertexBuffer {
 	public:
 		VulkanVertexBuffer(VertexLayout layout);
-		VulkanVertexBuffer(VertexLayout layout, void* data, uint32_t size);
+		VulkanVertexBuffer(VertexLayout layout, const void* data, int64 size);
 
-		virtual void setData(void* data, uint32_t size) override;
+        void setData(const void* data, int64 size) override;
 
-		~VulkanVertexBuffer();
+		~VulkanVertexBuffer() override;
 	};
 }

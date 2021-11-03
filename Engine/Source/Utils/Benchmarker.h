@@ -1,34 +1,35 @@
 #pragma once
 
-#include <aliases.h>
+#include <Aliases.h>
 #include <vector>
+#include <chrono>
 
 #if defined(__linux__)
-#define clock std::chrono::system_clock
+#    define BM_CLOCK std::chrono::system_clock
 #else
-#define clock std::chrono::steady_clock
+#    define BM_CLOCK std::chrono::steady_clock
 #endif
 
 namespace PetrolEngine{
 
     class Benchmarker {
     public:
-        double(*timeFunction)() = nullptr;
         void frameDone();
 
-        explicit Benchmarker(void* _timeFunction) : timeFunction(reinterpret_cast<double(*)()>(_timeFunction)), previousTimePoint(timeFunction()) { deltaTimes.reserve(1000); }
+        Benchmarker();
 
-        double    getOnePercentLow();
-        double getDotOnePercentLow();
-        double getAVG();
-        double getMax();
-        double getMin();
+        MAYBE_UNUSED NO_DISCARD double    getOnePercentLow();
+        MAYBE_UNUSED NO_DISCARD double getDotOnePercentLow();
+        MAYBE_UNUSED NO_DISCARD double getAVG();
+        MAYBE_UNUSED NO_DISCARD double getMax();
+        MAYBE_UNUSED NO_DISCARD double getMin();
 
         void clear();
 
     private:
-        std::vector<double> deltaTimes;
-        double previousTimePoint = 0.0;
-        bool   sorted = false;
+        Vector<uint32> deltaTimes;
+        double pt = 0;
+        std::chrono::time_point<BM_CLOCK> previousTimePoint;
+        bool sorted = false;
     };
 }

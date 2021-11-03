@@ -14,17 +14,17 @@ namespace PetrolEngine {
         return characters[character];
     }
 
-	void Text::init(String fontPath) {
+	void Text::init(const String& fontPath) {
         FT_Library ft;
 
         if (FT_Error error = FT_Init_FreeType(&ft)) {
-            DEBUG_LOG("[!] FREETYPE ERROR: Could not init FreeType Library (error code:" << error << ")");
+            LOG("FREETYPE ERROR: Could not init FreeType Library (error code:" + std::to_string(error) + ")", 3);
             return;
         }
 
         FT_Face face;
         if (FT_Error error = FT_New_Face(ft, fontPath.c_str(), 0, &face)) {
-            DEBUG_LOG("[!] FREETYPE ERROR: Failed to load font (error code:" << error << ")");
+            LOG("FREETYPE ERROR: Failed to load font (error code:" + std::to_string(error) + ")", 2);
             return;
         }
 
@@ -43,7 +43,7 @@ namespace PetrolEngine {
 
             // load character glyph 
             if (FT_Error error = FT_Load_Char(face, c, FT_LOAD_RENDER)) {
-                DEBUG_LOG("[!] FREETYTPE ERROR: Failed to load Glyph with ASCII ID " << (uint) c << " (error code:" << error << ")");
+                LOG("FREETYPE ERROR: Failed to load Glyph with ASCII ID " + std::to_string(c) + " (error code:" + std::to_string(error) + ")", 2);
                 continue;
             }
 

@@ -17,7 +17,7 @@ namespace PetrolEngine{
         UnorderedMap<TypeIndex, void*> unorderedMap;
 
         template<typename T>
-        Vector<T> getView(){
+        Vector<T> getView() {
             T* t = reinterpret_cast<T*>( unorderedMap[typeid(T)] );
             return t;
         }

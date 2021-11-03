@@ -25,3 +25,6 @@
 [submodule "Deps/shaderc"]
 	path = Deps/shaderc
 	url = https://github.com/google/shaderc/
+[submodule "Deps/openal-soft"]
+	path = Deps/openal-soft
+	url = https://github.com/kcat/openal-soft

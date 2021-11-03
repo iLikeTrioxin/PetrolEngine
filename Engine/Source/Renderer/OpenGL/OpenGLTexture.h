@@ -20,7 +20,7 @@ namespace PetrolEngine {
 		);
 
 		explicit OpenGLTexture(
-			const Image& image,
+			Ref<Image> image,
 			TextureType type = TextureType::NONE
 		);
 		

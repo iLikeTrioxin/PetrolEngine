@@ -14,7 +14,7 @@ namespace PetrolEngine {
     static const char* defaultVertexShaderPath   = "C:/Users/mpr19/Desktop/Engine/Engine/Resources/Shaders/shader.frag";
     static const char* defaultFragmentShaderPath = "C:/Users/mpr19/Desktop/Engine/Engine/Resources/Shaders/shader.vert";
 
-	std::unordered_map<String, std::shared_ptr<Shader>> Shader::loadedShaders;
+	std::unordered_map<String, Ref<Shader>> Shader::loadedShaders;
 	
 	auto getSourcesFromString(String fileSource, String keyword = "#type") {
 		std::unordered_map<String, String> sources;
@@ -42,7 +42,7 @@ namespace PetrolEngine {
 
 		return sources;
 	}
-	std::shared_ptr<Shader> Shader::load(const String& path) {
+	Ref<Shader> Shader::load(const String& path) {
 		// check if shader with that path wasn't already loaded
 		auto isShaderInHash = loadedShaders.find(path);
 
@@ -76,10 +76,10 @@ namespace PetrolEngine {
 		return shader;
 	}
 
-	std::shared_ptr<Shader> Shader::load(String&& name,
-										 String&& vertexSrc,
-										 String&& fragmentSrc,
-										 String&& geometrySrc  ) {
+	Ref<Shader> Shader::load( String&& name       ,
+                              String&& vertexSrc  ,
+                              String&& fragmentSrc,
+                              String&& geometrySrc  ) {
 		LOG_FUNCTION();
 
 		// find shader with that name
@@ -102,11 +102,11 @@ namespace PetrolEngine {
 		return shader;
 	}
 
-	std::shared_ptr<Shader> Shader::create(String&& vertexSrc, String&& fragmentSrc, String&& geometrySrc){ LOG_FUNCTION();
+	Ref<Shader> Shader::create(String&& vertexSrc, String&& fragmentSrc, String&& geometrySrc){ LOG_FUNCTION();
 		switch (RendererAPI::get())
 		{
-            case RendererAPI::API::OpenGL: return std::make_shared<OpenGLShader>( vertexSrc .c_str(), fragmentSrc.c_str(), nullptr );
-            case RendererAPI::API::Vulkan: return std::make_shared<VulkanShader>( vertexSrc .c_str(), fragmentSrc.c_str(), nullptr );
+            case RendererAPI::API::OpenGL: return CreateRef<OpenGLShader>( vertexSrc .c_str(), fragmentSrc.c_str(), nullptr );
+            case RendererAPI::API::Vulkan: return CreateRef<VulkanShader>( vertexSrc .c_str(), fragmentSrc.c_str(), nullptr );
 			default: return nullptr;
 		}
 	}

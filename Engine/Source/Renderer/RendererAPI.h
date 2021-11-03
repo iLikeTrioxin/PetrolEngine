@@ -75,7 +75,7 @@ namespace PetrolEngine{
         static Ptr<RendererAPI> create(API targetAPI);
 
         virtual int  init    (bool debug) = 0;
-        virtual void setViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height) = 0;
+        virtual void setViewport(int x, int y, int width, int height) = 0;
         virtual void renderMesh (Mesh& mesh, Transform& transform, Camera& camera) = 0;
         virtual void renderText(const String& text, Transform& transform) = 0;
         virtual void clear() = 0;

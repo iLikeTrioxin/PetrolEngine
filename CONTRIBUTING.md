@@ -1,45 +1,69 @@
-This file describes how you can contribute to this respository.
+####This file describes how you can contribute to this respository.
 
-I describe here those topics:
-    - General contribution info
-    - Prefered code style      
+#I describe here those topics:
+- ####General contribution info
+- ####Preferred code style      
 
 
-//
-// General info
-//
 
-So to begin with, I'm open to any sugesstions
-that can help improve my code or knowlage.
+#General info
+
+So to begin with, I'm open to any suggestions
+that can help improve my code or knowledge.
 
 If you see any bugs or things I could do better
 please commit your change or tell me about it
 on discord or any other media (can be found on https://www.yukiteru.xyz)
 
-//
-// Prefered code style
-//
 
-before:
-    - lower camel case (ex. lowerCamelCase)
-    - upper camel case (ex. UpperCamelCase) so called pascal case
-    - all caps    case (ex. ALLCAPSCASE)
+# Preferred code style
 
 
-Variable names are written with lower camel case.
-    int someVariable;
+##before:
+- lower camel case (ex. lowerCamelCase)
+- upper camel case (ex. UpperCamelCase) so called pascal case
+- all caps    case (ex. ALLCAPSCASE)
 
-Class names are written using upper camel case.
-    class SomeClass
 
-Files and directories are also named upper camel case.
-    PetrolEngine/Deps/Xyz.cpp
+###Variable names are written with lower camel case.
+```c++
+int someVariable;
+```
 
-Macros are all caps with words seperated with '_'
-    DEBUG_LOG(msg)
+###Class names are written using upper camel case.
+```c++
+class SomeClass
+```
 
-Internal includes like Rednerer/Renderer.h are in ""
-    #include "Rednerer/Renderer.h"
+###Files and directories are also named upper camel case.
+```
+PetrolEngine/Deps/Xyz.cpp
+```
 
-External includes like GLFW/glfw3.h are in <>
-    #include <GLFW/glfw3.h>
+###Macros are all caps with words seperated with '_'
+```c++
+DEBUG_LOG("some message");
+```
+
+###Internal includes like Renderer/Renderer.h are in ""
+```c++
+#include "Renderer/Renderer.h"
+```
+
+###External includes like GLFW/glfw3.h are in <>
+```c++
+#include <GLFW/glfw3.h>
+```
+
+#Future
+
+## Code
+
+### My goto code style is something like:
+```c++
+Window* window = new Window(...);
+Renderer* renderer = new Renderer(...);
+
+renderer.bind(window);
+
+```

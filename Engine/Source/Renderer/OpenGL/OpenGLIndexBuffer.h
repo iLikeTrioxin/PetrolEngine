@@ -6,10 +6,10 @@ namespace PetrolEngine {
 	class OpenGLIndexBuffer : public IndexBuffer {
 	public:
 		OpenGLIndexBuffer();
-		OpenGLIndexBuffer(void* data, uint32_t size);
+		OpenGLIndexBuffer(const void* data, int64 size);
 
-		virtual void setData(void* data, uint32_t size) override;
+        void setData(const void* data, int64 size) override;
 
-		~OpenGLIndexBuffer();
+		~OpenGLIndexBuffer() override;
 	};
 }

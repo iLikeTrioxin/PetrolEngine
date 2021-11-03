@@ -279,7 +279,7 @@ namespace PetrolEngine {
 
         vkEnumeratePhysicalDevices(instance, &deviceCount, nullptr);
 
-        if(deviceCount == 0) { DEBUG_LOG("No vulkan suitable devices found. Aborting."); return; }
+        if(deviceCount == 0) { LOG("No vulkan suitable devices found. Aborting.", 3); return; }
 
         Vector<VkPhysicalDevice> devices(deviceCount);
 
@@ -390,7 +390,7 @@ namespace PetrolEngine {
     int VulkanRenderer::init(bool debug) {
         this->debugMode = debug;
 
-        if(debugMode) debugMode = checkValidationLayerSupport();
+        if(this->debugMode) debugMode = checkValidationLayerSupport();
 
         VkApplicationInfo appInfo{};
         appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
@@ -426,9 +426,10 @@ namespace PetrolEngine {
             createInfo.pNext             = nullptr;
         }
 
-        auto extensions = getRequiredExtensions();
-        createInfo.enabledExtensionCount = static_cast<uint32_t>(extensions.size());
-        createInfo.ppEnabledExtensionNames = extensions.data();
+        // TODO: IMPORTANTE CHECK WHATS UP WITH THIS SHIT
+        // auto extensions = getRequiredExtensions();
+        // createInfo.enabledExtensionCount = static_cast<uint32_t>(extensions.size());
+        // createInfo.ppEnabledExtensionNames = extensions.data();
 
         uint32_t glfwExtensionCount = 0;
         const char** glfwExtensions;
@@ -485,7 +486,7 @@ namespace PetrolEngine {
         }
 
         if (vkCreateDevice(physicalDevice, &createInfo, nullptr, &logicalDevice) != VK_SUCCESS) {
-            DEBUG_LOG("couldn't create logical device");
+            LOG("Couldn't create logical device", 3);
         }
 
         vkGetDeviceQueue(logicalDevice, indices.graphicsFamily.value(), 0, &graphicsQueue);
@@ -509,7 +510,7 @@ namespace PetrolEngine {
 
     // to declare
 	void VulkanRenderer::getDeviceConstantValue(DeviceConstant d, void* o) {}
-	void VulkanRenderer::setViewport(uint32_t x, uint32_t y, uint32_t w, uint32_t h) {}
+	void VulkanRenderer::setViewport(int x, int y, int w, int h) {}
 	void VulkanRenderer::renderText(const String& s, Transform& t) {}
 	void VulkanRenderer::renderMesh(Mesh& m, Transform& t, Camera& c) {}
 	void VulkanRenderer::clear() {}

@@ -19,8 +19,8 @@ namespace PetrolEngine {
 			TextureFormat format = TextureFormat::NONE
 		);
 
-		VulkanTexture(
-			const Image& image,
+        VulkanTexture(
+			const Ref<Image>& image,
 			TextureType type = TextureType::NONE
 		);
 		

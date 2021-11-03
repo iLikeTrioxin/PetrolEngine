@@ -2,20 +2,117 @@
 
 // TODO replace std containers with my own (as i want to get the rid of most dependencies)
 
-#if   __cplusplus >= 202002L // Cpp20
-    #define CPP 20
-#elif __cplusplus >= 201703L // Cpp17
-    #define CPP 17
-#elif __cplusplus >= 201402L // Cpp14
-    #define CPP 14
-#elif __cplusplus >= 201103L // Cpp11
-    #define CPP 11
-#else   // __cplusplus expands to 199711L until Cpp11 but asume not supported, so 00
-    #define CPP 00
+#if !defined(__cplusplus)
+#    error A C++ compiler is required!
 #endif
 
-#if defined(NDEBUG)
-#define PETROL_ENGINE_DEBUG
+#if   __cplusplus >= 202002L // Cpp20
+#    define CPP 20
+#elif __cplusplus >= 201703L // Cpp17
+#    define CPP 17
+#elif __cplusplus >= 201402L // Cpp14
+#    define CPP 14
+#elif __cplusplus >= 201103L // Cpp11
+#    define CPP 11
+#elif __cplusplus >= 199711L // Cpp98
+#    define CPP 98
+#endif
+
+#if defined(DEBUG)
+#    define DEBUG_LEVEL_3
+#endif
+
+#if defined(DEBUG_LEVEL_3)
+#    define DEBUG_STATEMENT_L3(x) x
+#    define DEBUG_STATEMENT_L2(x) x
+#    define DEBUG_STATEMENT_L1(x) x
+#elif defined(DEBUG_LEVEL_2)
+#    define DEBUG_STATEMENT_L3(x)
+#    define DEBUG_STATEMENT_L2(x) x
+#    define DEBUG_STATEMENT_L1(x) x
+#elif defined(DEBUG_LEVEL_1)
+#    define DEBUG_STATEMENT_L3(x)
+#    define DEBUG_STATEMENT_L2(x)
+#    define DEBUG_STATEMENT_L1(x) x
+#else
+#    define DEBUG_STATEMENT_L3(x)
+#    define DEBUG_STATEMENT_L2(x)
+#    define DEBUG_STATEMENT_L1(x)
+#endif
+
+/*
+ *  C++ attributes:
+ *  LIKELY
+ *  UNLIKELY
+ *  NO_DISCARD
+ *  NO_DISCARD(reason)
+ *  NO_UNIQUE_ADDRESS
+ *  MAYBE_UNUSED
+ *  FALLTHROUGH
+ *  DEPRECATED
+ *  DEPRECATED(reason)
+ *  DEPENDENT
+ *  NO_RETURN
+ */
+
+#if CPP >= 20
+#    define   LIKELY  [[likely]]
+#    define UNLIKELY [[unlikely]]
+#    define NO_DISCARD(reason) [[nodiscard(reason)]]
+#    define NO_UNIQUE_ADDRESS [[no_unique_address]]
+#elif CPP == 17
+#    define MAYBE_UNUSED [[   maybe_unused   ]]
+#    define NO_DISCARD   [[     nodiscard    ]]
+#    define FALLTHROUGH  [[    fallthrough   ]]
+#elif CPP == 14
+#    define DEPRECATED         [[deprecated        ]]
+#    define DEPRECATED(reason) [[deprecated(reason)]]
+#elif CPP == 11
+#    define DEPENDENT [[carries_dependency]]
+#    define NO_RETURN [[     noreturn     ]]
+#else
+//
+#endif
+
+
+// Compiler specific attributes
+#if defined(__GNUC__)
+#    define PURE     __attribute  ((         const        ))
+#    define FASTCALL __attribute  ((       fastcall       ))
+#    define INTERNAL __attribute__((visibility("internal")))
+#    define RESTRICT __restrict
+#    define VECTORCALL
+#
+#    define CURRENT_FUNCTION __PRETTY_FUNCTION__
+#elif defined(__clang__)
+#    define PURE       __attribute  ((         const        ))
+#    define FASTCALL   __attribute  ((       fastcall       ))
+#    define INTERNAL   __attribute__((visibility("internal")))
+#    define RESTRICT   __restrict
+#    define VECTORCALL __vectorcall
+#
+#    define CURRENT_FUNCTION __PRETTY_FUNCTION__
+#elif defined(__INTEL_COMPILER)
+#    if defined(__linux__)
+#        define PURE __attribute((const))
+#    else
+#        define PURE
+#    endif
+#
+#    define FASTCALL   __attribute((fastcall))
+#    define INTERNAL   __attribute__((visibility("internal")))
+#    define RESTRICT   __restrict
+#    define VECTORCALL __vectorcall
+#
+#    define CURRENT_FUNCTION __FUNCTION__
+#else
+#    define PURE
+#    define FASTCALL
+#    define INTERNAL
+#    define RESTRICT
+#    define VECTORCALL
+#    // if no compiler macro for function is detected use the standard one
+#    define CURRENT_FUNCTION __func__
 #endif
 
 /* TODO: figure out if should those be implemented
@@ -45,6 +142,11 @@
 #include <string>
 using String = std::string;
 
+template<typename T>
+inline String toString(T x) {
+    return std::to_string(x);
+}
+
 #include <vector>
 template<typename T>
 using Vector = std::vector<T>;
@@ -52,6 +154,15 @@ using Vector = std::vector<T>;
 #include <memory>
 template<typename T>
 using Ptr = std::unique_ptr<T>;
+
+template<typename T>
+using Ref = std::shared_ptr<T>;
+
+template<typename T, typename ... Args>
+constexpr Ref<T> CreateRef(Args&& ... args)
+{
+    return std::make_shared<T>(std::forward<Args>(args)...);
+}
 
 #include <optional>
 template<typename T>
@@ -72,77 +183,6 @@ using TypeIndex = std::type_index;
 template<typename T>
 using List = std::list<T>;
 
-// c++ macros
-#define CURRENT_LINE __LINE__
-#define CURRENT_FILE __FILE__
-
-#if defined(__GNUC__)
-    #define PURE     __attribute  ((         const        ))
-    #define FASTCALL __attribute  ((       fastcall       ))
-    #define INTERNAL __attribute__((visibility("internal")))
-    #define RESTRICT __restrict
-    #define VECTORCALL
-
-    #define CURRENT_FUNCTION __PRETTY_FUNCTION__
-#elif defined(__clang__)
-    #define PURE       __attribute  ((         const        ))
-    #define FASTCALL   __attribute  ((       fastcall       ))
-    #define INTERNAL   __attribute__((visibility("internal")))
-    #define RESTRICT   __restrict
-    #define VECTORCALL __vectorcall
-
-    #define CURRENT_FUNCTION __PRETTY_FUNCTION__
-#elif defined(__INTEL_COMPILER)
-
-    #if defined(__linux__)
-        #define PURE __attribute((const))
-    #else
-        #define PURE
-    #endif
-
-    #define FASTCALL   __attribute((fastcall))
-    #define INTERNAL   __attribute__((visibility("internal")))
-    #define RESTRICT   __restrict
-    #define VECTORCALL __vectorcall
-
-    #define CURRENT_FUNCTION __FUNCTION__
-#else
-    #define PURE
-    #define FASTCALL
-    #define INTERNAL
-    #define RESTRICT
-    #define VECTORCALL
-
-    // if no compiler macro for function is detected use the standard one
-    #define CURRENT_FUNCTION __func__
-#endif
-
-#include <ostream>
-#include "DebugTools.h"
-
-#include <iostream>
-
-#if defined(PETROL_ENGINE_DEBUG)
-
-// I don't know why but this redirect is required to work on every compiler
-#define LOG_SCOPE_LINE2(name, line) PetrolEngine::Debugging::ScopeTimer timer##line(name)
-#define LOG_SCOPE_LINE(name, line) LOG_SCOPE_LINE2(name, line)
-
-#define LOG_SCOPE(name) LOG_SCOPE_LINE(name, __LINE__)
-#define LOG_FUNCTION() LOG_SCOPE(CURRENT_FUNCTION)
-#define DEBUG_LOG(msg) std::cout<<msg<<std::endl
-
-#else
-
-// If not debugging then replace those with nothing
-#define LOG_SCOPE(name)
-#define LOG_FUNCTION()
-#define DEBUG_LOG(msg)
-
-#endif
-
-typedef unsigned int uint;
-
 // types with guaranteed length
 
 using  int8 =   signed char;
@@ -154,9 +194,27 @@ using uint16 = unsigned short;
 using  int32 =   signed int;
 using uint32 = unsigned int;
 
-using  int64 =   signed long long;
-using uint64 = unsigned long long;
+#if defined(__x86_64__) && !defined(__ILP32__)
+using  int64 =   signed long int;
+using uint64 = unsigned long int;
+#else
+using  int64 =   signed long long int;
+using uint64 = unsigned long long int;
+#endif
 
-template<typename from, typename to>
-constexpr to CastTo(from& in) { return *reinterpret_cast<to*>(&in); }
+#include <cassert>
 
+static_assert(sizeof(int8 ) == 1, "int8  size is not 8  bits.");
+static_assert(sizeof(int16) == 2, "int16 size is not 16 bits.");
+static_assert(sizeof(int32) == 4, "int32 size is not 32 bits.");
+static_assert(sizeof(int64) == 8, "int64 size is not 64 bits.");
+
+#include <cstdio>
+
+// some nice spaghetti here
+
+constexpr bool strSlant(const char *str) { return *str == '/' || *str != 0 && strSlant(str + 1); }
+
+constexpr const char* rSlant           (const char* str) { return *str == '/' ? (str + 1) : rSlant(str - 1); }
+constexpr const char* strEnd           (const char *str) { return *str ?  strEnd(str + 1) : str;             }
+constexpr const char* constExprFilename(const char* str) { return strSlant(str) ? rSlant(strEnd(str)) : str; }

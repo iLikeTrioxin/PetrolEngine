@@ -58,27 +58,27 @@ namespace PetrolEngine {
 
 	class Texture {
 	public:
-		TextureFormat format;
-		TextureType   type  ;
+		TextureFormat format = TextureFormat::NONE;
+		TextureType   type   =   TextureType::NONE;
 
 		virtual ~Texture() = default;
 
 		virtual void updateTextureImage(const void* data) = 0;
 
-		[[nodiscard]] uint getHeight() const { return height; }
-		[[nodiscard]] uint getWidth () const { return width ; }
-		[[nodiscard]] uint getID    () const { return id    ; }
+		NO_DISCARD uint getHeight() const { return height; }
+		NO_DISCARD uint getWidth () const { return width ; }
+		NO_DISCARD uint getID    () const { return id    ; }
 
-		//static std::shared_ptr<Texture> load(std::string path = "", TextureType type = TextureType::NONE);
+		//static Ref<Texture> load(std::string path = "", TextureType type = TextureType::NONE);
 
-		static std::shared_ptr<Texture> create(const String& path, TextureType type = TextureType::NONE);
-		static std::shared_ptr<Texture> create(const Image& image, TextureType type = TextureType::NONE);
-		static std::shared_ptr<Texture> create(int width, int height, TextureType type, TextureFormat format);
+		static Ref<Texture> create(const String&     path , TextureType type = TextureType::NONE);
+		static Ref<Texture> create(const Ref<Image>& image, TextureType type = TextureType::NONE);
+		static Ref<Texture> create(int width, int height, TextureType type, TextureFormat format);
 	protected:
-		uint id;
+		uint id{};
 		uint width  = 0;
 		uint height = 0;
 
-		static UnorderedMap<String, std::shared_ptr<Texture>> loadedTextures;
+		static UnorderedMap<String, Ref<Texture>> loadedTextures;
 	};
 }

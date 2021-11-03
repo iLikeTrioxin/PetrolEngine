@@ -46,8 +46,8 @@ namespace PetrolEngine {
                 VertexLayout layout            ) {
         this->material = material;
 
-        this->vertexBuffer = VertexBuffer::create( layout, (void*) vertices.data(), (uint32_t) vertices.size() * sizeof(Vertex) );
-        this-> indexBuffer =  IndexBuffer::create(         (void*)  indices.data(), (uint32_t)  indices.size() * sizeof( uint ) );
+        this->vertexBuffer = VertexBuffer::create( layout, (void*) vertices.data(), (int64)vertices.size() * (int64) sizeof(Vertex) );
+        this-> indexBuffer =  IndexBuffer::create(         (void*)  indices.data(), (int64) indices.size() * (int64) sizeof( uint ) );
 
         this->vertexArray = VertexArray::create();
 
@@ -138,7 +138,7 @@ namespace PetrolEngine {
     // Movement
          Movement::Movement(Transform* trans) :
                             transform (trans) {};
-    void Movement::update(std::shared_ptr<Window> window, Entity cam) { LOG_FUNCTION();
+    void Movement::update(Ref<Window> window, Entity cam) { LOG_FUNCTION();
         auto& camera = cam.getComponent<Camera>();
 
         float distance = (walkSpeed + (window->isPressed(GLFW_KEY_LEFT_SHIFT) * runSpeed)) * deltaTime;

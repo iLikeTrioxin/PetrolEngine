@@ -1,6 +1,6 @@
-#include "../PCH.h"
+#include <PCH.h>
+
 #include "Window.h"
-#include "../Renderer/Renderer.h"
 #include "GLFW/GLFWWindow.h"
 
 namespace PetrolEngine {
@@ -11,11 +11,11 @@ namespace PetrolEngine {
     double cursorYPos     = 0.0;
     double deltaTime      = 0.0;
 
-    std::shared_ptr<Window> Window::create(uint32_t width, uint32_t height, std::string title) {
-        return std::make_shared<GLFWWindow>(width, height, title);
+    Ref<Window> Window::create(int width, int height, const String& title) {
+        return CreateRef<GLFWWindow>(width, height, title);
     }
 
-    float Window::getAspectRatio() {
+    float Window::getAspectRatio() const {
         return ((float) windowData.width) / ((float)windowData.height);
     }
     

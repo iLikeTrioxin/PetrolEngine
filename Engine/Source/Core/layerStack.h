@@ -1,16 +1,19 @@
 #pragma once
 
-#include <vector>
 #include "layer.h"
+
+#include <vector>
 #include <memory>
+
+#include <Aliases.h>
 
 namespace PetrolEngine {
 	class LayerStack {
 	public:
 		static void execute();
-		static void addLayer(std::shared_ptr<Layer> layer);
+		static void addLayer(Ref<Layer> layer);
 
 	private:
-		static std::vector<std::shared_ptr<Layer>> layers;
+		static std::vector<Ref<Layer>> layers;
 	};
 }

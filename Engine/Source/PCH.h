@@ -37,3 +37,4 @@
 // Engine insides
 #include "DebugTools.h"
 #include "Aliases.h"
+#include "Core/Logger.h"

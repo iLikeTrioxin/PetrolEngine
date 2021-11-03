@@ -8,11 +8,12 @@
 #include "DebugTools.h"
 
 namespace PetrolEngine {
+    // TODO: Use nullptr instead of strcmp if possible
 	Entity Scene::createEntity(const char* name) {
 		Entity entity = { sceneRegistry.create(), this };
 		
 		entity.addComponent<Transform>();
-		entity.addComponent<   Tag   >( name == "" ? "New entity" : name, entt::null );
+		entity.addComponent<   Tag   >( strcmp(name, "") == 0 ? "New entity" : name, entt::null );
 
 		return entity;
 	}
@@ -21,7 +22,7 @@ namespace PetrolEngine {
 		Entity entity = { sceneRegistry.create(), this };
 
 		entity.addComponent<Transform>();
-		entity.addComponent<   Tag   >( name == "" ? "New entity" : name, parent );
+		entity.addComponent<   Tag   >( strcmp(name, "") == 0 ? "New entity" : name, parent );
 		
 		return entity;
 	}

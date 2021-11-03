@@ -1,6 +1,7 @@
 #pragma once
 
 // std includes
+#include <utility>
 #include <vector>
 #include <memory>
 
@@ -50,20 +51,19 @@ namespace PetrolEngine {
 	}
 
 	static int GetComponentCount(ShaderDataType type) {
-		switch (type)
-		{
-		case ShaderDataType::Float:   return 1;
-		case ShaderDataType::Float2:  return 2;
-		case ShaderDataType::Float3:  return 3;
-		case ShaderDataType::Float4:  return 4;
-		case ShaderDataType::Mat3:    return 3; // 3* float3
-		case ShaderDataType::Mat4:    return 4; // 4* float4
-		case ShaderDataType::Int:     return 1;
-		case ShaderDataType::Int2:    return 2;
-		case ShaderDataType::Int3:    return 3;
-		case ShaderDataType::Int4:    return 4;
-		case ShaderDataType::Bool:    return 1;
-        default:                      return 0;
+		switch (type) {
+            case ShaderDataType::Float :
+            case ShaderDataType::Bool  :
+            case ShaderDataType::Int   : return 1;
+            case ShaderDataType::Float2:
+            case ShaderDataType::Int2  : return 2;
+            case ShaderDataType::Float3:
+            case ShaderDataType::Mat3  :
+            case ShaderDataType::Int3  : return 3;
+            case ShaderDataType::Float4:
+            case ShaderDataType::Mat4  :
+            case ShaderDataType::Int4  : return 4;
+            default:                     return 0;
         }
 	}
 
@@ -77,26 +77,26 @@ namespace PetrolEngine {
 		VertexLayout(std::initializer_list<Element> elements) : elements(elements) {};
 
 	public:
-		std::vector<Element> elements;
+		Vector<Element> elements;
 	};
 
 	class VertexBuffer {
 	public:
 		virtual ~VertexBuffer() = default;
 
-		static std::shared_ptr<VertexBuffer> create(const VertexLayout& layout);
-		static std::shared_ptr<VertexBuffer> create(const VertexLayout& layout, void* data, uint32_t size);
+		static Ref<VertexBuffer> create(const VertexLayout& layout);
+		static Ref<VertexBuffer> create(const VertexLayout& layout, const void* data, int64 size);
 		
-		virtual void setData(void* data, uint32_t size) = 0;
+		virtual void setData(const void* data, int64 size) = 0;
 
-		[[nodiscard]] VertexLayout getLayout() const { return layout; }
-		[[nodiscard]] uint         getID    () const { return ID    ; }
+		NO_DISCARD VertexLayout getLayout() const { return layout; }
+		NO_DISCARD unsigned int getID    () const { return ID    ; }
 
 	protected:
-		VertexBuffer(VertexLayout layout): layout(layout), ID(0) {};
+		explicit VertexBuffer(VertexLayout layout): layout(std::move(layout)), ID(0) {};
 
 	protected:
 		VertexLayout layout;
-		uint ID;
+		unsigned int ID;
 	};
 }

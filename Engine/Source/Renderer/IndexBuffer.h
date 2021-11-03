@@ -7,18 +7,18 @@
 namespace PetrolEngine {
 	class IndexBuffer {
 	public:
-		static std::shared_ptr<IndexBuffer> create();
-		static std::shared_ptr<IndexBuffer> create(void* data, uint32_t size);
+		static Ref<IndexBuffer> create();
+		static Ref<IndexBuffer> create(const void* data, int64 size);
 
-		virtual void setData(void* data, uint32_t size) = 0;
+		virtual void setData(const void* data, int64 size) = 0;
 
 		virtual ~IndexBuffer() = default;
 
-		uint32_t getID  () const { return ID  ; }
-		uint32_t getSize() const { return size; }
+		NO_DISCARD int64 getID  () const { return ID  ; }
+		NO_DISCARD uint  getSize() const { return size; }
 
 	protected:
-		uint32_t size;
-		uint32_t ID;
+        int64 size{};
+		uint  ID  {};
 	};
 }

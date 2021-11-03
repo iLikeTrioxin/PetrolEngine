@@ -8,24 +8,24 @@
 namespace PetrolEngine {
 
 	void OpenGLRenderer::getDeviceConstantValue(DeviceConstant deviceConstant, void* outputBuffer) {
-		auto OpenGLdeviceConstant = OpenGLDeviceConstants.find(deviceConstant);
+		auto openGLDeviceConstant = openGLDeviceConstants.find(deviceConstant);
 
-		glGetIntegerv(OpenGLdeviceConstant->second, (GLint*) outputBuffer);
+		glGetIntegerv(openGLDeviceConstant->second, (GLint*) outputBuffer);
 	}
 
-	void OpenGLRenderer::setViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height) {
+	void OpenGLRenderer::setViewport(int x, int y, int width, int height) {
 		glViewport(x, y, width, height);
 	}
 
 	int OpenGLRenderer::init(bool debug) {
-        DEBUG_LOG("[*] Initializing OpenGL.");
+        LOG("Initializing OpenGL.", 1);
 
 		if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-            DEBUG_LOG("[!] Initializing OpenGL failed.");
+            LOG("Initializing OpenGL failed.", 3);
 			return 1;
 		}
 
-		glEnable(GL_DEPTH_TEST);
+		glEnable(GL_DEPTH_TEST); //-V525
 		glEnable(GL_CULL_FACE);
 		glCullFace(GL_BACK);
 
@@ -54,49 +54,52 @@ namespace PetrolEngine {
 
 		glActiveTexture(GL_TEXTURE0);
 
-		static std::vector<Vertex> squereVerts  ({ {}, {}, {}, {}, {}, {} });
-		static std::vector< uint > squereIndices({ 0,  1,  2,  3,  4,  5  });
-		static Mesh characterMesh = Mesh(squereVerts, squereIndices, Material());
+		static std::vector<Vertex> squareVertices({{}, {}, {}, {}, {}, {} });
+		static std::vector< uint > squareIndices ({ 0,  1,  2,  3,  4,  5  });
+		static Mesh characterMesh = Mesh(squareVertices, squareIndices, Material());
 
 		float x = transform.position.x;
 		float y = transform.position.y;
+
 		// iterate through all characters
 		std::string::const_iterator c;
-		for (c = text.begin(); c != text.end(); c++) {
+		for (c = text.begin(); c != text.end(); ++c) {
 			LOG_SCOPE("Rendering character");
 
 			Text::Character ch = Text::get(*c);
 			
 			glBindTexture(GL_TEXTURE_2D, ch.texture->getID());
 			
-			float xpos = x + ch.Bearing.x * transform.scale.x;
-			float ypos = y - (ch.Size.y - ch.Bearing.y) * transform.scale.y;
+			float xPos = x + (float) ch.Bearing.x * transform.scale.x;
+			float yPos = y - (float) (ch.Size.y - ch.Bearing.y) * transform.scale.y;
 
-			float w = ch.Size.x * transform.scale.x;
-			float h = ch.Size.y * transform.scale.y;
+			float w = (float) ch.Size.x * transform.scale.x;
+			float h = (float) ch.Size.y * transform.scale.y;
 
 			// update VBO for each character
-			
-			squereVerts = {
-				Vertex( glm::vec3(xpos    , ypos + h, 0.f), glm::vec2( 0.0f, 0.0f ) ),
-				Vertex( glm::vec3(xpos    , ypos    , 0.f), glm::vec2( 0.0f, 1.0f ) ),
-				Vertex( glm::vec3(xpos + w, ypos    , 0.f), glm::vec2( 1.0f, 1.0f ) ),
-				Vertex( glm::vec3(xpos    , ypos + h, 0.f), glm::vec2( 0.0f, 0.0f ) ),
-				Vertex( glm::vec3(xpos + w, ypos    , 0.f), glm::vec2( 1.0f, 1.0f ) ),
-				Vertex( glm::vec3(xpos + w, ypos + h, 0.f), glm::vec2( 1.0f, 0.0f ) )
+
+            // + 0 are used here to align arguments in clion editor
+            // it will be stripped by compiler anyway
+            squareVertices = {
+				Vertex({xPos + 0, yPos + h, 0.f}, {0.0f, 0.0f } ),
+				Vertex({xPos + 0, yPos + 0, 0.f}, {0.0f, 1.0f } ),
+				Vertex({xPos + w, yPos + 0, 0.f}, {1.0f, 1.0f } ),
+				Vertex({xPos + 0, yPos + h, 0.f}, {0.0f, 0.0f } ),
+				Vertex({xPos + w, yPos + 0, 0.f}, {1.0f, 1.0f } ),
+				Vertex({xPos + w, yPos + h, 0.f}, {1.0f, 0.0f } )
 			};
 
-			characterMesh.vertexBuffer->setData(squereVerts.data(), squereVerts.size() * sizeof(Vertex));
+			characterMesh.vertexBuffer->setData(squareVertices.data(), squareVertices.size() * sizeof(Vertex));
 			
 			glBindVertexArray(characterMesh.vertexArray->getID());
 
 			//glBindBuffer(GL_ARRAY_BUFFER, a.vertexBuffer->getID());
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, characterMesh.indexBuffer->getID());
 			
-			glDrawElements(GL_TRIANGLES, characterMesh.indexBuffer->getSize(), GL_UNSIGNED_INT, nullptr);
+			glDrawElements(GL_TRIANGLES, (int) characterMesh.indexBuffer->getSize(), GL_UNSIGNED_INT, nullptr);
 
 			// now advance cursors for next glyph (note that advance is number of 1/64 pixels)
-			x += (ch.Advance >> 6) * transform.scale.x; // bitshift by 6 to get value in pixels (2^6 = 64)
+			x += (float) (ch.Advance >> 6) * transform.scale.x; // bitshift by 6 to get value in pixels (2^6 = 64)
 		}
 	}
 
@@ -107,7 +110,7 @@ namespace PetrolEngine {
 
 		glUseProgram(shader->ID);
 		
-// Applying them to shader used by mesh
+        // Applying them to shader used by mesh
 		shader->setMat4("model", transform.transformation);
 		shader->setMat4("pav"  , camera.perspective * camera.view);
 		
@@ -115,11 +118,11 @@ namespace PetrolEngine {
 		shader->setInt  ( "material.specular" , 0   );
 		shader->setFloat( "material.shininess", 1.f );
 
-		shader->setInt  ( "light[0].lightType", 1                        );
-		shader->setVec3 ( "light[0].direction", -1.f, 0.f, 1.f           );
-		shader->setVec3 ( "light[0].ambient"  ,  .2f, .2f, .2f           );
-		shader->setVec3 ( "light[0].diffuse"  , glm::vec3(1.f, 1.f, 1.f) );
-		shader->setVec3 ( "light[0].specular" , 0.f, 0.f, 0.f            );
+		shader->setInt  ( "light[0].lightType", 1                     );
+		shader->setVec3 ( "light[0].direction", -1.f,  0.f, 1.f );
+		shader->setVec3 ( "light[0].ambient"  ,  .2f,  .2f, .2f );
+		shader->setVec3 ( "light[0].diffuse"  ,  1.f,  1.f, 1.f );
+		shader->setVec3 ( "light[0].specular" ,  0.f,  0.f, 0.f );
 
 		// if (currentShader != mesh.material.shader->ID) {
 		// 	mesh.material.shader->use();
@@ -132,20 +135,18 @@ namespace PetrolEngine {
 		uint normalNumber   = 1;
 		uint specularNumber = 1;
 
-		for (uint textureIndex = 0; textureIndex < mesh.material.textures.size(); textureIndex++) {
-			LOG_SCOPE("Assigning texture");
-			
-			std::shared_ptr<Texture> texture = mesh.material.textures[textureIndex];
+		for (uint textureIndex=0; textureIndex < mesh.material.textures.size(); textureIndex++) { LOG_SCOPE("Assigning texture");
+			Ref<Texture> texture = mesh.material.textures[textureIndex];
 
 			glActiveTexture(GL_TEXTURE0  + textureIndex);
 			glBindTexture  (GL_TEXTURE_2D, texture->getID());
 			
 			switch (texture->type)
 			{
-			case TextureType::DIFFUSE : shader->setInt("texture_diffuse"  +  diffuseNumber, textureIndex); continue;
-			case TextureType::HEIGHT  : shader->setInt("texture_height"   +   heightNumber, textureIndex); continue;
-			case TextureType::NORMAL  : shader->setInt("texture_normal"   +   normalNumber, textureIndex); continue;
-			case TextureType::SPECULAR: shader->setInt("texture_specular" + specularNumber, textureIndex); continue;
+			case TextureType::DIFFUSE : shader->setUint("texture_diffuse"  +  diffuseNumber, textureIndex); continue;
+			case TextureType::HEIGHT  : shader->setUint("texture_height"   +   heightNumber, textureIndex); continue;
+			case TextureType::NORMAL  : shader->setUint("texture_normal"   +   normalNumber, textureIndex); continue;
+			case TextureType::SPECULAR: shader->setUint("texture_specular" + specularNumber, textureIndex); continue;
 			
 			default: continue;
 			}
@@ -155,7 +156,7 @@ namespace PetrolEngine {
 		
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.indexBuffer->getID());
 
-		glDrawElements(GL_TRIANGLES, mesh.indexBuffer->getSize(), GL_UNSIGNED_INT, nullptr);
+		glDrawElements(GL_TRIANGLES, (int) mesh.indexBuffer->getSize(), GL_UNSIGNED_INT, nullptr);
 	}
 	
 	void OpenGLRenderer::clear() {

@@ -1,13 +1,13 @@
 #include "layerStack.h"
 
 namespace PetrolEngine {
-	std::vector<std::shared_ptr<Layer>> LayerStack::layers;
+	std::vector<Ref<Layer>> LayerStack::layers;
 
 	void LayerStack::execute() {
 		for (auto layer : layers) { layer->layerBody(); }
 	}
 
-	void LayerStack::addLayer(std::shared_ptr<Layer> layer) {
+	void LayerStack::addLayer(Ref<Layer> layer) {
 		layers.push_back(layer);
 	}
 

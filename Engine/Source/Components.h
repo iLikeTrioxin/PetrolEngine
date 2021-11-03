@@ -80,9 +80,9 @@ namespace PetrolEngine {
 
 	class Mesh {
 	public:
-		std::shared_ptr<VertexBuffer> vertexBuffer;
-		std::shared_ptr< IndexBuffer>  indexBuffer;
-		std::shared_ptr< VertexArray>  vertexArray;
+		Ref<VertexBuffer> vertexBuffer;
+		Ref< IndexBuffer>  indexBuffer;
+		Ref< VertexArray>  vertexArray;
 		Material material;
 
 		Mesh();
@@ -139,7 +139,7 @@ namespace PetrolEngine {
 
 		Movement(Transform* trans);
 
-		void update(std::shared_ptr<Window> window, Entity cam);
+		void update(Ref<Window> window, Entity cam);
 	};
 
 	class ExternalScript {

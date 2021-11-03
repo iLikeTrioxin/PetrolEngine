@@ -1,13 +1,17 @@
 #include <PCH.h>
 
+#include <utility>
+
 #include "GLFWWindow.h"
 
 #include "../../Renderer/GraphicsContext.h"
 
+// TODO: Remove unnecessary type size conversions
+
 namespace PetrolEngine {
 
     GLFWWindow::GLFWWindow(uint32_t width, uint32_t height, std::string title) { LOG_FUNCTION();
-        this->windowData = { width, height, title };
+        this->windowData = { (int) width, (int) height, std::move(title) };
         this->window     = nullptr;
     }
 
@@ -16,10 +20,12 @@ namespace PetrolEngine {
         glfwSwapInterval(enabled);
     }
 
-    void GLFWWindow::setIcon(Image image) { LOG_FUNCTION();
+    void GLFWWindow::setIcon(Ref<Image> image) { LOG_FUNCTION();
         GLFWimage icons[1];
         
-        icons[0].pixels = image.getData();
+        icons[0].pixels = image->getData  ();
+        icons[0].height = image->getHeight();
+        icons[0].width  = image->getWidth ();
 
         glfwSetWindowIcon(window, 1, icons);
     }
@@ -46,7 +52,11 @@ namespace PetrolEngine {
 
         window = glfwCreateWindow(windowData.width, windowData.height, windowData.title.c_str(), nullptr, nullptr);
 
-        if (!window) { DEBUG_LOG("window failed to create"); glfwTerminate(); return 0; }
+        if (!window) {
+            LOG("Window failed to create" , 3);
+            glfwTerminate();
+            return 0;
+        }
 
         if (GraphicsContext::create(window)->init((void*) glfwGetProcAddress))
             return -1;
@@ -54,52 +64,54 @@ namespace PetrolEngine {
         glfwMakeContextCurrent  (window);
         glfwSetWindowUserPointer(window, &windowData);
         
-        glfwSetWindowSizeCallback(window, [](GLFWwindow* window, int Width, int Height) {
-                WindowData& windowData = *reinterpret_cast<WindowData*>(glfwGetWindowUserPointer(window));
+        glfwSetWindowSizeCallback(window, [](GLFWwindow* windowPtr, int newWidth, int newHeight) {
+                auto* newWindowData = reinterpret_cast<WindowData*>(glfwGetWindowUserPointer(windowPtr));
                 
-                windowData.width  = Width ;
-                windowData.height = Height;
+                newWindowData->width  = newWidth ;
+                newWindowData->height = newHeight;
                 
-                EventStack::addEvent( new WindowResizedEvent(windowData) );
+                EventStack::addEvent( new WindowResizedEvent(*newWindowData) );
             }
         );
 
-        glfwSetWindowCloseCallback(window, [](GLFWwindow* window) {
-                WindowData& windowData = *(WindowData*)glfwGetWindowUserPointer(window);
+        glfwSetWindowCloseCallback(window, [](GLFWwindow* windowPtr) {
+                WindowData& newWindowData = *(WindowData*)glfwGetWindowUserPointer(windowPtr);
 
-                EventStack::addEvent(new WindowClosedEvent(windowData));
+                EventStack::addEvent(new WindowClosedEvent(newWindowData));
             }
         );
 
-        glfwSetKeyCallback(window, [](GLFWwindow* window, int key, int scancode, int action, int mods) {
+        glfwSetKeyCallback(window, [](GLFWwindow* windowPtr, int key, int scancode, int action, int mods) {
                 switch (action) {
-                case GLFW_PRESS  : EventStack::addEvent(new KeyPressedEvent (key, false)); break;
-                case GLFW_REPEAT : EventStack::addEvent(new KeyPressedEvent (key, true )); break;
-                case GLFW_RELEASE: EventStack::addEvent(new KeyReleasedEvent(key       )); break;
+                    case GLFW_PRESS  : EventStack::addEvent(new KeyPressedEvent (key, false)); break;
+                    case GLFW_REPEAT : EventStack::addEvent(new KeyPressedEvent (key, true )); break;
+                    case GLFW_RELEASE: EventStack::addEvent(new KeyReleasedEvent(key       )); break;
+                    default          :                                                         break;
                 }
             }
         );
 
-        glfwSetCharCallback(window, [](GLFWwindow* window, unsigned int keycode) {
-                EventStack::addEvent( new KeyTypedEvent(keycode) );
+        glfwSetCharCallback(window, [](GLFWwindow* windowPtr, unsigned int keycode) {
+                EventStack::addEvent( new KeyTypedEvent( (int) keycode) );
             }
         );
 
-        glfwSetMouseButtonCallback(window, [](GLFWwindow* window, int button, int action, int mods) {
-                switch (action)
-                {
-                    case GLFW_PRESS  : EventStack::addEvent( new MouseClickEvent(button) ); break;
+        // TODO: distinguish press and release events
+        glfwSetMouseButtonCallback(window, [](GLFWwindow* windowPtr, int button, int action, int mods) {
+                switch (action) {
+                    case GLFW_PRESS  :
                     case GLFW_RELEASE: EventStack::addEvent( new MouseClickEvent(button) ); break;
+                    default          :                                                      break;
                 }
             }
         );
 
-        glfwSetScrollCallback(window, [](GLFWwindow* window, double xOffset, double yOffset) {
+        glfwSetScrollCallback(window, [](GLFWwindow* windowPtr, double xOffset, double yOffset) {
                 EventStack::addEvent( new MouseScrolledEvent(xOffset, yOffset) );
             }
         );
 
-        glfwSetCursorPosCallback(window, [](GLFWwindow* window, double x, double y) {
+        glfwSetCursorPosCallback(window, [](GLFWwindow* windowPtr, double x, double y) {
                 cursorXPos = x;
                 cursorYPos = y;
 

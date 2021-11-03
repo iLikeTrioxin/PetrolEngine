@@ -10,15 +10,15 @@ namespace PetrolEngine {
 	public:
 		GLFWWindow(uint32_t width, uint32_t height, std::string title);
 
-		bool shouldClose() override { return glfwWindowShouldClose(window)  ; };
-		void swapBuffers() override { glfwSwapBuffers(window)               ; };
-		void close      () override { glfwSetWindowShouldClose(window, true); };
-		void pollEvents () override { glfwPollEvents()                      ; };
+		bool shouldClose() override { return glfwWindowShouldClose(window)        ; };
+		void swapBuffers() override { glfwSwapBuffers(window)                     ; };
+		void close      () override { glfwSetWindowShouldClose(window, true); }; //-V601
+		void pollEvents () override { glfwPollEvents()                            ; };
 
 		int init() override;
 
-		void setVSync(bool  enabled) override;
-		void setIcon (Image image  ) override;
+		void setVSync(bool       enabled) override;
+		void setIcon (Ref<Image> image  ) override;
 
 		bool isPressed(int key) override { return glfwGetKey(window, key); }
 

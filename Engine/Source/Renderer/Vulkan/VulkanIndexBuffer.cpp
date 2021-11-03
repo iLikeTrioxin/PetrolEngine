@@ -41,15 +41,8 @@ namespace PetrolEngine {
      */
     VulkanIndexBuffer::VulkanIndexBuffer() = default;
 
-    VulkanIndexBuffer::VulkanIndexBuffer(void* data, uint32_t size){
+    VulkanIndexBuffer::VulkanIndexBuffer(const void* data, int64 size) { }
+    void VulkanIndexBuffer::setData     (const void* data, int64 size) { }
 
-    }
-
-    void VulkanIndexBuffer::setData(void* data, uint32_t size) {
-
-    }
-
-    VulkanIndexBuffer::~VulkanIndexBuffer() {
-
-    }
+    VulkanIndexBuffer::~VulkanIndexBuffer() = default;
 }

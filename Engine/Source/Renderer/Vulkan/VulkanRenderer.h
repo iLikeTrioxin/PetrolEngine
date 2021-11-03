@@ -27,7 +27,7 @@ namespace PetrolEngine {
 		void renderMesh(Mesh& mesh, Transform& transform, Camera& camera) override;
 
 		// utility
-		void setViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height) override;
+		void setViewport(int x, int y, int width, int height) override;
 		void clear() override;
 		int  init (bool debug) override;
 
@@ -39,7 +39,7 @@ namespace PetrolEngine {
 			{DeviceConstant::MAX_TEXTURE_IMAGE_UNITS, GL_MAX_TEXTURE_IMAGE_UNITS}
 		};
 
-        ~VulkanRenderer();
+        ~VulkanRenderer() override;
     private:
         static Vector<const char*> validationLayers;
         static Vector<const char*> deviceExtensions;
@@ -67,11 +67,12 @@ namespace PetrolEngine {
         void createLogicalDevice ();
         bool checkValidationLayerSupport();
 
-        Vector<VkImageView>      swapChainImageViews;
-        Vector<VkImage>          swapChainImages;
-        VkExtent2D               swapChainExtent;
-        VkFormat                 swapChainImageFormat;
-        VkSwapchainKHR           swapChain;
+        Vector<VkImageView>      swapChainImageViews {};
+        Vector<VkImage>          swapChainImages     {};
+        VkExtent2D               swapChainExtent     {};
+        VkFormat                 swapChainImageFormat{};
+
+        VkSwapchainKHR           swapChain      = VK_NULL_HANDLE;
         VkQueue                  graphicsQueue  = VK_NULL_HANDLE;
         VkDevice                 logicalDevice  = VK_NULL_HANDLE;
         VkInstance               instance       = VK_NULL_HANDLE;

@@ -1,14 +1,12 @@
-#include "../../PCH.h"
+#include <PCH.h>
 
 #include "OpenGLShader.h"
 
-#include "../Shader.h"
 #include "../../Core/Files.h"
-#include <fstream>
 
 //
 // INFO
-// 1. I use here propertie of glShaderXXX(shader) which is stated at khronos site "A value of 0 for shader will be silently ignored."
+// 1. I use here properties of glShaderXXX(shader) which is stated at khronos site "A value of 0 for shader will be silently ignored."
 //
 
 namespace PetrolEngine {
@@ -16,18 +14,17 @@ namespace PetrolEngine {
     int OpenGLShader::recompileShader( const char* vertexShaderSourceCode  ,
                                        const char* fragmentShaderSourceCode,
                                        const char* geometryShaderSourceCode ) {
-        DEBUG_LOG("started");
-        uint32_t   newVertexShaderID = 0,
-                 newFragmentShaderID = 0,
-                 newGeometryShaderID = 0;
+        uint32_t   newVertexShaderID,
+                 newFragmentShaderID,
+                 newGeometryShaderID;
 
         if (vertexShaderSourceCode) {
             newVertexShaderID = glCreateShader(GL_VERTEX_SHADER);    
 
-            glShaderSource (vertexShaderID, 1, &vertexShaderSourceCode, NULL);
-            glCompileShader(vertexShaderID);
+            glShaderSource (newVertexShaderID, 1, &vertexShaderSourceCode, nullptr);
+            glCompileShader(newVertexShaderID);
 
-            int error = checkShaderCompileErrors(vertexShaderID, "VERTEX");
+            int error = checkShaderCompileErrors(newVertexShaderID, "VERTEX");
 
             if (!error) {
                 glDetachShader(ID,    vertexShaderID);
@@ -38,10 +35,10 @@ namespace PetrolEngine {
         if (fragmentShaderSourceCode) {
             newFragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);
 
-            glShaderSource(fragmentShaderID, 1, &fragmentShaderSourceCode, NULL);
-            glCompileShader(fragmentShaderID);
+            glShaderSource (newFragmentShaderID, 1, &fragmentShaderSourceCode, nullptr);
+            glCompileShader(newFragmentShaderID);
 
-            int error = checkShaderCompileErrors(fragmentShaderID, "FRAGMENT");
+            int error = checkShaderCompileErrors(newFragmentShaderID, "FRAGMENT");
 
             if (!error) {
                 glDetachShader(ID,    fragmentShaderID);
@@ -52,10 +49,10 @@ namespace PetrolEngine {
         if (geometryShaderSourceCode) {
             newGeometryShaderID = glCreateShader(GL_GEOMETRY_SHADER);
 
-            glShaderSource(geometryShaderID, 1, &geometryShaderSourceCode, NULL);
-            glCompileShader(geometryShaderID);
+            glShaderSource (newGeometryShaderID, 1, &geometryShaderSourceCode, nullptr);
+            glCompileShader(newGeometryShaderID);
 
-            int error = checkShaderCompileErrors(geometryShaderID, "GEOMETRY");
+            int error = checkShaderCompileErrors(newGeometryShaderID, "GEOMETRY");
 
             if (!error) {
                 glDetachShader(ID,    geometryShaderID);
@@ -68,7 +65,7 @@ namespace PetrolEngine {
         int error = checkProgramCompileErrors(ID);
 
         if (!error) {
-            // We need to remove only old code before we change old id's to new
+            // We need to remove only old code before we change old id's to the new ones
             if (  vertexShaderSourceCode) { glDeleteShader(  vertexShaderID);   vertexShaderID =   newVertexShaderID; }
             if (fragmentShaderSourceCode) { glDeleteShader(fragmentShaderID); fragmentShaderID = newFragmentShaderID; }
             if (geometryShaderSourceCode) { glDeleteShader(geometryShaderID); geometryShaderID = newGeometryShaderID; }
@@ -98,10 +95,8 @@ namespace PetrolEngine {
         {
             this->vertexShaderID = glCreateShader(GL_VERTEX_SHADER);
             
-            glShaderSource (vertexShaderID, 1, &vertexShaderSourceCode, NULL);
+            glShaderSource (vertexShaderID, 1, &vertexShaderSourceCode, nullptr);
             glCompileShader(vertexShaderID);
-
-            DEBUG_LOG("VERTEX\n" << vertexShaderSourceCode << "\nVERTEX");
 
             checkShaderCompileErrors(vertexShaderID, "VERTEX");
 
@@ -112,10 +107,8 @@ namespace PetrolEngine {
         {
             this->fragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);
 
-            glShaderSource(fragmentShaderID, 1, &fragmentShaderSourceCode, NULL);
+            glShaderSource(fragmentShaderID, 1, &fragmentShaderSourceCode, nullptr);
             glCompileShader(fragmentShaderID);
-
-            DEBUG_LOG("FRAGMENT\n" << fragmentShaderSourceCode << "\nFRAGMENT");
 
             checkShaderCompileErrors(fragmentShaderID, "FRAGMENT");
 
@@ -127,10 +120,8 @@ namespace PetrolEngine {
         {
             this->geometryShaderID = glCreateShader(GL_GEOMETRY_SHADER);
 
-            glShaderSource (geometryShaderID, 1, &geometryShaderSourceCode, NULL);
+            glShaderSource (geometryShaderID, 1, &geometryShaderSourceCode, nullptr);
             glCompileShader(geometryShaderID);
-
-            DEBUG_LOG("GEOMETRY\n" << geometryShaderSourceCode << "\nGEOMETRY");
 
             checkShaderCompileErrors(geometryShaderID, "GEOMETRY");
             
@@ -141,7 +132,7 @@ namespace PetrolEngine {
 
         checkProgramCompileErrors(ID);
         
-        // delete the shaders as they're linked into our program now and no longer necessery
+        // delete the shaders as they're linked into our program now and no longer necessary
         //glDeleteShader(vertexShaderID);
         //glDeleteShader(fragment);
         //glDeleteShader(geometry);
@@ -157,41 +148,44 @@ namespace PetrolEngine {
         glDeleteProgram(this->ID);
     }
 
-    void OpenGLShader::setVec4(const String& name, float x, float y, float z, float w) {
-        glUniform4f(glGetUniformLocation(ID, name.c_str()), x, y, z, w);
+    void OpenGLShader::setVec4(const String& uniform, float x, float y, float z, float w) {
+        glUniform4f(glGetUniformLocation(ID, uniform.c_str()), x, y, z, w);
     }
-    void OpenGLShader::setBool(const String& name, bool     x) {
-        glUniform1i(glGetUniformLocation(ID, name.c_str()), (int)x);
+    void OpenGLShader::setBool(const String& uniform, bool     x) {
+        glUniform1i(glGetUniformLocation(ID, uniform.c_str()), (int)x);
     }
-    void OpenGLShader::setInt(const String& name, int      x) {
-        glUniform1i(glGetUniformLocation(ID, name.c_str()), x);
+    void OpenGLShader::setInt(const String& uniform, int      x) {
+        glUniform1i(glGetUniformLocation(ID, uniform.c_str()), x);
     }
-    void OpenGLShader::setFloat(const String& name, float     x) {
-        glUniform1f(glGetUniformLocation(ID, name.c_str()), x);
+    void OpenGLShader::setUint(const String& uniform, uint      x) {
+        glUniform1ui(glGetUniformLocation(ID, uniform.c_str()), x);
     }
-    void OpenGLShader::setVec2(const String& name, const glm::vec2& x) {
-        glUniform2fv(glGetUniformLocation(ID, name.c_str()), 1, &x[0]);
+    void OpenGLShader::setFloat(const String& uniform, float     x) {
+        glUniform1f(glGetUniformLocation(ID, uniform.c_str()), x);
     }
-    void OpenGLShader::setVec2(const String& name, float x, float    y) {
-        glUniform2f(glGetUniformLocation(ID, name.c_str()), x, y);
+    void OpenGLShader::setVec2(const String& uniform, const glm::vec2& x) {
+        glUniform2fv(glGetUniformLocation(ID, uniform.c_str()), 1, &x[0]);
     }
-    void OpenGLShader::setVec3(const String& name, const glm::vec3& x) {
-        glUniform3fv(glGetUniformLocation(ID, name.c_str()), 1, &x[0]);
+    void OpenGLShader::setVec2(const String& uniform, float x, float    y) {
+        glUniform2f(glGetUniformLocation(ID, uniform.c_str()), x, y);
     }
-    void OpenGLShader::setVec3(const String& name, float x, float y, float z) {
-        glUniform3f(glGetUniformLocation(ID, name.c_str()), x, y, z);
+    void OpenGLShader::setVec3(const String& uniform, const glm::vec3& x) {
+        glUniform3fv(glGetUniformLocation(ID, uniform.c_str()), 1, &x[0]);
     }
-    void OpenGLShader::setVec4(const String& name, const glm::vec4& x) {
-        glUniform4fv(glGetUniformLocation(ID, name.c_str()), 1, &x[0]);
+    void OpenGLShader::setVec3(const String& uniform, float x, float y, float z) {
+        glUniform3f(glGetUniformLocation(ID, uniform.c_str()), x, y, z);
     }
-    void OpenGLShader::setMat2(const String& name, const glm::mat2& mat) {
-        glUniformMatrix2fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &mat[0][0]);
+    void OpenGLShader::setVec4(const String& uniform, const glm::vec4& x) {
+        glUniform4fv(glGetUniformLocation(ID, uniform.c_str()), 1, &x[0]);
     }
-    void OpenGLShader::setMat3(const String& name, const glm::mat3& mat) {
-        glUniformMatrix3fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &mat[0][0]);
+    void OpenGLShader::setMat2(const String& uniform, const glm::mat2& mat) {
+        glUniformMatrix2fv(glGetUniformLocation(ID, uniform.c_str()), 1, GL_FALSE, &mat[0][0]);
     }
-    void OpenGLShader::setMat4(const String& name, const glm::mat4& mat) {
-        glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &mat[0][0]);
+    void OpenGLShader::setMat3(const String& uniform, const glm::mat3& mat) {
+        glUniformMatrix3fv(glGetUniformLocation(ID, uniform.c_str()), 1, GL_FALSE, &mat[0][0]);
+    }
+    void OpenGLShader::setMat4(const String& uniform, const glm::mat4& mat) {
+        glUniformMatrix4fv(glGetUniformLocation(ID, uniform.c_str()), 1, GL_FALSE, &mat[0][0]);
     }
 
     int OpenGLShader::checkProgramCompileErrors(GLuint shader) {
@@ -203,14 +197,14 @@ namespace PetrolEngine {
         if (success)
             return 0;
 
-        glGetProgramInfoLog(shader, 1024, NULL, infoLog);
+        glGetProgramInfoLog(shader, 1024, nullptr, infoLog);
 
-        DEBUG_LOG( "ERROR::PROGRAM_LINKING_ERROR: " << infoLog );
+        LOG( std::string("PROGRAM_LINKING_ERROR: ") + infoLog, 2);
 
         return 1;
     }
 
-    int OpenGLShader::checkShaderCompileErrors(GLuint shader, String type) {
+    int OpenGLShader::checkShaderCompileErrors(GLuint shader, const String& type) {
         GLint success;
         GLchar infoLog[1024];
 
@@ -219,9 +213,9 @@ namespace PetrolEngine {
         if (success)
             return 0;
 
-        glGetShaderInfoLog(shader, 1024, NULL, infoLog);
+        glGetShaderInfoLog(shader, 1024, nullptr, infoLog);
 
-        DEBUG_LOG( "ERROR::SHADER_COMPILATION_ERROR(" << type << "): " << infoLog );
+        LOG( "ERROR::SHADER_COMPILATION_ERROR(" + type + "): " + infoLog, 2);
 
         return 1;
     }

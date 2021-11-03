@@ -29,7 +29,7 @@ namespace PetrolEngine {
 	    rendererAPI->init(debug);
 	    //RendererAPI::getInstance()->getDeviceConstantValue(DeviceConstant::MAX_TEXTURE_IMAGE_UNITS, &renderer2DData.maxTextures);
 
-	    //DEBUG_LOG("[*] Textures: " + std::to_string(renderer2DData.maxTextures));
+	    //LOG("[*] Textures: " + std::to_string(renderer2DData.maxTextures), 1);
 	}
 
 	void Renderer::renderMesh(Mesh& m, Transform& t, Camera& c) { LOG_FUNCTION();
@@ -48,7 +48,7 @@ namespace PetrolEngine {
 	    rendererAPI->getDeviceConstantValue(d, o);
 	}
 
-
+    // TODO: remove this
 	void Renderer::getErrors() {
 	    GLenum err;
         while ( (err = glGetError()) != GL_NO_ERROR) {
@@ -65,7 +65,7 @@ namespace PetrolEngine {
 
             default: error = "Unknown error"; break;
             }
-            DEBUG_LOG("[!] error here:" << error);
+            LOG("OpenGL error:" + error, 2);
             err = glGetError();
         }
 	}

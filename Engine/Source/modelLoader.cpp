@@ -4,7 +4,6 @@
 #include "DebugTools.h"
 #include "Components.h"
 #include "Scene.h"
-#include "./Renderer/Texture.h"
 #include "Entity.h"
 
 namespace PetrolEngine {
@@ -27,11 +26,11 @@ namespace PetrolEngine {
 		const aiScene* scene = importer.ReadFile(filename, aiProcess_GenSmoothNormals | aiProcess_Triangulate);
 		//  aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace
 		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
-            DEBUG_LOG("ERROR::ASSIMP:: " << importer.GetErrorString());
-			return Entity();
+            LOG(std::string("ASSIMP: ") + importer.GetErrorString(), 2);
+			return {};
 		}
 
-        DEBUG_LOG("[*] Running down the Root node of model(" << _path << ")");
+        LOG(std::string("Running down the Root node of model(") + _path + ")", 1);
 	
 		Entity model = _scene->createEntity(filename.c_str());
 
@@ -51,11 +50,11 @@ namespace PetrolEngine {
 		const aiScene* scene = importer.ReadFile(_path, aiProcess_GenNormals);
 		//  aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace
 		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
-            DEBUG_LOG("ERROR::ASSIMP:: " << importer.GetErrorString());
-			return Entity();
+            LOG(std::string("ASSIMP:: ") + importer.GetErrorString(), 2);
+			return {};
 		}
 
-        DEBUG_LOG("[*] Running down the Root node of model(" << _path << ")");
+        LOG(std::string("Running down the Root node of model(") + _path + ")", 1);
 
 		std::string fileName(_path);
 
@@ -69,19 +68,19 @@ namespace PetrolEngine {
 
 		return model;
 	}
-	void ModelLoader::texturesFromMaterial(aiMaterial* material, aiTextureType type, TextureType myType, std::vector< std::shared_ptr<Texture> >* textures) {
-        DEBUG_LOG("[*] Detected " << material->GetTextureCount(type) << " textures of " << static_cast<int>(myType));
+	void ModelLoader::texturesFromMaterial(aiMaterial* material, aiTextureType type, TextureType myType, std::vector< Ref<Texture> >* textures) {
+        LOG("Detected " + std::to_string(material->GetTextureCount(type))+ " textures of " + std::to_string(static_cast<int>(myType)), 1);
 
 		for (uint i = 0; i < (material->GetTextureCount(type)); i++) {
 			aiString path;
 			material->GetTexture(type, i, &path);
-			auto image = Image(path.C_Str());
+			auto image = Image::create(path.C_Str());
 			auto tex = Texture::create(image, myType);
 			textures->push_back(tex);
 		}
 	}
 	
-	void ModelLoader::processMesh(aiMesh* mesh, const aiScene* scene, Mesh* outputMesh) {
+	void ModelLoader::processMesh(aiMesh* mesh, const aiScene* scene, Mesh* outputMesh) const {
         std::vector<Vertex> vertices;
 		std::vector< uint > indices;
 
@@ -91,37 +90,48 @@ namespace PetrolEngine {
 		outputMesh->material.shader = shader;
 
 		for (uint i = 0; i < mesh->mNumVertices; i++) {
-			{
-				vertices.emplace_back();
-			}
-			//DEBUG_LOG("[can i] i: " << i << " and vert: " << vertices.size());
+			{ vertices.emplace_back(); }
 
-			vertices[i].position.x = mesh->mVertices[i].x;
-			vertices[i].position.y = mesh->mVertices[i].y;
-			vertices[i].position.z = mesh->mVertices[i].z;
+            auto& meshPosition = mesh->mVertices[i];
+            auto& vertPosition = vertices[i].position;
+
+			vertPosition.x = meshPosition.x;
+			vertPosition.y = meshPosition.y;
+			vertPosition.z = meshPosition.z;
 			
 			if (mesh->HasNormals()) {
-				vertices[i].normal.x = mesh->mNormals[i].x;
-				vertices[i].normal.y = mesh->mNormals[i].y;
-				vertices[i].normal.z = mesh->mNormals[i].z;
-			}
-			if (mesh->mTextureCoords[0]) {
-				vertices[i].texCoords.x = mesh->mTextureCoords[0][i].x;
-				vertices[i].texCoords.y = mesh->mTextureCoords[0][i].y;
-			}
-			else
-			{
-				vertices[i].texCoords.x = 0.0f;
-				vertices[i].texCoords.y = 0.0f;
-			}
-			if (mesh->HasTangentsAndBitangents()) {
-				vertices[i].tangent.x = mesh->mTangents[i].x;
-				vertices[i].tangent.y = mesh->mTangents[i].y;
-				vertices[i].tangent.z = mesh->mTangents[i].z;
+                auto& meshNormal = mesh->mNormals[i];
+                auto& vertNormal = vertices[i].normal;
 
-				vertices[i].bitangent.x = mesh->mBitangents[i].x;
-				vertices[i].bitangent.y = mesh->mBitangents[i].y;
-				vertices[i].bitangent.z = mesh->mBitangents[i].z;
+				vertNormal.x = meshNormal.x;
+				vertNormal.y = meshNormal.y;
+				vertNormal.z = meshNormal.z;
+			}
+
+			if (mesh->mTextureCoords[0]) {
+                auto& textureCoords = mesh->mTextureCoords[0][i];
+
+				vertices[i].texCoords = { textureCoords.x,
+                                          textureCoords.y  };
+			}
+			else {
+                vertices[i].texCoords = {0, 0};
+            }
+
+			if (mesh->HasTangentsAndBitangents()) {
+                auto& meshTangent = mesh->mTangents[i];
+                auto& vertTangent = vertices[i].tangent;
+
+				vertTangent.x = meshTangent.x;
+				vertTangent.y = meshTangent.y;
+				vertTangent.z = meshTangent.z;
+
+                auto& meshBitangent = mesh->mBitangents[i];
+                auto& vertBitangent = vertices[i].bitangent;
+
+                vertBitangent.x = meshBitangent.x;
+				vertBitangent.y = meshBitangent.y;
+				vertBitangent.z = meshBitangent.z;
 			}
 		}
 		
@@ -143,12 +153,9 @@ namespace PetrolEngine {
 			texturesFromMaterial(material, aiTextureType_HEIGHT  , TextureType::NORMAL  , &outputMesh->material.textures);
 			texturesFromMaterial(material, aiTextureType_SPECULAR, TextureType::SPECULAR, &outputMesh->material.textures);
 		}
-
-		//DEBUG_LOG("done 1");
-		//DEBUG_LOG("[*] Textures: " << scene->HasTextures() << " -- " << scene->mNumTextures);
 	}
 	void ModelLoader::processNode(aiNode* node, const aiScene* _scene, Entity parent) {
-		for (uint i = 0; i < node->mNumMeshes; i++) {
+		for (uint32 i = 0; i < node->mNumMeshes; i++) {
 			aiMesh* _mesh_ = _scene->mMeshes[node->mMeshes[i]];
 			const char* name = (node->mName.length == 0) ? "New node" : node->mName.C_Str();
 
@@ -158,7 +165,7 @@ namespace PetrolEngine {
 			
 			ModelLoader::processMesh(_mesh_, _scene, mesh);
 		}
-		for (uint i = 0; i < node->mNumChildren; i++) {
+		for (uint32 i = 0; i < node->mNumChildren; i++) {
 			processNode(node->mChildren[i], _scene, parent);
 		}
 	}

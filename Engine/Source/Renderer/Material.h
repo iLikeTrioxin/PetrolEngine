@@ -10,8 +10,8 @@ namespace PetrolEngine {
 	public:
 		Material() = default;
 
-		std::vector< std::shared_ptr<Texture> > textures;
-		std::shared_ptr<Shader> shader;
+		std::vector< Ref<Texture> > textures;
+		Ref<Shader> shader;
 	};
 }
 

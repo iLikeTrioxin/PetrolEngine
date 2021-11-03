@@ -35,7 +35,7 @@ namespace PetrolEngine {
         /// </summary>
         /// <param name="path">- path to the shader</param>
         /// <returns>shared pointer to shader</returns>
-        static std::shared_ptr<Shader> load( const String& path );
+        static Ref<Shader> load( const String& path );
         
         /// <summary>
         /// Creates Shader using source code.
@@ -46,14 +46,15 @@ namespace PetrolEngine {
         /// <param name="fragmentSrc"> - source code of fragment shader</param>
         /// <param name="geometrySrc"> - source code of geometry shader</param>
         /// <returns>shared pointer to the shader</returns>
-        static std::shared_ptr<Shader> load( String&&        name,
-                                             String&&   vertexSrc = "",
-                                             String&& fragmentSrc = "",
-                                             String&& geometrySrc = ""  );
+        static Ref<Shader> load( String&&        name     ,
+                                 String&&   vertexSrc = "",
+                                 String&& fragmentSrc = "",
+                                 String&& geometrySrc = ""  );
 
         // utility uniform functions
 
         virtual void setInt  ( const String& name, int   x                            ) = 0;
+        virtual void setUint ( const String& name, uint  x                            ) = 0;
         virtual void setBool ( const String& name, bool  x                            ) = 0;
         virtual void setFloat( const String& name, float x                            ) = 0;
         virtual void setVec2 ( const String& name, float x, float y                   ) = 0;
@@ -72,10 +73,10 @@ namespace PetrolEngine {
         uint32_t   vertexShaderID;
 
     private:
-        static std::unordered_map<String, std::shared_ptr<Shader>> loadedShaders;
+        static std::unordered_map<String, Ref<Shader>> loadedShaders;
         
         // creates a shader with current graphics API (it does not prevent copying, use load instead)
-        static std::shared_ptr<Shader> create( String&&   vertexSrc,
+        static Ref<Shader> create( String&&   vertexSrc,
                                                String&& fragmentSrc,
                                                String&& geometrySrc  );
     };

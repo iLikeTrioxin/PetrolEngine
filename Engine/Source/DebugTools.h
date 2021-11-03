@@ -7,9 +7,9 @@
 #include <fstream>
 
 #if defined(__linux__)
-#define clock std::chrono::system_clock
+#    define DEBUG_TOOLS_CLOCK std::chrono::system_clock
 #else
-#define clock std::chrono::steady_clock
+#    define DEBUG_TOOLS_CLOCK std::chrono::steady_clock
 #endif
 
 namespace PetrolEngine::Debugging {
@@ -27,7 +27,7 @@ namespace PetrolEngine::Debugging {
 	// Logging system
 	class Logger {
 	public:
-		static void logFunction(FunctionSpecification spec);
+		static void logFunction(const FunctionSpecification& spec);
 		static void setOutputFile(const std::string& filePath);
 
 	private:
@@ -50,6 +50,11 @@ namespace PetrolEngine::Debugging {
 	private:
 		const char* name;
 
-		std::chrono::time_point<clock> startTimePoint;
+		std::chrono::time_point<DEBUG_TOOLS_CLOCK> startTimePoint;
 	};
 };
+
+#define LOG_SCOPE_LINE2(name, line) PetrolEngine::Debugging::ScopeTimer timer##line(name)
+#define LOG_SCOPE_LINE(name, line) LOG_SCOPE_LINE2(name, line)
+#define LOG_SCOPE(name) LOG_SCOPE_LINE(name, __LINE__)
+#define LOG_FUNCTION() LOG_SCOPE(CURRENT_FUNCTION)

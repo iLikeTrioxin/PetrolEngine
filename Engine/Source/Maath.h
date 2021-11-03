@@ -25,8 +25,8 @@ namespace PetrolEngine::Math {
 			function(in.at(i));
 	}
 
-	template<typename inputVector, typename targetFunc, typename func>
-	double compareAccuracy(inputVector& vec, size_t vectorSize, targetFunc& targetFunction, func& function) {
+	template<typename InputVector, typename TargetFunc, typename Func>
+	double compareAccuracy(InputVector& vec, size_t vectorSize, TargetFunc& targetFunction, Func& function) {
 		double dif = 0.0;
 
 		for (size_t i = 0; i < vectorSize; i++)
@@ -37,18 +37,18 @@ namespace PetrolEngine::Math {
 
 
 	template<typename Output, typename Input>
-	inline Output TreatAs(Input value) {
+	inline Output TreatAs(Input& value) {
 		return *reinterpret_cast<Output*>(&value);
 	}
 
 	inline float NegateFloat(float& f) {
-        //DEBUG_LOG((sizeof(float) != sizeof(uint32)));
-		return TreatAs<uint32, float>(*reinterpret_cast<uint32*>(&f) ^ 0x80000000);
+        static_assert(sizeof(float) == sizeof(uint32), "casting types with different sizes.");
+		return TreatAs<float>(TreatAs<uint32>(f) ^ 0x80000000);
 	}
 
 
 	float Log2(float x) {
-		return float(TreatAs<unsigned int>(x) - OneAsInt) * ScaleDown;
+		return float(TreatAs<uint>(x) - OneAsInt) * ScaleDown;
 	}
 
 	float Exp2(float x) {
@@ -71,7 +71,7 @@ namespace PetrolEngine::Math {
 	float Quake_iSqrt(float x) {
 		int i;
 		float x2, y;
-		const float threehalfs = 1.5F;
+		const float threeHalf = 1.5F;
 
 		x2 = x * 0.5F;
 		y = x;
@@ -79,11 +79,11 @@ namespace PetrolEngine::Math {
 		i = 0x5f3759df - (i >> 1);
 
 		y = *reinterpret_cast<float*>(&i);
-		y = y * (threehalfs - (x2 * y * y));
+		y = y * (threeHalf - (x2 * y * y));
 		return y;
 	}
 
-	// Better version of quake inverse root squere
+	// Better version of quake inverse root square
 	float iSqrt(float x) {
 		float xhalf = 0.5f * x;
 		int   i     = *reinterpret_cast<int*>(&x);
@@ -104,7 +104,7 @@ namespace PetrolEngine::Math {
         PetrolEngine::Debuging::Logger::setOutputFile(outputPath);
 
 		for (uint32_t i = 0; i < iters; i++)
-			input.emplace_back((i / 100) + 1); // + 1 becouse Sqrt, iSqrt... does not support 0 and below
+			input.emplace_back((i / 100) + 1); // + 1 because Sqrt, iSqrt... does not support 0 and below
 
 		{
 			std::cout << "math sqrt      to cpp sqrt accuracy: " << compareAccuracy(input, iters, sqrtl, Sqrt) << std::endl;

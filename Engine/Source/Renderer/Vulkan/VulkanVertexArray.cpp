@@ -22,15 +22,11 @@ namespace PetrolEngine {
         }
 	}
 
-	VulkanVertexArray::VulkanVertexArray() {
-		LOG_FUNCTION();
-		
+	VulkanVertexArray::VulkanVertexArray() { LOG_FUNCTION();
 		glGenVertexArrays(1, &ID);
 	}
 
-	void VulkanVertexArray::setIndexBuffer(std::shared_ptr<IndexBuffer> indexBuffer) {
-		LOG_FUNCTION();
-		
+	void VulkanVertexArray::setIndexBuffer(Ref<IndexBuffer> indexBuffer) { LOG_FUNCTION(); //-V688
 		glBindVertexArray(this->ID);
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer->getID());
@@ -38,9 +34,7 @@ namespace PetrolEngine {
 		this->indexBuffer = indexBuffer;
 	}
 
-	void VulkanVertexArray::addVertexBuffer(std::shared_ptr<VertexBuffer> vertexBuffer) {
-		LOG_FUNCTION();
-
+	void VulkanVertexArray::addVertexBuffer(Ref<VertexBuffer> vertexBuffer) { LOG_FUNCTION();
 		glBindVertexArray(ID);
 		glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer->getID());
 
@@ -54,7 +48,7 @@ namespace PetrolEngine {
 		for ( auto& element : vertexLayout.elements ) {
 			switch (auto& type = element.type)
 			{
-			case ShaderDataType::None: DEBUG_LOG("[!] None type element detected in vertex array."); break;
+			case ShaderDataType::None: LOG("None type element detected in vertex array.", 2); break;
 
 			case ShaderDataType::Mat3:
 			case ShaderDataType::Mat4: {

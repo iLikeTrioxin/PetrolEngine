@@ -6,9 +6,9 @@ namespace PetrolEngine {
     class VulkanIndexBuffer : public IndexBuffer {
 	public:
 		VulkanIndexBuffer();
-		VulkanIndexBuffer(void* data, uint32_t size);
+		VulkanIndexBuffer(const void* data, int64 size);
 
-		void setData(void* data, uint32_t size) override;
+		void setData(const void* data, int64 size) override;
 
 		~VulkanIndexBuffer() override;
 	};

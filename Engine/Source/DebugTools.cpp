@@ -10,8 +10,7 @@ namespace PetrolEngine::Debugging {
 
 	// Logger
 	Logger Logger::logger;
-	Logger::Logger() {
-	}
+	Logger::Logger() = default;
 	Logger::~Logger() {
 		std::lock_guard lock(mutex);
 		log(std::string("]}")); // Footer
@@ -31,23 +30,23 @@ namespace PetrolEngine::Debugging {
 		outputStream << input;
 		outputStream.flush();
 	}
-	void Logger::logFunction(FunctionSpecification spec) {
+	void Logger::logFunction(const FunctionSpecification& spec) {
 		if(!get().outputStream)
-			get().setOutputFile("./Result.json");
+			setOutputFile("./Result.json");
 
 		std::stringstream json;
 
 		// Structure of json file for chromium profiling
 		json << std::setprecision(3) << std::fixed;
-		json << ",{";
-		json << "\"cat\":\"function\",";
-		json << "\"dur\":" << spec.duration << ',';
-		json << "\"name\":\"" << spec.name << "\",";
-		json << "\"ph\":\"X\",";
-		json << "\"pid\":0,";
-		json << "\"tid\":" << spec.threadID << ",";
-		json << "\"ts\":" << spec.startTimePoint;
-		json << "}";
+		json << R"(,{)";
+		json << R"("cat":"function",)";
+		json << R"("dur":)" << spec.duration << ',';
+		json << R"("name":")" << spec.name << "\",";
+		json << R"("ph":"X",)";
+		json << R"("pid\":0,)";
+		json << R"("tid":)" << spec.threadID << ",";
+		json << R"("ts":)" << spec.startTimePoint;
+		json << R"(})";
 
 		std::lock_guard lock(get().mutex);
 		get().log(json.str());

@@ -1,37 +1,41 @@
 #pragma once
 
 #include <string>
+#include <Aliases.h>
 
 namespace PetrolEngine {
 
 	class Image {
 	public:
-		Image(const std::string&& path);
-		Image(const std::string&  path);
-		Image(const char* path);
-		
+        static Ref<Image> create(const String& path) { return CreateRef<Image>(path); }
+
 		~Image();
 
 		static void flipImages(bool flip);
 		
-		unsigned char* getData() const { return data; }
-		std::string    getPath() const { return path; }
+		NO_DISCARD unsigned char* getData() const { return data; }
+		NO_DISCARD String         getPath() const { return path; }
 
-		uint8_t getComponentsNumber() const { return componentsNumber; }
-		uint8_t getBitsPerChannel  () const { return bitsPerChannel  ; }
-		bool    isHDR              () const { return HDR             ; }
-		int     getWidth           () const { return width           ; }
-		int     getHeight          () const { return height          ; }
+		NO_DISCARD uint8_t getComponentsNumber() const { return componentsNumber; }
+		NO_DISCARD uint8_t getBitsPerChannel  () const { return bitsPerChannel  ; }
+		NO_DISCARD bool    isHDR              () const { return HDR             ; }
+		NO_DISCARD int     getWidth           () const { return width           ; }
+		NO_DISCARD int     getHeight          () const { return height          ; }
 
-	private:
-		std::string path;
+    public:
+        explicit Image(const String&  path);
+        explicit Image(const char*    path);
 
-		int width;
-		int height;
-		bool HDR;
-		uint8_t componentsNumber;
-		uint8_t bitsPerChannel;
+    private:
+		String path;
 
-		unsigned char* data;
+		int  width  = 0;
+		int  height = 0;
+		bool HDR    = false;
+
+		int componentsNumber = 0;
+		int bitsPerChannel   = 0;
+
+		unsigned char* data = nullptr;
 	};
 }

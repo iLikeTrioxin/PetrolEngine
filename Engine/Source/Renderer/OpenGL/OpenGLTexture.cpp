@@ -42,20 +42,20 @@ namespace PetrolEngine {
 		// glTextureSubImage2D(id, 0, 0, 0, width, height, GLFormat, GL_UNSIGNED_BYTE, data);
 	}
 
-	OpenGLTexture::OpenGLTexture(const Image& image, TextureType type) {
+	OpenGLTexture::OpenGLTexture(Ref<Image> image, TextureType type) {
 		this->type = type;
 		this->id   = 0;
 
-		if (!image.getData()) { DEBUG_LOG("[!] Texture failed to load at path: " << image.getPath()); return; }
+		if (!image->getData()) { LOG("Texture failed to load at path: " + image->getPath(), 2); return; }
 
-		this->width  = image.getWidth();
-		this->height = image.getHeight();
+		this->width  = image->getWidth();
+		this->height = image->getHeight();
 
 		int formata = 0x0000;
 
-		formata ^= image.getComponentsNumber() * 0x1;
-		formata ^= image.getBitsPerChannel  () * 0x10;
-		formata ^= image.isHDR              () * 0x1000;
+		formata ^= image->getComponentsNumber() * 0x1;
+		formata ^= image->getBitsPerChannel  () * 0x10;
+		formata ^= image->isHDR              () * 0x1000;
 
 		auto GLFormat = textureFormatLookupTable.at( static_cast<TextureFormat>(formata) );
 				
@@ -71,7 +71,7 @@ namespace PetrolEngine {
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-		glTexImage2D    (GL_TEXTURE_2D, 0, GLFormat.second, width, height, 0, GLFormat.first, GL_UNSIGNED_BYTE, image.getData());
+		glTexImage2D    (GL_TEXTURE_2D, 0, GLFormat.second, width, height, 0, GLFormat.first, GL_UNSIGNED_BYTE, image->getData());
 		glGenerateMipmap(GL_TEXTURE_2D);
 
 		// glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, data);
