@@ -80,6 +80,7 @@ namespace PetrolEngine{
         virtual void renderText(const String& text, Transform& transform) = 0;
         virtual void clear() = 0;
         virtual void getDeviceConstantValue(DeviceConstant deviceConstant, void* outputBuffer) = 0;
+        virtual void drawQuad2D(Material material, Transform transform) = 0;
 
         virtual ~RendererAPI() = default;
 

@@ -31,7 +31,7 @@ namespace PetrolEngine {
 
 		return 0;
 	}
-
+	/*
 	void OpenGLRenderer::renderText(const std::string& text, Transform& transform) {
 		LOG_FUNCTION();
 
@@ -81,12 +81,12 @@ namespace PetrolEngine {
             // + 0 are used here to align arguments in clion editor
             // it will be stripped by compiler anyway
             squareVertices = {
-				Vertex({xPos + 0, yPos + h, 0.f}, {0.0f, 0.0f } ),
-				Vertex({xPos + 0, yPos + 0, 0.f}, {0.0f, 1.0f } ),
-				Vertex({xPos + w, yPos + 0, 0.f}, {1.0f, 1.0f } ),
-				Vertex({xPos + 0, yPos + h, 0.f}, {0.0f, 0.0f } ),
-				Vertex({xPos + w, yPos + 0, 0.f}, {1.0f, 1.0f } ),
-				Vertex({xPos + w, yPos + h, 0.f}, {1.0f, 0.0f } )
+				Vertex( {xPos + 0, yPos + h, 0f}, {0f, 0f} ),
+				Vertex( {xPos + 0, yPos + 0, 0f}, {0f, 1f} ),
+				Vertex( {xPos + w, yPos + 0, 0f}, {1f, 1f} ),
+				Vertex( {xPos + 0, yPos + h, 0f}, {0f, 0f} ),
+				Vertex( {xPos + w, yPos + 0, 0f}, {1f, 1f} ),
+				Vertex( {xPos + w, yPos + h, 0f}, {1f, 0f} )
 			};
 
 			characterMesh.vertexBuffer->setData(squareVertices.data(), squareVertices.size() * sizeof(Vertex));
@@ -101,11 +101,9 @@ namespace PetrolEngine {
 			// now advance cursors for next glyph (note that advance is number of 1/64 pixels)
 			x += (float) (ch.Advance >> 6) * transform.scale.x; // bitshift by 6 to get value in pixels (2^6 = 64)
 		}
-	}
+	}*/
 
-	void OpenGLRenderer::renderMesh(Mesh& mesh, Transform& transform, Camera& camera) {
-		LOG_FUNCTION();
-
+	void OpenGLRenderer::renderMesh(Mesh& mesh, Transform& transform, Camera& camera) { LOG_FUNCTION();
 		auto shader = mesh.material.shader;
 
 		glUseProgram(shader->ID);
@@ -118,11 +116,11 @@ namespace PetrolEngine {
 		shader->setInt  ( "material.specular" , 0   );
 		shader->setFloat( "material.shininess", 1.f );
 
-		shader->setInt  ( "light[0].lightType", 1                     );
-		shader->setVec3 ( "light[0].direction", -1.f,  0.f, 1.f );
-		shader->setVec3 ( "light[0].ambient"  ,  .2f,  .2f, .2f );
-		shader->setVec3 ( "light[0].diffuse"  ,  1.f,  1.f, 1.f );
-		shader->setVec3 ( "light[0].specular" ,  0.f,  0.f, 0.f );
+		shader->setInt  ( "light[0].lightType",  1                 );
+		shader->setVec3 ( "light[0].direction", -1.0f,  0.0f, 1.0f );
+		shader->setVec3 ( "light[0].ambient"  ,  0.2f,  0.2f, 0.2f );
+		shader->setVec3 ( "light[0].diffuse"  ,  1.0f,  1.0f, 1.0f );
+		shader->setVec3 ( "light[0].specular" ,  0.0f,  0.0f, 0.0f );
 
 		// if (currentShader != mesh.material.shader->ID) {
 		// 	mesh.material.shader->use();
@@ -130,25 +128,24 @@ namespace PetrolEngine {
 		// }
 
 		// loading textures into the buffers
-		uint diffuseNumber  = 1;
-		uint heightNumber   = 1;
-		uint normalNumber   = 1;
-		uint specularNumber = 1;
+		uint32 diffuseNumber  = 1;
+		uint32 heightNumber   = 1;
+		uint32 normalNumber   = 1;
+		uint32 specularNumber = 1;
 
-		for (uint textureIndex=0; textureIndex < mesh.material.textures.size(); textureIndex++) { LOG_SCOPE("Assigning texture");
+		for (uint32 textureIndex = 0; textureIndex < mesh.material.textures.size(); textureIndex++) { LOG_SCOPE("Assigning texture");
 			Ref<Texture> texture = mesh.material.textures[textureIndex];
 
 			glActiveTexture(GL_TEXTURE0  + textureIndex);
 			glBindTexture  (GL_TEXTURE_2D, texture->getID());
 			
-			switch (texture->type)
-			{
-			case TextureType::DIFFUSE : shader->setUint("texture_diffuse"  +  diffuseNumber, textureIndex); continue;
-			case TextureType::HEIGHT  : shader->setUint("texture_height"   +   heightNumber, textureIndex); continue;
-			case TextureType::NORMAL  : shader->setUint("texture_normal"   +   normalNumber, textureIndex); continue;
-			case TextureType::SPECULAR: shader->setUint("texture_specular" + specularNumber, textureIndex); continue;
-			
-			default: continue;
+			switch (texture->type) {
+				case TextureType::DIFFUSE : shader->setUint("texture_diffuse"  + toString( diffuseNumber), textureIndex); continue;
+				case TextureType::HEIGHT  : shader->setUint("texture_height"   + toString(  heightNumber), textureIndex); continue;
+				case TextureType::NORMAL  : shader->setUint("texture_normal"   + toString(  normalNumber), textureIndex); continue;
+				case TextureType::SPECULAR: shader->setUint("texture_specular" + toString(specularNumber), textureIndex); continue;
+				
+				default: continue;
 			}
 		}
 
@@ -157,6 +154,24 @@ namespace PetrolEngine {
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.indexBuffer->getID());
 
 		glDrawElements(GL_TRIANGLES, (int) mesh.indexBuffer->getSize(), GL_UNSIGNED_INT, nullptr);
+	}
+
+	/* Pseudo fragment shader
+	* 
+	* struct quad {
+	*     textureSampler texture;
+	*         
+	* }
+	* 
+	* 
+	* 
+	* 
+	*
+	* 
+	*/
+
+	void OpenGLRenderer::drawQuad2D(Material material, Transform transform) {
+
 	}
 	
 	void OpenGLRenderer::clear() {

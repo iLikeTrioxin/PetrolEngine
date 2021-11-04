@@ -10,7 +10,7 @@ namespace PetrolEngine{
 
         if (resource != resources.end()) return resource->second;
 
-        resources[path] = std::filesystem::absolute(path);
+        //resources[path] = std::filesystem::absolute(path);
     }
 
 }

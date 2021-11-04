@@ -7,15 +7,17 @@
 #endif
 
 #if   __cplusplus >= 202002L // Cpp20
-#    define CPP 20
+#    define CPP 2020
 #elif __cplusplus >= 201703L // Cpp17
-#    define CPP 17
+#    define CPP 2017
 #elif __cplusplus >= 201402L // Cpp14
-#    define CPP 14
+#    define CPP 2014
 #elif __cplusplus >= 201103L // Cpp11
-#    define CPP 11
+#    define CPP 2011
 #elif __cplusplus >= 199711L // Cpp98
-#    define CPP 98
+#    define CPP 1998
+#else
+#    define CPP 0000
 #endif
 
 #if defined(DEBUG)
@@ -55,25 +57,41 @@
  *  NO_RETURN
  */
 
+// repair this mess a little
+
+#define   LIKELY  [[likely]] // Cpp 20
+#define UNLIKELY [[unlikely]] // Cpp 20
+#define NO_UNIQUE_ADDRESS [[no_unique_address]] // Cpp 20
+
 #if CPP >= 20
-#    define   LIKELY  [[likely]]
-#    define UNLIKELY [[unlikely]]
-#    define NO_DISCARD(reason) [[nodiscard(reason)]]
-#    define NO_UNIQUE_ADDRESS [[no_unique_address]]
-#elif CPP == 17
-#    define MAYBE_UNUSED [[   maybe_unused   ]]
-#    define NO_DISCARD   [[     nodiscard    ]]
-#    define FALLTHROUGH  [[    fallthrough   ]]
-#elif CPP == 14
-#    define DEPRECATED         [[deprecated        ]]
-#    define DEPRECATED(reason) [[deprecated(reason)]]
-#elif CPP == 11
-#    define DEPENDENT [[carries_dependency]]
-#    define NO_RETURN [[     noreturn     ]]
+#    define NO_DISCARD_R(reason) [[nodiscard(reason)]] // Cpp 20
 #else
-//
+#    define NO_DISCARD_R(reason) [[     nodiscard    ]] // Cpp 17
 #endif
 
+#define NO_DISCARD   [[     nodiscard    ]] // Cpp 17
+#define MAYBE_UNUSED [[   maybe_unused   ]] // Cpp 17
+#define FALLTHROUGH  [[    fallthrough   ]] // Cpp 17
+
+#define DEPRECATED         [[deprecated        ]] // Cpp 14
+#define DEPRECATED(reason) [[deprecated(reason)]] // Cpp 14
+#define DEPENDENT [[carries_dependency]] // Cpp 11
+#define NO_RETURN [[     noreturn     ]] // Cpp 11
+
+
+#if CPP == 0000
+#    define   LIKELY [[likely]]
+#    define UNLIKELY [[unlikely]]
+#    define NO_DISCARD_R(reason) [[nodiscard(reason)]]
+#    define NO_UNIQUE_ADDRESS [[no_unique_address]]
+#    define MAYBE_UNUSED [[maybe_unused]]
+#    define NO_DISCARD [[nodiscard]]
+#    define FALLTHROUGH [[fallthrough]]
+#    define DEPRECATED [[deprecated]]
+#    define DEPRECATED(reason) [[deprecated(reason)]]
+#    define DEPENDENT [[carries_dependency]]
+#    define NO_RETURN [[noreturn]]
+#endif
 
 // Compiler specific attributes
 #if defined(__GNUC__)
@@ -182,6 +200,8 @@ using TypeIndex = std::type_index;
 #include <list>
 template<typename T>
 using List = std::list<T>;
+
+using uint = unsigned int;
 
 // types with guaranteed length
 
