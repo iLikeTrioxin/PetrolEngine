@@ -12,7 +12,7 @@ namespace PetrolEngine {
     double deltaTime      = 0.0;
 
     Ref<Window> Window::create(int width, int height, const String& title) {
-        return CreateRef<GLFWWindow>(width, height, title);
+        return createRef<GLFWWindow>(width, height, title);
     }
 
     float Window::getAspectRatio() const {

@@ -14,22 +14,22 @@ namespace PetrolEngine::Math {
 	const float    ScaleDown = 1.0f / ScaleUp;
 
 	template<typename InputVector, typename T>
-	void benchmarkFunction2D(InputVector& in, size_t vectorSize, T& function, String nameForLog) {
+	void benchmarkFunction2D(InputVector& in, sizeType vectorSize, T& function, const String& nameForLog) {
 		// delay because in release mode log scope was called in the same ms, so graphs would be overlapping
 		// and gives a moment to rest for cpu
 		std::this_thread::sleep_for(std::chrono::milliseconds(100));
 
 		LOG_SCOPE(nameForLog.c_str());
 
-		for (size_t i = 0; i < vectorSize; i++)
+		for (sizeType i = 0; i < vectorSize; i++)
 			function(in.at(i));
 	}
 
 	template<typename InputVector, typename TargetFunc, typename Func>
-	double compareAccuracy(InputVector& vec, size_t vectorSize, TargetFunc& targetFunction, Func& function) {
+	double compareAccuracy(InputVector& vec, sizeType vectorSize, TargetFunc& targetFunction, Func& function) {
 		double dif = 0.0;
 
-		for (size_t i = 0; i < vectorSize; i++)
+		for (sizeType i = 0; i < vectorSize; i++)
 			dif += std::abs(targetFunction(vec.at(i)) - function(vec.at(i))) / vectorSize;
 
 		return dif;
@@ -96,53 +96,53 @@ namespace PetrolEngine::Math {
 		return x;
 	}
 
-	void testMathFunctions(size_t iters = 100000, std::string&& outputPath = "Result.json") {
+	void testMathFunctions(sizeType iterations = 100000, std::string&& outputPath = "Result.json") {
 		std::vector<float> input;
-		input.reserve(iters);
+		input.reserve(iterations);
 
 		// Set directory for logger
         PetrolEngine::Debuging::Logger::setOutputFile(outputPath);
 
-		for (uint32_t i = 0; i < iters; i++)
+		for (uint32_t i = 0; i < iterations; i++)
 			input.emplace_back((i / 100) + 1); // + 1 because Sqrt, iSqrt... does not support 0 and below
 
 		{
-			std::cout << "math sqrt      to cpp sqrt accuracy: " << compareAccuracy(input, iters, sqrtl, Sqrt) << std::endl;
-			std::cout << "math sqrt + NS to cpp sqrt accuracy: " << compareAccuracy(input, iters, sqrtl, SqrtRep) << std::endl;
+			std::cout << "math sqrt      to cpp sqrt accuracy: " << compareAccuracy(input, iterations, sqrtl, Sqrt) << std::endl;
+			std::cout << "math sqrt + NS to cpp sqrt accuracy: " << compareAccuracy(input, iterations, sqrtl, SqrtRep) << std::endl;
 
 			LOG_SCOPE("sqrt");
 
-			benchmarkFunction2D(input, iters, sqrtf, "cpp sqrt");
-			benchmarkFunction2D(input, iters, SqrtRep, "'math' sqrt + newton step");
-			benchmarkFunction2D(input, iters, Sqrt   , "'math' sqrt");
+			benchmarkFunction2D(input, iterations, sqrtf, "cpp sqrt");
+			benchmarkFunction2D(input, iterations, SqrtRep, "'math' sqrt + newton step");
+			benchmarkFunction2D(input, iterations, Sqrt   , "'math' sqrt");
 		}
 		{
 			auto normal_iSqrt = [](float x) {return 1.0f / std::sqrtf(x); };
 
-			std::cout << "math quake iSqrt to cpp iSqrt accuracy: " << compareAccuracy(input, iters, normal_iSqrt, Quake_iSqrt) << std::endl;
-			std::cout << "math       iSqrt to cpp iSqrt accuracy: " << compareAccuracy(input, iters, normal_iSqrt, iSqrt) << std::endl;
+			std::cout << "math quake iSqrt to cpp iSqrt accuracy: " << compareAccuracy(input, iterations, normal_iSqrt, Quake_iSqrt) << std::endl;
+			std::cout << "math       iSqrt to cpp iSqrt accuracy: " << compareAccuracy(input, iterations, normal_iSqrt, iSqrt) << std::endl;
 
 			LOG_SCOPE("isqrt");
 
-			benchmarkFunction2D(input, iters, normal_iSqrt, "cpp isqrt");
-			benchmarkFunction2D(input, iters, Quake_iSqrt, "quake isqrt");
-			benchmarkFunction2D(input, iters, iSqrt, "'math' isqrt");
+			benchmarkFunction2D(input, iterations, normal_iSqrt, "cpp   isqrt"   );
+			benchmarkFunction2D(input, iterations, Quake_iSqrt , "quake isqrt"   );
+			benchmarkFunction2D(input, iterations, iSqrt       , "quake isqrt v2");
 		}
 		{
-			std::cout << "math log2 to cpp log2 accuracy: " << compareAccuracy(input, iters, log2l, Log2) << std::endl;
+			std::cout << "math log2 to cpp log2 accuracy: " << compareAccuracy(input, iterations, log2l, Log2) << std::endl;
 
 			LOG_SCOPE("log2");
 
-			benchmarkFunction2D(input, iters, log2f, "cpp log2");
-			benchmarkFunction2D(input, iters, Log2, "'math' log2");
+			benchmarkFunction2D(input, iterations, log2f, "cpp log2");
+			benchmarkFunction2D(input, iterations, Log2, "'math' log2");
 		}
 		{
-			std::cout << "math exp2 to cpp exp2 accuracy: " << compareAccuracy(input, iters, exp2l, Exp2) << std::endl;
+			std::cout << "math exp2 to cpp exp2 accuracy: " << compareAccuracy(input, iterations, exp2l, Exp2) << std::endl;
 
 			LOG_SCOPE("exp2");
 
-			benchmarkFunction2D(input, iters, exp2f, "cpp exp2");
-			benchmarkFunction2D(input, iters, Exp2, "'math' exp2");
+			benchmarkFunction2D(input, iterations, exp2f, "cpp exp2");
+			benchmarkFunction2D(input, iterations, Exp2, "'math' exp2");
 		}
 	}
 }

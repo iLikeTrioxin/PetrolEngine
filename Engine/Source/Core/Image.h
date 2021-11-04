@@ -7,7 +7,7 @@ namespace PetrolEngine {
 
 	class Image {
 	public:
-        static Ref<Image> create(const String& path) { return CreateRef<Image>(path); }
+        static Ref<Image> create(const String& path) { return createRef<Image>(path); }
 
 		~Image();
 

@@ -105,8 +105,8 @@ namespace PetrolEngine {
 	Ref<Shader> Shader::create(String&& vertexSrc, String&& fragmentSrc, String&& geometrySrc){ LOG_FUNCTION();
 		switch (RendererAPI::get())
 		{
-            case RendererAPI::API::OpenGL: return CreateRef<OpenGLShader>( vertexSrc .c_str(), fragmentSrc.c_str(), nullptr );
-            case RendererAPI::API::Vulkan: return CreateRef<VulkanShader>( vertexSrc .c_str(), fragmentSrc.c_str(), nullptr );
+            case RendererAPI::API::OpenGL: return createRef<OpenGLShader>( vertexSrc .c_str(), fragmentSrc.c_str(), nullptr );
+            case RendererAPI::API::Vulkan: return createRef<VulkanShader>( vertexSrc .c_str(), fragmentSrc.c_str(), nullptr );
 			default: return nullptr;
 		}
 	}

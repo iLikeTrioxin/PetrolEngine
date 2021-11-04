@@ -12,8 +12,8 @@ namespace PetrolEngine {
 
 		switch (RendererAPI::get())
 		{
-			case RendererAPI::API::OpenGL: return CreateRef<OpenGLTexture>(image, type) ;
-            case RendererAPI::API::Vulkan: return CreateRef<VulkanTexture>(image, type);
+			case RendererAPI::API::OpenGL: return createRef<OpenGLTexture>(image, type) ;
+            case RendererAPI::API::Vulkan: return createRef<VulkanTexture>(image, type);
             default: return nullptr;
         }
 	}
@@ -21,8 +21,8 @@ namespace PetrolEngine {
 	Ref<Texture> Texture::create(const Ref<Image>& image, TextureType type) {
 		switch (RendererAPI::get())
 		{
-			case RendererAPI::API::OpenGL: return CreateRef<OpenGLTexture>(image, type);
-            case RendererAPI::API::Vulkan: return CreateRef<VulkanTexture>(image, type);
+			case RendererAPI::API::OpenGL: return createRef<OpenGLTexture>(image, type);
+            case RendererAPI::API::Vulkan: return createRef<VulkanTexture>(image, type);
 			default: return nullptr;
 		}
 	}
@@ -30,8 +30,8 @@ namespace PetrolEngine {
 	Ref<Texture> Texture::create(int width, int height, TextureType type, TextureFormat format) {
 		switch (RendererAPI::get())
 		{
-			case RendererAPI::API::OpenGL: return CreateRef<OpenGLTexture>(width, height, type, format);
-            case RendererAPI::API::Vulkan: return CreateRef<VulkanTexture>(width, height, type, format);
+			case RendererAPI::API::OpenGL: return createRef<OpenGLTexture>(width, height, type, format);
+            case RendererAPI::API::Vulkan: return createRef<VulkanTexture>(width, height, type, format);
             default: return nullptr;
 		}
 	}

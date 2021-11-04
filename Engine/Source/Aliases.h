@@ -73,8 +73,8 @@
 #define MAYBE_UNUSED [[   maybe_unused   ]] // Cpp 17
 #define FALLTHROUGH  [[    fallthrough   ]] // Cpp 17
 
-#define DEPRECATED         [[deprecated        ]] // Cpp 14
-#define DEPRECATED(reason) [[deprecated(reason)]] // Cpp 14
+#define DEPRECATED           [[deprecated        ]] // Cpp 14
+#define DEPRECATED_R(reason) [[deprecated(reason)]] // Cpp 14
 #define DEPENDENT [[carries_dependency]] // Cpp 11
 #define NO_RETURN [[     noreturn     ]] // Cpp 11
 
@@ -161,9 +161,7 @@
 using String = std::string;
 
 template<typename T>
-inline String toString(T x) {
-    return std::to_string(x);
-}
+inline String toString(T x) { return std::to_string(x); }
 
 #include <vector>
 template<typename T>
@@ -177,10 +175,7 @@ template<typename T>
 using Ref = std::shared_ptr<T>;
 
 template<typename T, typename ... Args>
-constexpr Ref<T> CreateRef(Args&& ... args)
-{
-    return std::make_shared<T>(std::forward<Args>(args)...);
-}
+constexpr Ref<T> createRef(Args&& ... args) { return std::make_shared<T>(std::forward<Args>(args)...); }
 
 #include <optional>
 template<typename T>
@@ -205,22 +200,16 @@ using uint = unsigned int;
 
 // types with guaranteed length
 
-using  int8 =   signed char;
-using uint8 = unsigned char;
+using  int8  = std:: int8_t ;
+using uint8  = std::uint8_t ;
+using  int16 = std:: int16_t;
+using uint16 = std::uint16_t;
+using  int32 = std:: int32_t;
+using uint32 = std::uint32_t;
+using  int64 = std:: int64_t;
+using uint64 = std::uint64_t;
 
-using  int16 =   signed short;
-using uint16 = unsigned short;
-
-using  int32 =   signed int;
-using uint32 = unsigned int;
-
-#if defined(__x86_64__) && !defined(__ILP32__)
-using  int64 =   signed long int;
-using uint64 = unsigned long int;
-#else
-using  int64 =   signed long long int;
-using uint64 = unsigned long long int;
-#endif
+using sizeType = std::size_t;
 
 #include <cassert>
 
