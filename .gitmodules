@@ -19,9 +19,6 @@
 [submodule "Deps/freetype"]
 	path = Deps/freetype
 	url = https://github.com/freetype/freetype
-[submodule "Deps/lua-cmake"]
-	path = Deps/lua-cmake
-	url = https://github.com/lubgr/lua-cmake
 [submodule "Deps/shaderc"]
 	path = Deps/shaderc
 	url = https://github.com/google/shaderc/
