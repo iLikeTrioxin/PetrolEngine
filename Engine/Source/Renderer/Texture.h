@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../Core/Image.h"
+#include "RendererResourceCreator.h"
 
 namespace PetrolEngine {
 
@@ -61,7 +62,7 @@ namespace PetrolEngine {
 		TextureFormat format = TextureFormat::NONE;
 		TextureType   type   =   TextureType::NONE;
 
-		virtual ~Texture() = default;
+		virtual ~Texture() = 0;
 
 		virtual void updateTextureImage(const void* data) = 0;
 
@@ -69,16 +70,14 @@ namespace PetrolEngine {
 		NO_DISCARD uint getWidth () const { return width ; }
 		NO_DISCARD uint getID    () const { return id    ; }
 
-		//static Ref<Texture> load(std::string path = "", TextureType type = TextureType::NONE);
+        static Texture* create(RRC creator, const Image* image, TextureType type = TextureType::NONE);
 
-		static Ref<Texture> create(const String&     path , TextureType type = TextureType::NONE);
-		static Ref<Texture> create(const Ref<Image>& image, TextureType type = TextureType::NONE);
-		static Ref<Texture> create(int width, int height, TextureType type, TextureFormat format);
+        //static Texture* create(const String&     path , TextureType type = TextureType::NONE);
+		//static Texture* create(const Image* image, TextureType type = TextureType::NONE);
+		//static Texture* create(int width, int height, TextureType type, TextureFormat format);
 	protected:
 		uint id{};
 		uint width  = 0;
 		uint height = 0;
-
-		static UnorderedMap<String, Ref<Texture>> loadedTextures;
 	};
 }

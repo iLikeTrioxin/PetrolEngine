@@ -42,7 +42,6 @@ target_link_libraries(Engine
     PRIVATE assimp
     PRIVATE shaderc
     PRIVATE freetype
-    PRIVATE lua::lib
 )
 
 target_include_directories(Engine

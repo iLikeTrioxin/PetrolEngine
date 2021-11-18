@@ -8,6 +8,7 @@
 
 #include "../Core/Image.h"
 #include "EventStack.h"
+#include "WindowResourceCreator.h"
 
 namespace PetrolEngine {
 
@@ -24,7 +25,7 @@ namespace PetrolEngine {
 			int width;
 			int height;
 
-			std::string title;
+			String title;
 		};
 
 		struct WindowResizedEvent: Event { WindowData data; explicit WindowResizedEvent(WindowData data) : data(std::move(data)) {} };
@@ -39,7 +40,7 @@ namespace PetrolEngine {
 		struct KeyTypedEvent     : Event { int key;              KeyTypedEvent   (int key             ) : key(key)                 {} };
 
 	public:
-		static Ref<Window> create(int width, int height, const String& title);
+		static Window* create(WRC creator, int width, int height, String&& title);
 		
 		NO_DISCARD int getWidth () const { return windowData.width ; };
 		NO_DISCARD int getHeight() const { return windowData.height; };
@@ -50,10 +51,12 @@ namespace PetrolEngine {
 		virtual void close      () = 0;
 		virtual void pollEvents () = 0;
 		
-		virtual void setVSync(bool       enabled) = 0;
-		virtual void setIcon (Ref<Image> image  ) = 0;
+		virtual void setVSync(bool   enabled) = 0;
+		virtual void setIcon (Image* image  ) = 0;
 
 		virtual bool isPressed(int key) = 0;
+
+        virtual ~Window() = 0;
 
 		// Vulkan specific
 		virtual void createWindowSurface(void* instance, const void* allocation, void* surface) = 0;
@@ -62,5 +65,6 @@ namespace PetrolEngine {
 
 	protected:
 		WindowData windowData;
+        Image* icon = nullptr;
 	};
 }

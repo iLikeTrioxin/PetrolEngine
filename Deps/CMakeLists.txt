@@ -17,9 +17,6 @@ set( GLAD_INSTALL                 ON  CACHE BOOL "Generate installation target" 
 
 add_subdirectory(glad)
 
-#lua
-add_subdirectory(lua-cmake)
-
 #glfw
 set( BUILD_SHARED_LIBS OFF CACHE BOOL "Build shared libraries" FORCE )
 set( GLFW_BUILD_DOCS   OFF CACHE BOOL "GLFW lib only"          FORCE )

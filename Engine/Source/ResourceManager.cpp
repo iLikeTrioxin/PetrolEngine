@@ -4,7 +4,6 @@
 #include <filesystem>
 
 namespace PetrolEngine{
-    ResourceManager programResourceManager = ResourceManager();
 
     const String& ResourceManager::resource(const String& path) {
         auto resource = resources.find(path);

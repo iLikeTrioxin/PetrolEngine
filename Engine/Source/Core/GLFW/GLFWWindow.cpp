@@ -10,8 +10,8 @@
 
 namespace PetrolEngine {
 
-    GLFWWindow::GLFWWindow(uint32_t width, uint32_t height, std::string title) { LOG_FUNCTION();
-        this->windowData = { (int) width, (int) height, std::move(title) };
+    GLFWWindow::GLFWWindow(int width, int height, String&& title) { LOG_FUNCTION();
+        this->windowData = { width, height, move(title) };
         this->window     = nullptr;
     }
 
@@ -20,14 +20,20 @@ namespace PetrolEngine {
         glfwSwapInterval(enabled);
     }
 
-    void GLFWWindow::setIcon(Ref<Image> image) { LOG_FUNCTION();
+    void GLFWWindow::setIcon(Image* image) { LOG_FUNCTION();
         GLFWimage icons[1];
-        
+
         icons[0].pixels = image->getData  ();
         icons[0].height = image->getHeight();
         icons[0].width  = image->getWidth ();
 
+        this->icon = image;
+
         glfwSetWindowIcon(window, 1, icons);
+    }
+
+    GLFWWindow::~GLFWWindow(){
+        delete this->icon;
     }
 
     void GLFWWindow::createWindowSurface(void* i, const void* a, void* s){

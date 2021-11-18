@@ -1,12 +1,9 @@
 #include <PCH.h>
 
-#include "OpenGL/OpenGLTexture.h"
-#include "Vulkan/VulkanTexture.h"
-
-#include "RendererAPI.h"
+#include "Texture.h"
 
 namespace PetrolEngine {
-	
+	/*
 	Ref<Texture> Texture::create(const String& path, TextureType type) {
 	    auto image = Image::create(path);
 
@@ -35,4 +32,8 @@ namespace PetrolEngine {
             default: return nullptr;
 		}
 	}
+    */
+    Texture* Texture::create(RRC creator, const Image* image, TextureType type) {
+        return creator.newTexture(image, type);
+    }
 }

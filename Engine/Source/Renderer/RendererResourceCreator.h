@@ -10,8 +10,10 @@ namespace PetrolEngine {
 	class VertexArray ;
 	class Renderer    ;
 	class Shader      ;
-	
-	using RRC = PetrolEngine::RendererResourceCreator;
+    class Texture     ;
+    class Image       ;
+
+    enum class TextureType;
 
 	class RendererResourceCreator {
 	public:
@@ -24,7 +26,9 @@ namespace PetrolEngine {
 											   String&& fragmentShader,
 			                                   String&& geometryShader  ) = 0;
 
+        virtual Texture* newTexture(const Image* image, TextureType type) = 0;
 
 	};
 
+    using RRC = PetrolEngine::RendererResourceCreator;
 }

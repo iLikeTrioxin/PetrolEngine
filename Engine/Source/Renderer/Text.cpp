@@ -8,7 +8,7 @@
 #include FT_FREETYPE_H
 
 namespace PetrolEngine {
-	std::map<char, Text::Character> Text::characters;
+	UnorderedMap<char, Text::Character> Text::characters;
 
     Text::Character Text::get(char character) {
         return characters[character];
