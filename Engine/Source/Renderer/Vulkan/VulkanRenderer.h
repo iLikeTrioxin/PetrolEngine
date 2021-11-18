@@ -5,8 +5,8 @@
 
 namespace PetrolEngine {
     struct QueueFamilyIndices {
-        Optional<uint32_t> graphicsFamily;
-        Optional<uint32_t> presentFamily;
+        Optional<uint32> graphicsFamily;
+        Optional<uint32> presentFamily;
 
         bool isValid() const { return graphicsFamily.has_value() && presentFamily.has_value(); }
     };
@@ -18,7 +18,7 @@ namespace PetrolEngine {
         Vector<VkPresentModeKHR  > presentModes;
     };
 
-    class VulkanRenderer : public RendererAPI {
+    class VulkanRenderer : public Renderer {
 	public:
 		// 2D stuff
 	    void renderText(const String& text, Transform& transform) override;
@@ -35,7 +35,7 @@ namespace PetrolEngine {
 
 		void resetBuffers();
 
-		const std::unordered_map<DeviceConstant, GLint> VulkanDeviceConstants{
+		const UnorderedMap<DeviceConstant, GLint> VulkanDeviceConstants{
 			{DeviceConstant::MAX_TEXTURE_IMAGE_UNITS, GL_MAX_TEXTURE_IMAGE_UNITS}
 		};
 

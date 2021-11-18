@@ -25,7 +25,7 @@ namespace PetrolEngine {
 		glGenVertexArrays(1, &ID);
 	}
 
-	void OpenGLVertexArray::setIndexBuffer(Ref<IndexBuffer> indexBuffer) { LOG_FUNCTION(); //-V688
+	void OpenGLVertexArray::setIndexBuffer(Ref<IndexBuffer> indexBuffer) { LOG_FUNCTION();
 		glBindVertexArray(this->ID);
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer->getID());

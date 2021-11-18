@@ -1,5 +1,9 @@
 #pragma once
 
+#include <Aliases.h>
+
+#include "RendererResourceCreator.h"
+
 // std includes
 #include <utility>
 #include <vector>
@@ -82,10 +86,9 @@ namespace PetrolEngine {
 
 	class VertexBuffer {
 	public:
-		virtual ~VertexBuffer() = default;
+		virtual ~VertexBuffer() = 0;
 
-		static Ref<VertexBuffer> create(const VertexLayout& layout);
-		static Ref<VertexBuffer> create(const VertexLayout& layout, const void* data, int64 size);
+		static VertexBuffer* create(RRC creator, const VertexLayout& layout, const void* data = nullptr, int64 size = 0);
 		
 		virtual void setData(const void* data, int64 size) = 0;
 
@@ -93,7 +96,7 @@ namespace PetrolEngine {
 		NO_DISCARD unsigned int getID    () const { return ID    ; }
 
 	protected:
-		explicit VertexBuffer(VertexLayout layout): layout(std::move(layout)), ID(0) {};
+		explicit VertexBuffer(VertexLayout layout): layout(move(layout)), ID(0) {};
 
 	protected:
 		VertexLayout layout;

@@ -5,26 +5,27 @@
 #include <string>
 #include <vector>
 
+#include "RendererResourceCreator.h"
+
 #include "VertexBuffer.h"
 #include  "IndexBuffer.h"
 
 namespace PetrolEngine {
 	class VertexArray {
 	public:
-		
-		static Ref<VertexArray> create();
+		static VertexArray* create(RRC creator);
 
-		virtual void addVertexBuffer(Ref<VertexBuffer> vertexBuffer) = 0;
-		virtual void  setIndexBuffer(Ref< IndexBuffer>  indexBuffer) = 0;
+		virtual void addVertexBuffer(VertexBuffer* vertexBuffer) = 0;
+		virtual void  setIndexBuffer( IndexBuffer*  indexBuffer) = 0;
 
-		virtual ~VertexArray() = default;
+		virtual ~VertexArray() = 0;
 
-		uint32_t getID() { return ID; }
+		uint32 getID() { return ID; }
 
 	protected:
-		std::vector<Ref<VertexBuffer>> vertexBuffers;
-		            Ref< IndexBuffer>   indexBuffer;
+		Vector<VertexBuffer*> vertexBuffers;
+		        IndexBuffer*   indexBuffer;
 
-		uint32_t ID;
+		uint32 ID;
 	};
 }

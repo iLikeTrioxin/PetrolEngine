@@ -2,20 +2,17 @@
 
 #include <Aliases.h>
 
-#include <memory>
-#include <sstream>
-#include <fstream>
-#include <map>
+#include "RendererResourceCreator.h"
 
 #include <glm/glm.hpp>
 
 namespace PetrolEngine {
     class Shader {
     public:
-        uint32_t ID;
-        std::string name;
+        uint32 ID;
+        String name;
         
-        virtual ~Shader() = default;
+        virtual ~Shader() = 0;
         virtual int recompileShader( const char* vertexShaderSourceCode   = nullptr,
                                      const char* fragmentShaderSourceCode = nullptr,
                                      const char* geometryShaderSourceCode = nullptr  ) = 0;
@@ -35,7 +32,7 @@ namespace PetrolEngine {
         /// </summary>
         /// <param name="path">- path to the shader</param>
         /// <returns>shared pointer to shader</returns>
-        static Ref<Shader> load( const String& path );
+        static Shader* create( RRC creator, const String& path );
         
         /// <summary>
         /// Creates Shader using source code.
@@ -46,10 +43,10 @@ namespace PetrolEngine {
         /// <param name="fragmentSrc"> - source code of fragment shader</param>
         /// <param name="geometrySrc"> - source code of geometry shader</param>
         /// <returns>shared pointer to the shader</returns>
-        static Ref<Shader> load( String&&        name     ,
-                                 String&&   vertexSrc = "",
-                                 String&& fragmentSrc = "",
-                                 String&& geometrySrc = ""  );
+        static Shader* create( RRC          creator,
+                               String&&   vertexSrc,
+                               String&& fragmentSrc,
+                               String&& geometrySrc  );
 
         // utility uniform functions
 
@@ -68,17 +65,9 @@ namespace PetrolEngine {
         virtual void setMat4 ( const String& name, const glm::mat4& x ) = 0;
         
     protected:
-        uint32_t geometryShaderID;
-        uint32_t fragmentShaderID;
-        uint32_t   vertexShaderID;
-
-    private:
-        static std::unordered_map<String, Ref<Shader>> loadedShaders;
-        
-        // creates a shader with current graphics API (it does not prevent copying, use load instead)
-        static Ref<Shader> create( String&&   vertexSrc,
-                                               String&& fragmentSrc,
-                                               String&& geometrySrc  );
+        uint32 geometryShaderID;
+        uint32 fragmentShaderID;
+        uint32   vertexShaderID;
     };
 
 }

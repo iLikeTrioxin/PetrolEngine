@@ -4,20 +4,15 @@
 #include "Renderer.h"
 #include <cassert>
 
-#include "OpenGL/OpenGLShader.h"
-#include "Vulkan/VulkanShader.h"
-
 #include <fstream>
 #include "../Core/Files.h"
 
 namespace PetrolEngine {
     static const char* defaultVertexShaderPath   = "C:/Users/mpr19/Desktop/Engine/Engine/Resources/Shaders/shader.frag";
     static const char* defaultFragmentShaderPath = "C:/Users/mpr19/Desktop/Engine/Engine/Resources/Shaders/shader.vert";
-
-	std::unordered_map<String, Ref<Shader>> Shader::loadedShaders;
-	
+		
 	auto getSourcesFromString(String fileSource, String keyword = "#type") {
-		std::unordered_map<String, String> sources;
+		UnorderedMap<String, String> sources;
 
 		String lcSource; // lower case source because find would detect only lower case "#type"
 		
@@ -42,6 +37,8 @@ namespace PetrolEngine {
 
 		return sources;
 	}
+
+	/*
 	Ref<Shader> Shader::load(const String& path) {
 		// check if shader with that path wasn't already loaded
 		auto isShaderInHash = loadedShaders.find(path);
@@ -75,7 +72,9 @@ namespace PetrolEngine {
 
 		return shader;
 	}
+	*/
 
+	/*
 	Ref<Shader> Shader::load( String&& name       ,
                               String&& vertexSrc  ,
                               String&& fragmentSrc,
@@ -101,13 +100,14 @@ namespace PetrolEngine {
 		
 		return shader;
 	}
+	*/
 
-	Ref<Shader> Shader::create(String&& vertexSrc, String&& fragmentSrc, String&& geometrySrc){ LOG_FUNCTION();
-		switch (RendererAPI::get())
-		{
-            case RendererAPI::API::OpenGL: return createRef<OpenGLShader>( vertexSrc .c_str(), fragmentSrc.c_str(), nullptr );
-            case RendererAPI::API::Vulkan: return createRef<VulkanShader>( vertexSrc .c_str(), fragmentSrc.c_str(), nullptr );
-			default: return nullptr;
-		}
+	Shader* Shader::create(RRC creator, String&& vertexSrc, String&& fragmentSrc, String&& geometrySrc){ LOG_FUNCTION();
+		return creator.newShader(vertexSrc, fragmentSrc, geometrySrc);
+	}
+
+	Shader* Shader::create(RRC creator, const String& path) { LOG_FUNCTION();
+		auto sources = getSourcesFromString(ReadFile(path));
+		return creator.newShader(sources["vertexShader"], sources["fragmentShader"], sources["geometryShader"]);
 	}
 }

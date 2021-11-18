@@ -177,6 +177,9 @@ using Ref = std::shared_ptr<T>;
 template<typename T, typename ... Args>
 constexpr Ref<T> createRef(Args&& ... args) { return std::make_shared<T>(std::forward<Args>(args)...); }
 
+template<typename T>
+constexpr auto move(T t) { return std::move(t); }
+
 #include <optional>
 template<typename T>
 using Optional = std::optional<T>;

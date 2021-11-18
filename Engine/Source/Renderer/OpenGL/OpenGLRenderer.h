@@ -1,12 +1,21 @@
  #pragma once
 
-#include "../Renderer.h"
-
 #include <glad/glad.h>
+
+#include "../Renderer.h"
+#include "../RendererResourceCreator.h"
+
+#include "OpenGLIndexBuffer.h"
+#include "OpenGLShader.h"
+#include "OpenGLTexture.h"
+#include "OpenGLVertexArray.h"
+#include "OpenGLVertexBuffer.h"
+
+// TODO: make sure to move shader sources.
 
 namespace PetrolEngine {
 	
-	class OpenGLRenderer : public RendererAPI {
+	class OpenGLRenderer : public Renderer {
 	public:
 		// 2D stuff
 		void drawQuad2D(Material material, Transform transform) override;
@@ -23,8 +32,19 @@ namespace PetrolEngine {
 
 		static void resetBuffers();
 
-		const std::unordered_map<DeviceConstant, GLint> openGLDeviceConstants{
+		const UnorderedMap<DeviceConstant, GLint> openGLDeviceConstants{
 			{DeviceConstant::MAX_TEXTURE_IMAGE_UNITS, GL_MAX_TEXTURE_IMAGE_UNITS}
 		};
 	};
+
+	class: public RendererResourceCreator {
+		VertexBuffer* newVertexBuffer(const VertexLayout& layout, const void* data, int64 size) override { return new OpenGLVertexBuffer(layout, data, size); };
+		IndexBuffer * newIndexBuffer (                            const void* data, int64 size) override { return new OpenGLIndexBuffer (        data, size); };
+		VertexArray * newVertexArray (                                                        ) override { return new OpenGLVertexArray (                  ); };
+		Renderer    * newRenderer    (                                                        ) override { return new OpenGLRenderer    (                  ); };
+
+		Shader      * newShader      ( String&& vertexShader  ,
+					                   String&& fragmentShader,
+		                               String&& geometryShader  ) override { return new OpenGLShader(vertexShader, fragmentShader, geometryShader); };
+	} OpenGL;
 }
