@@ -7,28 +7,26 @@ namespace PetrolEngine {
 
 	class Image {
 	public:
-        static Ref<Image> create(const String& path) { return createRef<Image>(path); }
+        static Image* create(const String& path) { return new Image(path); }
+        static Image* create(int width, int height, TextureType type, TextureFormat format) { return new Image(path); }
 
 		~Image();
 
 		static void flipImages(bool flip);
 		
 		NO_DISCARD unsigned char* getData() const { return data; }
-		NO_DISCARD String         getPath() const { return path; }
 
-		NO_DISCARD uint8_t getComponentsNumber() const { return componentsNumber; }
-		NO_DISCARD uint8_t getBitsPerChannel  () const { return bitsPerChannel  ; }
-		NO_DISCARD bool    isHDR              () const { return HDR             ; }
-		NO_DISCARD int     getWidth           () const { return width           ; }
-		NO_DISCARD int     getHeight          () const { return height          ; }
+		NO_DISCARD uint8 getComponentsNumber() const { return componentsNumber; }
+		NO_DISCARD uint8 getBitsPerChannel  () const { return bitsPerChannel  ; }
+		NO_DISCARD bool  isHDR              () const { return HDR             ; }
+		NO_DISCARD int   getWidth           () const { return width           ; }
+		NO_DISCARD int   getHeight          () const { return height          ; }
 
     public:
         explicit Image(const String&  path);
-        explicit Image(const char*    path);
+        explicit Image(int width, int height, TextureType type, TextureFormat format);
 
     private:
-		String path;
-
 		int  width  = 0;
 		int  height = 0;
 		bool HDR    = false;

@@ -2,13 +2,9 @@
 
 #include "../Texture.h"
 
-//
-// Messy code - repair it
-//
-
 namespace PetrolEngine {
 
-	void initalizeTextureSettings(bool flipImage);
+	void initializeTextureSettings(bool flipImage);
 
 	class OpenGLTexture : public Texture {
 	public:
@@ -19,23 +15,20 @@ namespace PetrolEngine {
 			TextureFormat format = TextureFormat::NONE
 		);
 
-		explicit OpenGLTexture(
-			Ref<Image> image,
-			TextureType type = TextureType::NONE
+        OpenGLTexture(
+			const Image* image,
+			TextureType type
 		);
 		
 		~OpenGLTexture() override;
 
 		void updateTextureImage(const void* data) override;
 	private:
-		const std::unordered_map<TextureFormat, std::pair<GLuint, GLuint>> textureFormatLookupTable{
+		const UnorderedMap<TextureFormat, Pair<GLuint, GLuint>> textureFormatLookupTable{
 			{TextureFormat::RGBA16, {GL_RGBA, GL_RGBA16}},
 			{TextureFormat::RGBA8 , {GL_RGBA, GL_RGBA8 }},
 			{TextureFormat::RGB16 , {GL_RGB , GL_RGB16 }},
 			{TextureFormat::RED   , {GL_RED , GL_RED   }}
 		};
-		//void updateTextureImage(TextureFormat format, unsigned int width, unsigned int height, const void* data);
-		void createTexture();
-		//void loadTexture(const char* path);
 	};
 }

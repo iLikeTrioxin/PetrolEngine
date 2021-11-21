@@ -14,8 +14,9 @@ namespace PetrolEngine {
     class Image       ;
 
     enum class TextureType;
+    enum class TextureFormat;
 
-	class RendererResourceCreator {
+    class RendererResourceCreator {
 	public:
 		virtual VertexBuffer* newVertexBuffer(const VertexLayout& layout, const void* data, int64 size) = 0;
 		virtual IndexBuffer * newIndexBuffer (                            const void* data, int64 size) = 0;
@@ -27,7 +28,7 @@ namespace PetrolEngine {
 			                                   String&& geometryShader  ) = 0;
 
         virtual Texture* newTexture(const Image* image, TextureType type) = 0;
-
+        virtual Texture* newTexture(int width, int height, TextureType type, TextureFormat format) = 0;
 	};
 
     using RRC = PetrolEngine::RendererResourceCreator;

@@ -1,24 +1,29 @@
 #pragma once
 
+#include <Aliases.h>
+
 #include <glm/vec2.hpp>
 #include <map>
-#include "Texture.h"
 #include <memory>
-#include <Aliases.h>
+
+#include "../Core/Image.h"
 
 namespace PetrolEngine {
 
     class Text {
     public:
+        using ivec2 = glm::ivec2;
+
         struct Character {
-            Texture*   texture; // ID handle of the glyph texture
-            glm::ivec2 Size   ; // Size of glyph
-            glm::ivec2 Bearing; // Offset from baseline to left/top of glyph
-            long       Advance; // Offset to advance to next glyph
+            Image* image  ; // Image of the glyph
+            ivec2  size   ; // Size of glyph
+            ivec2  bearing; // Offset from baseline to left/top of glyph
+            long   advance; // Offset to advance to next glyph
         };
 
         static void init(const String& fontPath);
         static Character get(char character);
+
     private:
         static UnorderedMap<char, Character> characters;
     };

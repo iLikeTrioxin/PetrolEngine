@@ -180,6 +180,9 @@ constexpr Ref<T> createRef(Args&& ... args) { return std::make_shared<T>(std::fo
 template<typename T>
 constexpr auto move(T t) { return std::move(t); }
 
+template<typename T1, typename T2>
+using Pair = std::pair<T1, T2>;
+
 #include <optional>
 template<typename T>
 using Optional = std::optional<T>;

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <Aliases.h>
+
 #include "../Core/Image.h"
 #include "RendererResourceCreator.h"
 
@@ -13,7 +15,7 @@ namespace PetrolEngine {
 		SPECULAR = 4
 	};
 
-	enum class TextureFormat {
+	enum class TextureFormat: uint8 {
 		NONE = 0x0000,
 		
 		// Structure:
@@ -56,6 +58,15 @@ namespace PetrolEngine {
 		DEPTH32F = 0x1205
 	};
 
+    TextureFormat getFormat(const Image* image){
+        uint8 format = 0x0000;
+
+        format ^= image->getComponentsNumber() * 0x1;
+        format ^= image->getBitsPerChannel  () * 0x10;
+        format ^= image->isHDR              () * 0x1000;
+
+        return static_cast<TextureFormat>(format);
+    }
 
 	class Texture {
 	public:
@@ -70,11 +81,11 @@ namespace PetrolEngine {
 		NO_DISCARD uint getWidth () const { return width ; }
 		NO_DISCARD uint getID    () const { return id    ; }
 
-        static Texture* create(RRC creator, const Image* image, TextureType type = TextureType::NONE);
+        static Texture* create(RRC creator, const Image * image, TextureType type = TextureType::NONE);
+        static Texture* create(RRC creator, const String& path , TextureType type = TextureType::NONE);
 
-        //static Texture* create(const String&     path , TextureType type = TextureType::NONE);
-		//static Texture* create(const Image* image, TextureType type = TextureType::NONE);
-		//static Texture* create(int width, int height, TextureType type, TextureFormat format);
+        static Texture* create(RRC creator, int width, int height, TextureType type, TextureFormat format);
+
 	protected:
 		uint id{};
 		uint width  = 0;

@@ -42,7 +42,7 @@ namespace PetrolEngine {
 		// glTextureSubImage2D(id, 0, 0, 0, width, height, GLFormat, GL_UNSIGNED_BYTE, data);
 	}
 
-	OpenGLTexture::OpenGLTexture(Ref<Image> image, TextureType type) {
+	OpenGLTexture::OpenGLTexture(const Image* image, TextureType type) {
 		this->type = type;
 		this->id   = 0;
 
@@ -51,13 +51,7 @@ namespace PetrolEngine {
 		this->width  = image->getWidth();
 		this->height = image->getHeight();
 
-		int formata = 0x0000;
-
-		formata ^= image->getComponentsNumber() * 0x1;
-		formata ^= image->getBitsPerChannel  () * 0x10;
-		formata ^= image->isHDR              () * 0x1000;
-
-		auto GLFormat = textureFormatLookupTable.at( static_cast<TextureFormat>(formata) );
+		auto GLFormat = textureFormatLookupTable.at( getFormat(image) );
 				
 		glGenTextures(1, &id);
 		glBindTexture(GL_TEXTURE_2D, id);

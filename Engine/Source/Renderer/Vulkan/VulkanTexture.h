@@ -8,7 +8,7 @@
 
 namespace PetrolEngine {
 
-	void initalizeTextureSettings(bool flipImage);
+	void initializeTextureSettings(bool flipImage);
 
 	class VulkanTexture : public Texture {
 	public:

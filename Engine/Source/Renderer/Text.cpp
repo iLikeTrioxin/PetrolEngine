@@ -1,10 +1,10 @@
 #include <PCH.h>
 
 #include "Text.h"
+
 #include <iostream>
 #include <ft2build.h>
 
-#include "Texture.h"
 #include FT_FREETYPE_H
 
 namespace PetrolEngine {
@@ -47,7 +47,7 @@ namespace PetrolEngine {
                 continue;
             }
 
-            auto texture = Texture::create(
+            auto texture = Image::create(
                 face->glyph->bitmap.width,
                 face->glyph->bitmap.rows,
                 TextureType  ::NONE,
