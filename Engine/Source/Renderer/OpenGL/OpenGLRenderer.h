@@ -36,15 +36,4 @@ namespace PetrolEngine {
 			{DeviceConstant::MAX_TEXTURE_IMAGE_UNITS, GL_MAX_TEXTURE_IMAGE_UNITS}
 		};
 	};
-
-	class: public RendererResourceCreator {
-		VertexBuffer* newVertexBuffer(const VertexLayout& layout, const void* data, int64 size) override { return new OpenGLVertexBuffer(layout, data, size); };
-		IndexBuffer * newIndexBuffer (                            const void* data, int64 size) override { return new OpenGLIndexBuffer (        data, size); };
-		VertexArray * newVertexArray (                                                        ) override { return new OpenGLVertexArray (                  ); };
-		Renderer    * newRenderer    (                                                        ) override { return new OpenGLRenderer    (                  ); };
-
-		Shader      * newShader      ( String&& vertexShader  ,
-					                   String&& fragmentShader,
-		                               String&& geometryShader  ) override { return new OpenGLShader(vertexShader, fragmentShader, geometryShader); };
-	} OpenGL;
 }
