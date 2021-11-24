@@ -8,7 +8,7 @@ namespace PetrolEngine {
 	class Image {
 	public:
         static Image* create(const String& path) { return new Image(path); }
-        static Image* create(int width, int height, int bpc, int components, bool hdr) { return new Image(width, height, bpc, components, hdr); }
+        static Image* create(int width, int height, int bpc = 8, int components = 3, bool hdr = false) { return new Image(width, height, bpc, components, hdr); }
 
 		~Image();
 
