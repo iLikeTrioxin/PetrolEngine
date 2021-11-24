@@ -8,6 +8,8 @@
 #include <stb_image.h>
 #include <filesystem>
 
+// TODO: do a safety check if data size is correct in constructor
+
 namespace PetrolEngine {
 
 	Image::Image(const String& path) {
@@ -21,11 +23,12 @@ namespace PetrolEngine {
         LOG("Loaded image from " + path, 1);
 	}
 
-	Image::Image(int width, int height, int bpc, int components, bool hdr) {
+	Image::Image(const void* data, int width, int height, int bpc, int components, bool hdr) {
 		this->componentsNumber = components;
 		this->bitsPerChannel   = bpc;
 		this->height           = height;
 		this->width            = width;
+		this->data             = (unsigned char*) data;
 		this->HDR              = hdr;
 	}
 
