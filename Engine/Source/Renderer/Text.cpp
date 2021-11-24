@@ -48,13 +48,13 @@ namespace PetrolEngine {
             }
 
             auto texture = Image::create(
+                face->glyph->bitmap.buffer,
                 face->glyph->bitmap.width,
                 face->glyph->bitmap.rows,
-                TextureType  ::NONE,
-                TextureFormat::RED
+                8,
+                1,
+                false
             );
-
-            texture->updateTextureImage(face->glyph->bitmap.buffer);
 
             // now store character for later use
             Character character = {
