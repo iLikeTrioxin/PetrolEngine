@@ -8,7 +8,7 @@ namespace PetrolEngine {
 	class Image {
 	public:
         static Image* create(const String& path) { return new Image(path); }
-        static Image* create(int width, int height, TextureType type, TextureFormat format) { return new Image(path); }
+        static Image* create(int width, int height, int bpc, int components, bool hdr) { return new Image(width, height, bpc, components, hdr); }
 
 		~Image();
 
@@ -24,7 +24,7 @@ namespace PetrolEngine {
 
     public:
         explicit Image(const String&  path);
-        explicit Image(int width, int height, TextureType type, TextureFormat format);
+		explicit Image(int width, int height, int bpc, int components, bool hdr);
 
     private:
 		int  width  = 0;

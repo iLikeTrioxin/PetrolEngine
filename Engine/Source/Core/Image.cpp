@@ -10,19 +10,23 @@
 
 namespace PetrolEngine {
 
-	Image::Image(const std::string&  path) : Image(path.c_str()) {};
-
-	Image::Image(const char* _path) {
-		this->path = std::string(_path);
-
-		data = stbi_load(_path, &width, &height, &componentsNumber, 0);
+	Image::Image(const String& path) {
+		data = stbi_load(path.c_str(), &width, &height, &componentsNumber, 0);
 
 		if (!data) { LOG("Failed to load image from " + path, 2); return; }
 
-		this->bitsPerChannel = stbi_is_16_bit(_path) ? 16 : 8;
-		this->HDR = stbi_is_hdr(_path);
+		this->bitsPerChannel = stbi_is_16_bit(path.c_str()) ? 16 : 8;
+		this->HDR            = stbi_is_hdr   (path.c_str());
 
         LOG("Loaded image from " + path, 1);
+	}
+
+	Image::Image(int width, int height, int bpc, int components, bool hdr) {
+		this->componentsNumber = components;
+		this->bitsPerChannel   = bpc;
+		this->height           = height;
+		this->width            = width;
+		this->HDR              = hdr;
 	}
 
 	Image::~Image() {
