@@ -102,11 +102,11 @@ namespace PetrolEngine {
 	}
 	*/
 
-	Shader* Shader::create(RRC creator, String&& vertexSrc, String&& fragmentSrc, String&& geometrySrc){ LOG_FUNCTION();
+	Shader* Shader::create(RRC* creator, String&& vertexSrc, String&& fragmentSrc, String&& geometrySrc){ LOG_FUNCTION();
 		return creator.newShader(vertexSrc, fragmentSrc, geometrySrc);
 	}
 
-	Shader* Shader::create(RRC creator, const String& path) { LOG_FUNCTION();
+	Shader* Shader::create(RRC* creator, const String& path) { LOG_FUNCTION();
 		auto sources = getSourcesFromString(ReadFile(path));
 		return creator.newShader(sources["vertexShader"], sources["fragmentShader"], sources["geometryShader"]);
 	}

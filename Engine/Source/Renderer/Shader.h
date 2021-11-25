@@ -32,7 +32,7 @@ namespace PetrolEngine {
         /// </summary>
         /// <param name="path">- path to the shader</param>
         /// <returns>shared pointer to shader</returns>
-        static Shader* create( RRC creator, const String& path );
+        static Shader* create( RRC* creator, const String& path );
         
         /// <summary>
         /// Creates Shader using source code.
@@ -43,7 +43,7 @@ namespace PetrolEngine {
         /// <param name="fragmentSrc"> - source code of fragment shader</param>
         /// <param name="geometrySrc"> - source code of geometry shader</param>
         /// <returns>shared pointer to the shader</returns>
-        static Shader* create( RRC          creator,
+        static Shader* create( RRC*         creator,
                                String&&   vertexSrc,
                                String&& fragmentSrc,
                                String&& geometrySrc  );

@@ -40,7 +40,7 @@ namespace PetrolEngine {
 		struct KeyTypedEvent     : Event { int key;              KeyTypedEvent   (int key             ) : key(key)                 {} };
 
 	public:
-		static Window* create(WRC creator, int width, int height, String&& title);
+		static Window* create(WRC* creator, int width, int height, const String& title);
 		
 		NO_DISCARD int getWidth () const { return windowData.width ; };
 		NO_DISCARD int getHeight() const { return windowData.height; };

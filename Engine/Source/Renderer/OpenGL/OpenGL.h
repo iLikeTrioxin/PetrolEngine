@@ -21,6 +21,9 @@ namespace PetrolEngine{
 
         Shader      * newShader      ( String&& vertexShader  ,
                                        String&& fragmentShader,
-                                       String&& geometryShader  ) override { return new OpenGLShader(vertexShader, fragmentShader, geometryShader); };
+                                       String&& geometryShader  ) override { return new OpenGLShader(vertexShader.c_str(), fragmentShader.c_str(), geometryShader.c_str()); };
+
+        Texture* newTexture(const Image* image) override { return new OpenGLTexture(image); };
+        Texture* newTexture(int width, int height, TextureFormat format) override { return new OpenGLTexture(width, height, format); };
     } OpenGL;
 }

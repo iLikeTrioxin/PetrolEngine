@@ -7,6 +7,10 @@
 
 namespace PetrolEngine {
 
+	void renderText(const String& text, Transform& transform) {
+
+	}
+
 	void OpenGLRenderer::getDeviceConstantValue(DeviceConstant deviceConstant, void* outputBuffer) {
 		auto openGLDeviceConstant = openGLDeviceConstants.find(deviceConstant);
 
@@ -25,7 +29,7 @@ namespace PetrolEngine {
 			return 1;
 		}
 
-		glEnable(GL_DEPTH_TEST); //-V525
+		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_CULL_FACE);
 		glCullFace(GL_BACK);
 

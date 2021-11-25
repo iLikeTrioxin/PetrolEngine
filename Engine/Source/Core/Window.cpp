@@ -10,8 +10,8 @@ namespace PetrolEngine {
     double cursorYPos     = 0.0;
     double deltaTime      = 0.0;
 
-    Window* Window::create(WRC creator, int width, int height, String&& title) {
-        return creator.newWindow(width, height, move(title));
+    Window* Window::create(WRC* creator, int width, int height, const String& title) {
+        return creator->newWindow(width, height, title);
     }
 
     float Window::getAspectRatio() const {

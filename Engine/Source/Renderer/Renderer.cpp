@@ -2,7 +2,7 @@
 
 namespace PetrolEngine{
 
-    Renderer* Renderer::create(RRC creator) {
-        return creator.newRenderer();
+    Renderer* Renderer::create(RRC* creator) {
+        return creator->newRenderer();
     }
 }

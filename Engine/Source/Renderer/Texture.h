@@ -7,15 +7,7 @@
 
 namespace PetrolEngine {
 
-	enum class TextureType {
-		NONE     = 0,
-		DIFFUSE  = 1,
-		NORMAL   = 2,
-		HEIGHT   = 3,
-		SPECULAR = 4
-	};
-
-	enum class TextureFormat: uint8 {
+	enum class TextureFormat: uint16 {
 		NONE = 0x0000,
 		
 		// Structure:
@@ -59,7 +51,7 @@ namespace PetrolEngine {
 	};
 
     TextureFormat getFormat(const Image* image){
-        uint8 format = 0x0000;
+        uint16 format = 0x0000;
 
         format ^= image->getComponentsNumber() * 0x1;
         format ^= image->getBitsPerChannel  () * 0x10;
@@ -70,9 +62,6 @@ namespace PetrolEngine {
 
 	class Texture {
 	public:
-		TextureFormat format = TextureFormat::NONE;
-		TextureType   type   =   TextureType::NONE;
-
 		virtual ~Texture() = 0;
 
 		virtual void updateTextureImage(const void* data) = 0;
@@ -81,12 +70,14 @@ namespace PetrolEngine {
 		NO_DISCARD uint getWidth () const { return width ; }
 		NO_DISCARD uint getID    () const { return id    ; }
 
-        static Texture* create(RRC creator, const Image * image, TextureType type = TextureType::NONE);
-        static Texture* create(RRC creator, const String& path , TextureType type = TextureType::NONE);
+        static Texture* create(RRC* creator, const Image * image);
+        static Texture* create(RRC* creator, const String& path );
 
-        static Texture* create(RRC creator, int width, int height, TextureType type, TextureFormat format);
+        static Texture* create(RRC* creator, int width, int height, TextureFormat format);
 
 	protected:
+		TextureFormat format = TextureFormat::NONE;
+
 		uint id{};
 		uint width  = 0;
 		uint height = 0;

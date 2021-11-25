@@ -4,19 +4,9 @@
 
 namespace PetrolEngine {
 
-	VulkanTexture::VulkanTexture(int width, int height, TextureType type, TextureFormat format) {
-		this->width  = width;
-		this->height = height;
-		this->format = format;
-		this->type   = type;
-	}
+	VulkanTexture::VulkanTexture(int width, int height, TextureFormat format) { LOG("Vulkan is not implemented yet.", 4); }
+	VulkanTexture::~VulkanTexture() {}
 
-	VulkanTexture::~VulkanTexture() { ; }
-
-	void VulkanTexture::updateTextureImage(const void* data) { }
-
-	VulkanTexture::VulkanTexture(const Ref<Image>& image, TextureType type) {
-		this->type = type;
-		this->id   = 0;
-	}
+	void VulkanTexture::updateTextureImage(const void * data ) { LOG("Vulkan is not implemented yet.", 4); }
+	VulkanTexture::VulkanTexture          (const Image* image) { LOG("Vulkan is not implemented yet.", 4); }
 }

@@ -27,6 +27,7 @@ namespace PetrolEngine {
 		void setViewport(int x, int y, int width, int height) override;
 		void clear() override;
 		int  init (bool debug) override;
+		void renderText(const String& text, Transform& transform) override;
 
 		void getDeviceConstantValue(DeviceConstant deviceConstant, void* outputBuffer) override;
 
@@ -35,5 +36,7 @@ namespace PetrolEngine {
 		const UnorderedMap<DeviceConstant, GLint> openGLDeviceConstants{
 			{DeviceConstant::MAX_TEXTURE_IMAGE_UNITS, GL_MAX_TEXTURE_IMAGE_UNITS}
 		};
+
+		OpenGLRenderer() = default;
 	};
 }

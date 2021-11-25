@@ -60,7 +60,7 @@ namespace PetrolEngine{
 
     class Renderer {
     public:
-        static Renderer* create(RRC creator);
+        static Renderer* create(RRC* creator);
 
         virtual int  init    (bool debug) = 0;
         virtual void setViewport(int x, int y, int width, int height) = 0;

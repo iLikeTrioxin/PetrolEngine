@@ -33,7 +33,7 @@ namespace PetrolEngine {
         void setMat4 ( const String& uniform, const glm::mat4& x ) override;
 
     private:
-        static int checkShaderCompileErrors (GLuint shader, const std::string& type);
+        static int checkShaderCompileErrors (GLuint shader, const String& type);
         static int checkProgramCompileErrors(GLuint shader);
     };
 }

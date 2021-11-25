@@ -21,11 +21,11 @@ namespace PetrolEngine {
             long   advance; // Offset to advance to next glyph
         };
 
-        static void init(const String& fontPath);
-        static Character get(char character);
+        Text(const String& fontPath);
+        Character get(char character);
 
     private:
-        static UnorderedMap<char, Character> characters;
+        UnorderedMap<char, Character> characters;
     };
 
 }

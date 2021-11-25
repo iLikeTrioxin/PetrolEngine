@@ -8,13 +8,11 @@
 #include FT_FREETYPE_H
 
 namespace PetrolEngine {
-	UnorderedMap<char, Text::Character> Text::characters;
-
     Text::Character Text::get(char character) {
         return characters[character];
     }
 
-	void Text::init(const String& fontPath) {
+	Text::Text(const String& fontPath) {
         FT_Library ft;
 
         if (FT_Error error = FT_Init_FreeType(&ft)) {
@@ -38,7 +36,7 @@ namespace PetrolEngine {
 
         for (unsigned char c = 0; c < 128; c++)
         {
-            /* set transformation */
+            // set transformation
             FT_Set_Transform(face, &matrix, &pen);
 
             // load character glyph 
@@ -47,7 +45,7 @@ namespace PetrolEngine {
                 continue;
             }
 
-            auto texture = Image::create(
+            Image* image = Image::create(
                 face->glyph->bitmap.buffer,
                 face->glyph->bitmap.width,
                 face->glyph->bitmap.rows,
@@ -58,9 +56,9 @@ namespace PetrolEngine {
 
             // now store character for later use
             Character character = {
-                texture,
-                glm::ivec2(face->glyph->bitmap.width, face->glyph->bitmap.rows),
-                glm::ivec2(face->glyph->bitmap_left, face->glyph->bitmap_top),
+                image,
+                ivec2( face->glyph->bitmap.width, face->glyph->bitmap.rows ),
+                ivec2( face->glyph->bitmap_left , face->glyph->bitmap_top  ),
                 face->glyph->advance.x
             };
 

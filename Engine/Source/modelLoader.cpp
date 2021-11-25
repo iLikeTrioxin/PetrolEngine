@@ -68,7 +68,7 @@ namespace PetrolEngine {
 
 		return model;
 	}
-	void ModelLoader::texturesFromMaterial(aiMaterial* material, aiTextureType type, TextureType myType, std::vector< Ref<Texture> >* textures) {
+	void ModelLoader::texturesFromMaterial(aiMaterial* material, aiTextureType type, Vector< Texture* >* textures) {
         LOG("Detected " + std::to_string(material->GetTextureCount(type))+ " textures of " + std::to_string(static_cast<int>(myType)), 1);
 
 		for (uint i = 0; i < (material->GetTextureCount(type)); i++) {

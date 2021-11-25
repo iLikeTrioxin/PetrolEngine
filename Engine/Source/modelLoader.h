@@ -15,7 +15,7 @@ namespace PetrolEngine {
 	class ModelLoader
 	{
 	public:
-		Ref<Shader> shader;
+		Shader* shader;
 		static ModelLoader& Get();
 		static Entity loadModel(const char* _path, Scene*  _scene);
 		static Entity loadModel(const char* _path, Entity& _parent);
@@ -25,10 +25,12 @@ namespace PetrolEngine {
 		static std::mutex mutex;
 
 		void processMesh(aiMesh* mesh, const aiScene* scene, Mesh*  outputMesh) const;
-		static void texturesFromMaterial(aiMaterial* material, aiTextureType type, TextureType myType, std::vector< Ref<Texture> >* textures);
+		static void texturesFromMaterial(aiMaterial* material, aiTextureType type, Vector< Texture* >* textures);
 		void processNode(aiNode* node, const aiScene* scene, Entity parent);
 		std::vector<std::future<void>> meshProcesses;
 		
 		ModelLoader() = default;
 	};
 }
+
+

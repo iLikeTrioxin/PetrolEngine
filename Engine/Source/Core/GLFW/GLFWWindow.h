@@ -2,14 +2,13 @@
 
 #define GLFW_INCLUDE_VULKAN
 
-#include "../../Core/Window.h"
-#include "../WindowResourceCreator.h"
+#include "../Window.h"
 #include <GLFW/glfw3.h>
 
 namespace PetrolEngine {
 	class GLFWWindow : public Window {
 	public:
-		GLFWWindow(int width, int height, String&& title);
+		GLFWWindow(int width, int height, const String& title);
 
 		bool shouldClose() override { return glfwWindowShouldClose(window      ); };
 		void swapBuffers() override { glfwSwapBuffers             (window      ); };
@@ -32,8 +31,4 @@ namespace PetrolEngine {
 		GLFWwindow* window;
 	};
 
-    class: public WindowResourceCreator{
-    public:
-        Window* newWindow(int width, int height, String&& title) override { return new GLFWWindow(width, height, move(title)); }
-    } GLFW;
 }

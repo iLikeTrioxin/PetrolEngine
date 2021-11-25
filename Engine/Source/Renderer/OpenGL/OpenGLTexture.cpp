@@ -4,11 +4,10 @@
 
 namespace PetrolEngine {
 
-	OpenGLTexture::OpenGLTexture(int width, int height, TextureType type, TextureFormat format) {
+	OpenGLTexture::OpenGLTexture(int width, int height, TextureFormat format) {
 		this->width  = width;
 		this->height = height;
 		this->format = format;
-		this->type   = type;
 
 		if (format == TextureFormat::RED) glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 		
@@ -42,11 +41,10 @@ namespace PetrolEngine {
 		// glTextureSubImage2D(id, 0, 0, 0, width, height, GLFormat, GL_UNSIGNED_BYTE, data);
 	}
 
-	OpenGLTexture::OpenGLTexture(const Image* image, TextureType type) {
-		this->type = type;
+	OpenGLTexture::OpenGLTexture(const Image* image) {
 		this->id   = 0;
 
-		if (!image->getData()) { LOG("Texture failed to load at path: " + image->getPath(), 2); return; }
+		if (!image->getData()) { LOG("Texture failed to load. ", 2); return; }
 
 		this->width  = image->getWidth();
 		this->height = image->getHeight();
