@@ -1,71 +1,85 @@
 #include <PCH.h>
 
 #include "Scene.h"
-#include "./Renderer/Renderer.h"
-#include "Components.h"
-#include "./Core/Window.h"
-#include "Entity.h"
+#include "Renderer/Renderer/Renderer.h"
+#include "Core/WindowInterface/WindowI.h"
+#include "Components/Entity.h"
 #include "DebugTools.h"
 
+#include "Components/Entity.h"
+#include "Components/Transform.h"
+#include "Components/Mesh.h"
+#include "Components/Camera.h"
+#include "Components/Properties.h"
+
 namespace PetrolEngine {
-    // TODO: Use nullptr instead of strcmp if possible
-	Entity Scene::createEntity(const char* name) {
-		Entity entity = { sceneRegistry.create(), this };
-		
-		entity.addComponent<Transform>();
-		entity.addComponent<   Tag   >( strcmp(name, "") == 0 ? "New entity" : name, entt::null );
+	Entity* Scene::createEntity(const char* name) {
+        entities.push_back(new Entity(
+            sceneRegistry.create(),
+            this
+        ));
 
-		return entity;
+        Entity* entity = entities.back();
+
+        entity->addComponent<Properties>(name);
+
+        return entity;
 	}
 
-	Entity Scene::createEntity(const char* name, entt::entity parent) {
-		Entity entity = { sceneRegistry.create(), this };
+    Entity* Scene::createGameObject(const char* name, Entity* parent) {
+        Entity* entity = createEntity(name);
 
-		entity.addComponent<Transform>();
-		entity.addComponent<   Tag   >( strcmp(name, "") == 0 ? "New entity" : name, parent );
-		
-		return entity;
+        auto& transform = entity->addComponent<Transform>();
+
+        if (entity->scene == nullptr) {
+            LOG("Entity has no scene", 2);
+            throw std::runtime_error("Entity has no scene");
+        }
+
+        if (parent)
+            transform.parent = &parent->getComponent<Transform>();
+
+        return entity;
+    }
+
+	Entity* Scene::getEntityById(uint id) {
+        for (auto* entity : entities)
+            if (entity->getID() == id) return entity;
+
+        return nullptr;
 	}
 
-	Entity Scene::getEntityById(uint id) {
-		return Entity((entt::entity)id, this);
-	}
+    Scene::Scene() {
+        systemManager = new SystemManager();
+        systemManager->scene = this;
+    }
 
-	void Scene::update(float a) {
-		LOG_FUNCTION();
-		auto cameras = sceneRegistry.group<Camera>(entt::get<Transform>);
-		auto meshes  = sceneRegistry.group< Mesh >(entt::get<Transform>);
-		
-		for (auto camera : cameras) {
-			LOG_SCOPE("Processing camera view");
+    void Scene::start(){
+
+    }
+
+	void Scene::update() { LOG_FUNCTION();
+		auto camerasGroup = sceneRegistry.group<Camera>(entt::get<Transform>);
+		auto meshesGroup  = sceneRegistry.group< Mesh >(entt::get<Transform>);
+
+		for (auto cameraID : camerasGroup) { LOG_SCOPE("Processing camera view");
+			auto& cam = camerasGroup.get<Camera>(cameraID);
+
+            cam.updateView();
 			
-			auto& cam = cameras.get<  Camera >(camera);
-			auto& tra = cameras.get<Transform>(camera);
-			
-			cam.updateViewMatrix(tra.position);
-			
-			for (auto entity : meshes) {
+			for (auto& entity : meshesGroup) {
 				LOG_SCOPE("Rendering mesh");
 
-				auto& mesh      = meshes.get<   Mesh  >(entity);
-				auto  transform = meshes.get<Transform>(entity);
-				auto  parent    = sceneRegistry.get<Tag>(entity).parent;
-				
-				if (parent != entt::null) {
-					transform += sceneRegistry.get<Transform>(parent);
-				}
+				auto& mesh      = meshesGroup.get<   Mesh  >(entity);
+				auto  transform = meshesGroup.get<Transform>(entity);
 
-				transform.updateTransformMatrix();
-				
-				Renderer::renderMesh(mesh, transform, cam);
+                Transform t = transform.getRelativeTransform();
+
+				Renderer::renderMesh(mesh, t);
 			}
 			
 		}
 
-        auto scripts = sceneRegistry.group<ExternalScript*>(entt::get<Transform>);
-
-        for(auto& script : scripts){
-            scripts.get<ExternalScript*>(script)->onUpdate();
-        }
+        systemManager->update();
     }
 }

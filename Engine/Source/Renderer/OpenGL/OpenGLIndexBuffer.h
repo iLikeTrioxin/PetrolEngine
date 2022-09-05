@@ -1,9 +1,9 @@
 #pragma once
 
-#include "../IndexBuffer.h"
+#include "Renderer/RendererInterface/IndexBufferI.h"
 
 namespace PetrolEngine {
-	class OpenGLIndexBuffer : public IndexBuffer {
+	class OpenGLIndexBuffer : public IndexBufferI {
 	public:
 		OpenGLIndexBuffer();
 		OpenGLIndexBuffer(const void* data, int64 size);

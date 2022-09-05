@@ -3,7 +3,7 @@
 #include "OpenGLVertexBuffer.h"
 
 namespace PetrolEngine {
-	OpenGLVertexBuffer::OpenGLVertexBuffer(VertexLayout layout, const void* data, int64 size): VertexBuffer(layout) {
+	OpenGLVertexBuffer::OpenGLVertexBuffer(VertexLayout layout, const void* data, int64 size): VertexBufferI(layout) {
 		LOG_FUNCTION();
 		
 		glGenBuffers(1, &ID);
@@ -13,7 +13,7 @@ namespace PetrolEngine {
 		glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
 	}
 
-	OpenGLVertexBuffer::OpenGLVertexBuffer(VertexLayout layout): VertexBuffer(layout) {
+	OpenGLVertexBuffer::OpenGLVertexBuffer(VertexLayout layout): VertexBufferI(layout) {
 		LOG_FUNCTION();
 
 		glGenBuffers(1, &ID);

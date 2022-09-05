@@ -20,7 +20,7 @@ namespace PetrolEngine {
         template<class T>
         static Vector<T*>& getEvents() {
             // I believe that typeid is resolved here on compile time, but I'm not sure,
-            // so it is something to check later.
+            // TODO: so it is something to check.
             auto eventList = events.find(typeid(T));
 
             if (eventList == events.end())

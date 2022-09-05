@@ -43,7 +43,7 @@ namespace PetrolEngine::Debugging {
 		json << R"("dur":)" << spec.duration << ',';
 		json << R"("name":")" << spec.name << "\",";
 		json << R"("ph":"X",)";
-		json << R"("pid\":0,)";
+		json << R"("pid":0,)";
 		json << R"("tid":)" << spec.threadID << ",";
 		json << R"("ts":)" << spec.startTimePoint;
 		json << R"(})";

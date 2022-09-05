@@ -1,10 +1,10 @@
 #pragma once
 
-#include "../Texture.h"
+#include "Renderer/RendererInterface/TextureI.h"
 
 namespace PetrolEngine {
 
-	class OpenGLTexture : public Texture {
+	class OpenGLTexture : public TextureI {
 	public:
 		OpenGLTexture(
 			int width,
@@ -13,7 +13,8 @@ namespace PetrolEngine {
 		);
 
         OpenGLTexture(
-			const Image* image
+			const Image* image,
+            int a= GL_UNSIGNED_BYTE
 		);
 		
 		~OpenGLTexture() override;

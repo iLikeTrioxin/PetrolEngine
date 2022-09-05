@@ -2,7 +2,7 @@
 #include <PCH.h>
 #include "GLFWWindow.h"
 
-#include "../../Renderer/GraphicsContext.h"
+#include "../../RendererApi/GraphicsContext.h"
 
 namespace PetrolEngine {
 

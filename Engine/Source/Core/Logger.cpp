@@ -9,7 +9,7 @@ namespace PetrolEngine{
         records.emplace_back( std::move( source),
                               std::move(message),
                               type                );
-        if(type != 3) return;
+        //if(type != 3) return;
 
         std::cout<<records.back().source<<" - "<<records.back().message<<"\n";
     }

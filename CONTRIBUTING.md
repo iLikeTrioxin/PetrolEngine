@@ -61,9 +61,25 @@ DEBUG_LOG("some message");
 
 ### My goto code style is something like:
 ```c++
-Window* window = new Window(...);
-Renderer* renderer = new Renderer(...);
+#include "OpenGL.h"
 
-renderer.bind(window);
+using namespace PetrolEngine::Renderer;
 
+int main() {
+    // variant 1 - assigns to static context existing renderer
+    Renderer* renderer = OpenGL.newRenderer();
+    IndexBuffer* indexBuffer = IndexBuffer::create(...);
+    Renderer::setContext(renderer);
+    
+    // variant 2 - creates new renderer and assigns to static context
+    Renderer::setContext(OpenGL);
+    
+    Model* model = Model::load("some_model.obj");
+    
+    Renderer::draw(model);
+    
+    
+    
+    return 0;
+}
 ```

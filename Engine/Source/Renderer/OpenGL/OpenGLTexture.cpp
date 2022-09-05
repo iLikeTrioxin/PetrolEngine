@@ -17,11 +17,16 @@ namespace PetrolEngine {
 		// Those are for DSA version (OpenGL 4.5 or higher)
 		//	glCreateTextures(GL_TEXTURE_2D, 1, &id);
 		//	glTexStorage2D  (GL_TEXTURE_2D, 1, GLFormat, width, height);
+        auto GLFormat = textureFormatLookupTable.at(format);
 
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexImage2D(GL_TEXTURE_2D, 0, GLFormat.second, width, height, 0, GLFormat.first, GL_UNSIGNED_BYTE, nullptr);
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+        glBindTexture(GL_TEXTURE_2D, 0);
 	}
 
 	OpenGLTexture::~OpenGLTexture() {
@@ -41,15 +46,18 @@ namespace PetrolEngine {
 		// glTextureSubImage2D(id, 0, 0, 0, width, height, GLFormat, GL_UNSIGNED_BYTE, data);
 	}
 
-	OpenGLTexture::OpenGLTexture(const Image* image) {
+	OpenGLTexture::OpenGLTexture(const Image* image, int a) {
 		this->id   = 0;
 
-		if (!image->getData()) { LOG("Texture failed to load. ", 2); return; }
+		if (!image->getData()) {
+            LOG("Texture failed to load. ", 2); return;
+        }
 
 		this->width  = image->getWidth();
 		this->height = image->getHeight();
 
-		auto GLFormat = textureFormatLookupTable.at( getFormat(image) );
+        auto s = getFormat(image);
+		auto GLFormat = textureFormatLookupTable.at( s );
 				
 		glGenTextures(1, &id);
 		glBindTexture(GL_TEXTURE_2D, id);
@@ -63,7 +71,7 @@ namespace PetrolEngine {
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-		glTexImage2D    (GL_TEXTURE_2D, 0, GLFormat.second, width, height, 0, GLFormat.first, GL_UNSIGNED_BYTE, image->getData());
+		glTexImage2D    (GL_TEXTURE_2D, 0, GLFormat.second, width, height, 0, GLFormat.first, a, image->getData());
 		glGenerateMipmap(GL_TEXTURE_2D);
 
 		// glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, data);

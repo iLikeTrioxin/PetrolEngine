@@ -2,11 +2,11 @@
 
 #define GLFW_INCLUDE_VULKAN
 
-#include "../Window.h"
+#include "Core/WindowInterface/WindowI.h"
 #include <GLFW/glfw3.h>
 
 namespace PetrolEngine {
-	class GLFWWindow : public Window {
+	class GLFWWindow : public WindowI {
 	public:
 		GLFWWindow(int width, int height, const String& title);
 
@@ -17,6 +17,7 @@ namespace PetrolEngine {
 
 		int init() override;
 
+        void showCursor(bool enabled) override;
 		void setVSync( bool  enabled) override;
 		void setIcon (Image* image  ) override;
 

@@ -1,21 +1,45 @@
 #include <PCH.h>
 
 #include "OpenGLRenderer.h"
-#include "../Texture.h"
+#include "Renderer/RendererInterface/TextureI.h"
+#include "Renderer/Renderer/Texture.h"
 #include "../../Core/Files.h"
-#include "../Text.h"
+#include "Components/Transform.h"
+#include "Components/Mesh.h"
+#include "Renderer/Renderer/Text.h"
+
+// TODO: !!!!! REMOVE STATIC RENDERER DEPENDENCY !!!!!
+
+#include "Renderer/Renderer/Shader.h"
 
 namespace PetrolEngine {
-
-	void renderText(const String& text, Transform& transform) {
-
-	}
 
 	void OpenGLRenderer::getDeviceConstantValue(DeviceConstant deviceConstant, void* outputBuffer) {
 		auto openGLDeviceConstant = openGLDeviceConstants.find(deviceConstant);
 
 		glGetIntegerv(openGLDeviceConstant->second, (GLint*) outputBuffer);
 	}
+
+
+    void OpenGLRenderer::drawQuad2D(const Material& material, const Transform& transform) {
+        const Vector<Vertex> quadVertices = {
+                   // position           // texture coords
+            Vertex({-1.0f, -1.0f, 0.0f}, {0.0f, 0.0f}),
+            Vertex({ 1.0f,  1.0f, 0.0f}, {1.0f, 1.0f}),
+            Vertex({-1.0f,  1.0f, 0.0f}, {0.0f, 1.0f}),
+
+            Vertex({-1.0f, -1.0f, 0.0f}, {0.0f, 0.0f}),
+            Vertex({ 1.0f, -1.0f, 0.0f}, {1.0f, 0.0f}),
+            Vertex({ 1.0f,  1.0f, 0.0f}, {1.0f, 1.0f})
+        };
+
+        glUseProgram(material.shader->ID);
+
+
+
+
+
+    }
 
 	void OpenGLRenderer::setViewport(int x, int y, int width, int height) {
 		glViewport(x, y, width, height);
@@ -35,87 +59,99 @@ namespace PetrolEngine {
 
 		return 0;
 	}
-	/*
-	void OpenGLRenderer::renderText(const std::string& text, Transform& transform) {
-		LOG_FUNCTION();
+
+	void OpenGLRenderer::renderText(const String& text, const Transform& transform, const Material& material, const Camera* camera) { LOG_FUNCTION();
+        /*
+        String vertexShaderSource   = ReadFile("../Hei/Resources/Shaders/textShader.vert");
+        String fragmentShaderSource = ReadFile("../Hei/Resources/Shaders/textShader.frag");
 
 		auto shader = Shader::load(
 			"textShader",
-			ReadFile("../Hei/Resources/Shaders/textShader.vert"),
-			ReadFile("../Hei/Resources/Shaders/textShader.frag")
+            vertexShaderSource.c_str(),
+            fragmentShaderSource.c_str(),
+            nullptr
 		);
+         */
 
-		glUseProgram(shader->ID);
+		glUseProgram(material.shader->ID);
 
-		static auto perv = glm::ortho(0.0f, 800.f, 0.0f, 500.f);
+		static auto perv = glm::ortho(
+            0, camera->resolution.x,
+            0, camera->resolution.y
+        );
 		
-		{
-			LOG_SCOPE("Setting shader values.");
-
-			shader->setMat4("projection", perv);
-			shader->setInt("text", 0);
+		{ LOG_SCOPE("Setting shader values.");
+			material.shader->setMat4("projection", perv);
+			material.shader->setInt ("text"      , 0   );
 		}
 
 		glActiveTexture(GL_TEXTURE0);
 
-		static std::vector<Vertex> squareVertices({{}, {}, {}, {}, {}, {} });
-		static std::vector< uint > squareIndices ({ 0,  1,  2,  3,  4,  5  });
+		static Vector<Vertex> squareVertices({{}, {}, {}, {}, {}, {} });
+		static Vector< uint > squareIndices ({ 0,  1,  2,  3,  4,  5 });
+
+        squareVertices.reserve(text.length() * 6);
+        squareIndices .reserve(text.length() * 6);
+
 		static Mesh characterMesh = Mesh(squareVertices, squareIndices, Material());
 
 		float x = transform.position.x;
 		float y = transform.position.y;
 
-		// iterate through all characters
-		std::string::const_iterator c;
-		for (c = text.begin(); c != text.end(); ++c) {
+        Text::FontAtlas atlas = Text::getAtlas("arial");
+        auto a = material.textures[0];
+
+        glBindTexture(GL_TEXTURE_2D, a->getID());
+
+        // iterate through all characters
+		for (auto c : text) {
 			LOG_SCOPE("Rendering character");
 
-			Text::Character ch = Text::get(*c);
-			
-			glBindTexture(GL_TEXTURE_2D, ch.texture->getID());
-			
-			float xPos = x + (float) ch.Bearing.x * transform.scale.x;
-			float yPos = y - (float) (ch.Size.y - ch.Bearing.y) * transform.scale.y;
+            auto ch = atlas.characters[c];
 
-			float w = (float) ch.Size.x * transform.scale.x;
-			float h = (float) ch.Size.y * transform.scale.y;
+			float xPos = x +              ch.bearing.x  * transform.scale.x;
+			float yPos = y - (ch.size.y - ch.bearing.y) * transform.scale.y;
 
-			// update VBO for each character
+			float w = ch.size.x * transform.scale.x;
+			float h = ch.size.y * transform.scale.y;
 
-            // + 0 are used here to align arguments in clion editor
-            // it will be stripped by compiler anyway
-            squareVertices = {
-				Vertex( {xPos + 0, yPos + h, 0f}, {0f, 0f} ),
-				Vertex( {xPos + 0, yPos + 0, 0f}, {0f, 1f} ),
-				Vertex( {xPos + w, yPos + 0, 0f}, {1f, 1f} ),
-				Vertex( {xPos + 0, yPos + h, 0f}, {0f, 0f} ),
-				Vertex( {xPos + w, yPos + 0, 0f}, {1f, 1f} ),
-				Vertex( {xPos + w, yPos + h, 0f}, {1f, 0f} )
-			};
+            for(int i = 0; i < 6; i++)
+                squareIndices.push_back(squareVertices.size() + i);
 
-			characterMesh.vertexBuffer->setData(squareVertices.data(), squareVertices.size() * sizeof(Vertex));
-			
-			glBindVertexArray(characterMesh.vertexArray->getID());
-
-			//glBindBuffer(GL_ARRAY_BUFFER, a.vertexBuffer->getID());
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, characterMesh.indexBuffer->getID());
-			
-			glDrawElements(GL_TRIANGLES, (int) characterMesh.indexBuffer->getSize(), GL_UNSIGNED_INT, nullptr);
+            squareVertices.push_back(Vertex({xPos    , yPos + h, 0.f}, {ch.coords.x, ch.coords.y}));
+            squareVertices.push_back(Vertex({xPos    , yPos    , 0.f}, {ch.coords.x, ch.coords.w}));
+            squareVertices.push_back(Vertex({xPos + w, yPos    , 0.f}, {ch.coords.z, ch.coords.w}));
+            squareVertices.push_back(Vertex({xPos    , yPos + h, 0.f}, {ch.coords.x, ch.coords.y}));
+            squareVertices.push_back(Vertex({xPos + w, yPos    , 0.f}, {ch.coords.z, ch.coords.w}));
+            squareVertices.push_back(Vertex({xPos + w, yPos + h, 0.f}, {ch.coords.z, ch.coords.y}));
 
 			// now advance cursors for next glyph (note that advance is number of 1/64 pixels)
-			x += (float) (ch.Advance >> 6) * transform.scale.x; // bitshift by 6 to get value in pixels (2^6 = 64)
+			x += (float) (ch.advance >> 6) * transform.scale.x; // bitshift by 6 to get value in pixels (2^6 = 64)
 		}
-	}*/
 
-	void OpenGLRenderer::renderMesh(Mesh& mesh, Transform& transform, Camera& camera) { LOG_FUNCTION();
-		auto shader = mesh.material.shader;
+        characterMesh.vertexBuffer->setData(squareVertices.data(), squareVertices.size() * sizeof(Vertex));
+        characterMesh. indexBuffer->setData(squareIndices .data(), squareIndices .size() * sizeof( uint ));
+
+        glBindVertexArray(characterMesh.vertexArray->getID());
+        //glBindVertexArray(0);
+        //glBindBuffer(GL_ARRAY_BUFFER, characterMesh.vertexBuffer->getID());
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, characterMesh.indexBuffer->getID());
+
+        glDrawElements(GL_TRIANGLES, (int) characterMesh.indexBuffer->getSize(), GL_UNSIGNED_INT, nullptr);
+
+        squareVertices.clear();
+        squareIndices .clear();
+	}
+
+    void OpenGLRenderer::renderMesh(const Ref<VertexArrayI>& vao, const Transform& transform, const Material& material, const Camera* camera) { LOG_FUNCTION();
+		auto shader = material.shader;
 
 		glUseProgram(shader->ID);
 		
         // Applying them to shader used by mesh
 		shader->setMat4("model", transform.transformation);
-		shader->setMat4("pav"  , camera.perspective * camera.view);
-		
+		shader->setMat4("pav"  , camera->getPerspective() * camera->getViewMatrix());
+
 		shader->setInt  ( "material.diffuse"  , 0   );
 		shader->setInt  ( "material.specular" , 0   );
 		shader->setFloat( "material.shininess", 1.f );
@@ -137,27 +173,29 @@ namespace PetrolEngine {
 		uint32 normalNumber   = 1;
 		uint32 specularNumber = 1;
 
-		for (uint32 textureIndex = 0; textureIndex < mesh.material.textures.size(); textureIndex++) { LOG_SCOPE("Assigning texture");
-			Ref<Texture> texture = mesh.material.textures[textureIndex];
+		for (uint32 textureIndex = 0; textureIndex < material.textures.size(); textureIndex++) { LOG_SCOPE("Assigning texture");
+			Ref<TextureI> texture = material.textures[textureIndex];
 
 			glActiveTexture(GL_TEXTURE0  + textureIndex);
 			glBindTexture  (GL_TEXTURE_2D, texture->getID());
-			
+
+            shader->setUint("texture_diffuse"  + toString( diffuseNumber), textureIndex);
+			/*
 			switch (texture->type) {
-				case TextureType::DIFFUSE : shader->setUint("texture_diffuse"  + toString( diffuseNumber), textureIndex); continue;
-				case TextureType::HEIGHT  : shader->setUint("texture_height"   + toString(  heightNumber), textureIndex); continue;
-				case TextureType::NORMAL  : shader->setUint("texture_normal"   + toString(  normalNumber), textureIndex); continue;
-				case TextureType::SPECULAR: shader->setUint("texture_specular" + toString(specularNumber), textureIndex); continue;
+				case TextureI::TextureType::DIFFUSE : shader->setUint("texture_diffuse"  + toString( diffuseNumber), textureIndex); continue;
+				case TextureI::TextureType::HEIGHT  : shader->setUint("texture_height"   + toString(  heightNumber), textureIndex); continue;
+				case TextureI::TextureType::NORMAL  : shader->setUint("texture_normal"   + toString(  normalNumber), textureIndex); continue;
+                case TextureI::TextureType::SPECULAR: shader->setUint("texture_specular" + toString(specularNumber), textureIndex); continue;
 				
 				default: continue;
-			}
+			}*/
 		}
 
-		glBindVertexArray(mesh.vertexArray->getID());
+		glBindVertexArray(vao->getID());
 		
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.indexBuffer->getID());
+		//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.indexBuffer->getID());
 
-		glDrawElements(GL_TRIANGLES, (int) mesh.indexBuffer->getSize(), GL_UNSIGNED_INT, nullptr);
+		glDrawElements(GL_TRIANGLES, (int) vao->getIndexBuffer()->getSize(), GL_UNSIGNED_INT, nullptr);
 	}
 
 	/* Pseudo fragment shader
@@ -174,9 +212,9 @@ namespace PetrolEngine {
 	* 
 	*/
 
-	void OpenGLRenderer::drawQuad2D(Material material, Transform transform) {
-
-	}
+    //void OpenGLRenderer::drawQuad2D(Material material, Transform transform) {
+//
+	//}
 	
 	void OpenGLRenderer::clear() {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

@@ -3,18 +3,20 @@
 #include <utility>
 
 #include "GLFWWindow.h"
-
-#include "../../Renderer/GraphicsContext.h"
+#include "Renderer/Renderer/GraphicsContext.h"
 
 // TODO: Remove unnecessary type size conversions
 
 namespace PetrolEngine {
 
-    GLFWWindow::GLFWWindow(int width, int height, String&& title) { LOG_FUNCTION();
-        this->windowData = { width, height, move(title) };
+    GLFWWindow::GLFWWindow(int width, int height, const String& title) { LOG_FUNCTION();
+        this->windowData = { width, height, title };
         this->window     = nullptr;
     }
 
+    void GLFWWindow::showCursor(bool enabled) { LOG_FUNCTION();
+        glfwSetInputMode(window, GLFW_CURSOR, enabled ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_DISABLED);
+    }
 
     void GLFWWindow::setVSync(bool enabled) { LOG_FUNCTION();
         glfwSwapInterval(enabled);
@@ -64,7 +66,7 @@ namespace PetrolEngine {
             return 0;
         }
 
-        if (GraphicsContext::create(window)->init((void*) glfwGetProcAddress))
+        if (GraphicsContext::create()->init((void*) glfwGetProcAddress))
             return -1;
         
         glfwMakeContextCurrent  (window);
@@ -125,7 +127,6 @@ namespace PetrolEngine {
             }
         );
 
-        //glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
         glfwMakeContextCurrent(window);
         return 0;
     }

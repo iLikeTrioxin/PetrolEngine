@@ -10,12 +10,12 @@ file(GLOB_RECURSE RESOURCE_FILES Engine/Resources/*.*)
 
 find_package(Vulkan)
 
-if(NOT ${VULKAN_FOUND})
+#if(NOT ${VULKAN_FOUND})
 	# If vulkan was not found exclude source code for vulkan
     message(WARNING "Vulkan SDK not found. Building without vulkan.")
     list(FILTER SOURCE_FILES EXCLUDE REGEX "Vulkan")
     list(FILTER HEADER_FILES EXCLUDE REGEX "Vulkan")
-endif()
+#endif()
 
 add_library(Engine ${SOURCE_FILES} ${HEADER_FILES} ${RESOURCE_FILES})
 
@@ -52,6 +52,7 @@ target_include_directories(Engine
     PUBLIC Deps/stb
     PUBLIC Deps/entt/single_include
     PUBLIC Engine/Source
+    PUBLIC ${CMAKE_CURRENT_BINARY_DIR}/Deps/glad/include
     PUBLIC ${CMAKE_CURRENT_BINARY_DIR}/Deps/assimp/include
 )
 

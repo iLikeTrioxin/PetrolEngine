@@ -1,12 +1,12 @@
 #pragma once
 
-#include "../Shader.h"
+#include "Renderer/RendererInterface/ShaderI.h"
 #include <sstream>
 #include <fstream>
 #include <glm/glm.hpp>
 
 namespace PetrolEngine {
-    class OpenGLShader : public Shader {
+    class OpenGLShader : public ShaderI {
     public:
         OpenGLShader( const char* vertexShaderSourceCode  ,
                       const char* fragmentShaderSourceCode,

@@ -2,9 +2,13 @@
 
 #include "modelLoader.h"
 #include "DebugTools.h"
-#include "Components.h"
 #include "Scene.h"
-#include "Entity.h"
+
+#include "Components/Entity.h"
+#include "Components/Vertex.h"
+#include "Components/Mesh.h"
+
+#include "Renderer/Renderer/Texture.h"
 
 namespace PetrolEngine {
 
@@ -13,14 +17,14 @@ namespace PetrolEngine {
 
 	ModelLoader& ModelLoader::Get() { return modelLoader; }
 
-	Entity ModelLoader::loadModel(const char* _path, Scene* _scene) {
+	Entity* ModelLoader::loadModel(const char* _path, Scene* _scene) {
 		auto pPath = std::filesystem::current_path();
 		auto path  = std::filesystem::path(_path);
 		
 		auto filename   = path.filename().string();
 		auto workingDir = path.remove_filename();
 
-		std::filesystem::current_path(path);
+		std::filesystem::current_path(workingDir);
 
 		Assimp::Importer importer;
 		const aiScene* scene = importer.ReadFile(filename, aiProcess_GenSmoothNormals | aiProcess_Triangulate);
@@ -32,19 +36,19 @@ namespace PetrolEngine {
 
         LOG(std::string("Running down the Root node of model(") + _path + ")", 1);
 	
-		Entity model = _scene->createEntity(filename.c_str());
+		Entity* model = _scene->createGameObject(filename.c_str());
 
 		modelLoader.processNode(scene->mRootNode, scene, model);
 
-		for (auto& process : modelLoader.meshProcesses) process.wait();
+		//for (auto& process : modelLoader.meshProcesses) process.wait();
 
-		modelLoader.meshProcesses.clear();
+		//modelLoader.meshProcesses.clear();
 
 		std::filesystem::current_path(pPath);
 
 		return model;
 	}
-	Entity ModelLoader::loadModel(const char* _path, Entity& _parent) {
+	Entity* ModelLoader::loadModel(const char* _path, Entity* _parent) {
 
 		Assimp::Importer importer;
 		const aiScene* scene = importer.ReadFile(_path, aiProcess_GenNormals);
@@ -58,24 +62,24 @@ namespace PetrolEngine {
 
 		std::string fileName(_path);
 
-		Entity model = _parent.getScene()->createEntity(fileName.substr(fileName.find_last_of("\\/") + 1).c_str(), _parent.getID());
+		Entity* model = _parent->getScene()->createGameObject(fileName.substr(fileName.find_last_of("\\/") + 1).c_str(), _parent);
 
 		modelLoader.processNode(scene->mRootNode, scene, model);
 
-		for (auto& process : modelLoader.meshProcesses) process.wait();
+		//for (auto& process : modelLoader.meshProcesses) process.wait();
 
-		modelLoader.meshProcesses.clear();
+		//modelLoader.meshProcesses.clear();
 
 		return model;
 	}
-	void ModelLoader::texturesFromMaterial(aiMaterial* material, aiTextureType type, Vector< Texture* >* textures) {
-        LOG("Detected " + std::to_string(material->GetTextureCount(type))+ " textures of " + std::to_string(static_cast<int>(myType)), 1);
+	void ModelLoader::texturesFromMaterial(aiMaterial* material, aiTextureType type, Vector< Ref<TextureI> >* textures) {
+        //LOG("Detected " + std::to_string(material->GetTextureCount(type))+ " textures of " + std::to_string(static_cast<int>(type)), 1);
 
 		for (uint i = 0; i < (material->GetTextureCount(type)); i++) {
 			aiString path;
 			material->GetTexture(type, i, &path);
 			auto image = Image::create(path.C_Str());
-			auto tex = Texture::create(image, myType);
+			auto tex = Texture::create(image);
 			textures->push_back(tex);
 		}
 	}
@@ -148,20 +152,20 @@ namespace PetrolEngine {
 		
 		aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
 		{
-			texturesFromMaterial(material, aiTextureType_DIFFUSE , TextureType::DIFFUSE , &outputMesh->material.textures);
-			texturesFromMaterial(material, aiTextureType_AMBIENT , TextureType::HEIGHT  , &outputMesh->material.textures);
-			texturesFromMaterial(material, aiTextureType_HEIGHT  , TextureType::NORMAL  , &outputMesh->material.textures);
-			texturesFromMaterial(material, aiTextureType_SPECULAR, TextureType::SPECULAR, &outputMesh->material.textures);
+			texturesFromMaterial(material, aiTextureType_DIFFUSE, &outputMesh->material.textures);
+			//texturesFromMaterial(material, aiTextureType_AMBIENT , TextureType::HEIGHT  , &outputMesh->material.textures);
+			//texturesFromMaterial(material, aiTextureType_HEIGHT  , TextureType::NORMAL  , &outputMesh->material.textures);
+			//texturesFromMaterial(material, aiTextureType_SPECULAR, TextureType::SPECULAR, &outputMesh->material.textures);
 		}
 	}
-	void ModelLoader::processNode(aiNode* node, const aiScene* _scene, Entity parent) {
+	void ModelLoader::processNode(aiNode* node, const aiScene* _scene, Entity* parent) {
 		for (uint32 i = 0; i < node->mNumMeshes; i++) {
 			aiMesh* _mesh_ = _scene->mMeshes[node->mMeshes[i]];
 			const char* name = (node->mName.length == 0) ? "New node" : node->mName.C_Str();
 
-			Scene* scene = parent.getScene();
-			Entity meshEntity = scene->createEntity(name, parent.getID());
-			Mesh*  mesh = &meshEntity.addComponent<Mesh>();
+			Scene* scene = parent->getScene();
+			Entity* meshEntity = scene->createGameObject(name, parent);
+			Mesh*  mesh = &meshEntity->addComponent<Mesh>();
 			
 			ModelLoader::processMesh(_mesh_, _scene, mesh);
 		}

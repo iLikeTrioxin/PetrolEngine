@@ -1,12 +1,12 @@
 #pragma once
 
-#include "../Shader.h"
+#include "Renderer/RawRenderer/ShaderApi.h"
 #include <sstream>
 #include <fstream>
 #include <glm/glm.hpp>
 
 namespace PetrolEngine {
-    class VulkanShader : public Shader {
+    class VulkanShader : public ShaderApi {
     public:
         VulkanShader( const char* vertexShaderSourceCode   = nullptr,
                       const char* fragmentShaderSourceCode = nullptr,

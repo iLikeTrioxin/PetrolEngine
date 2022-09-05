@@ -1,6 +1,8 @@
 #pragma once
 
-#include "../Renderer.h"
+#include "Renderer/RawRenderer/RendererApi.h"
+#include "Transform.h"
+#include "Mesh.h"
 #include <vulkan/vulkan.h>
 
 namespace PetrolEngine {
@@ -18,7 +20,7 @@ namespace PetrolEngine {
         Vector<VkPresentModeKHR  > presentModes;
     };
 
-    class VulkanRenderer : public Renderer {
+    class VulkanRenderer : public RendererApi {
 	public:
 		// 2D stuff
 	    void renderText(const String& text, Transform& transform) override;

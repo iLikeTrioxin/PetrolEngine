@@ -1,7 +1,9 @@
 #include <PCH.h>
 
 #include "VulkanRenderer.h"
-#include "../Text.h"
+#include "Renderer/RawRenderer/Text.h"
+#include "Transform.h"
+#include "Mesh.h"
 
 /// #include "../../Core/Files.h"
 /// #include "../Texture.h"

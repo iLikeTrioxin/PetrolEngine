@@ -10,7 +10,7 @@ namespace PetrolEngine{
     public:
         static void playSound(const char* file);
         static int init();
-
+        static void destroy();
     private:
         static int soundPlayer(const char* file);
         static ALCdevice* device;

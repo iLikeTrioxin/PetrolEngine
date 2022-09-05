@@ -1,12 +1,10 @@
 #pragma once
 
-#include "../GraphicsContext.h"
+#include "Renderer/RendererInterface/GraphicsContextI.h"
 
 namespace PetrolEngine {
-	class OpenGLContext : public GraphicsContext {
+	class OpenGLContext : public GraphicsContextI {
 	public:
-        OpenGLContext(void* window) {this->window = window;}
-
 		int init(void* loaderProc) override;
 	};
 }

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../RendererResourceCreator.h"
+#include "../RendererInterface/RendererResourceCreator.h"
 
 #include "OpenGLIndexBuffer.h"
 #include "OpenGLRenderer.h"
@@ -8,22 +8,33 @@
 #include "OpenGLTexture.h"
 #include "OpenGLVertexArray.h"
 #include "OpenGLVertexBuffer.h"
+#include "OpenGLContext.h"
+#include "OpenGLFramebuffer.h"
 
-namespace PetrolEngine{
+namespace PetrolEngine {
+    class OPENGL_: public RRC {
+    public:
+        // with arguments
+        VertexBufferI* newVertexBuffer(const VL& layout, const void* data, int64 size) override { return new OpenGLVertexBuffer(layout, data, size); }
+        IndexBufferI * newIndexBuffer (                  const void* data, int64 size) override { return new OpenGLIndexBuffer (        data, size); }
 
-    using VL = PetrolEngine::VertexLayout;
+        // without arguments
+        VertexBufferI* newVertexBuffer(const VL& layout) override { return new OpenGLVertexBuffer(layout); }
+        IndexBufferI * newIndexBuffer (                ) override { return new OpenGLIndexBuffer (      ); }
 
-    class: public RendererResourceCreator {
-        VertexBuffer* newVertexBuffer(const VL& layout, const void* data, int64 size) override { return new OpenGLVertexBuffer(layout, data, size); };
-        IndexBuffer * newIndexBuffer (                  const void* data, int64 size) override { return new OpenGLIndexBuffer (        data, size); };
-        VertexArray * newVertexArray (                                              ) override { return new OpenGLVertexArray (                  ); };
-        Renderer    * newRenderer    (                                              ) override { return new OpenGLRenderer    (                  ); };
 
-        Shader      * newShader      ( String&& vertexShader  ,
-                                       String&& fragmentShader,
-                                       String&& geometryShader  ) override { return new OpenGLShader(vertexShader.c_str(), fragmentShader.c_str(), geometryShader.c_str()); };
+        VertexArrayI * newVertexArray (                                              ) override { return new OpenGLVertexArray (                  ); }
+        RendererI    * newRenderer    (                                              ) override { return new OpenGLRenderer    (                  ); }
+        GraphicsContextI * newGraphicsContext() override { return new OpenGLContext(); }
 
-        Texture* newTexture(const Image* image) override { return new OpenGLTexture(image); };
-        Texture* newTexture(int width, int height, TextureFormat format) override { return new OpenGLTexture(width, height, format); };
+        ShaderI* newShader(const char* vertexShader  ,
+                           const char* fragmentShader,
+                           const char* geometryShader  ) override { return new OpenGLShader(vertexShader, fragmentShader, geometryShader); }
+
+        TextureI* newTexture(const Image* image,int a= GL_UNSIGNED_BYTE) { return new OpenGLTexture(image, a); }
+        TextureI* newTexture(int width, int height, TextureFormat format) { return new OpenGLTexture(width, height, format); }
+
+        FramebufferI* newFramebuffer(const FramebufferSpecification& spec) override { return new OpenGLFramebuffer(spec); }
+
     } OpenGL;
 }

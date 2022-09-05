@@ -148,10 +148,12 @@ namespace PetrolEngine {
         alDeleteSources(1, &sourceID);
         alDeleteBuffers(1, &bufferID);
 
+        return 0;
+    }
+
+    void Sound::destroy() {
         alcDestroyContext(context);
         alcCloseDevice(device);
-
-        return 0;
     }
 
     void Sound::playSound(const char *file) {

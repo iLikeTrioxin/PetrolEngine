@@ -25,6 +25,7 @@
 #include <memory>
 #include <thread>
 #include <future>
+#include <cmath>
 
 // Assimp
 #include <assimp/Importer.hpp>

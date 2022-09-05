@@ -3,7 +3,7 @@
 #include "VulkanVertexBuffer.h"
 
 namespace PetrolEngine {
-	VulkanVertexBuffer::VulkanVertexBuffer(VertexLayout layout, const void* data, int64 size): VertexBuffer(layout) {
+	VulkanVertexBuffer::VulkanVertexBuffer(VertexLayout layout, const void* data, int64 size): VertexBufferApi(layout) {
 		LOG_FUNCTION();
 		
 		glGenBuffers(1, &ID);
@@ -13,7 +13,7 @@ namespace PetrolEngine {
 		glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
 	}
 
-	VulkanVertexBuffer::VulkanVertexBuffer(VertexLayout layout): VertexBuffer(layout) {
+	VulkanVertexBuffer::VulkanVertexBuffer(VertexLayout layout): VertexBufferApi(layout) {
 		LOG_FUNCTION();
 
 		glGenBuffers(1, &ID);
