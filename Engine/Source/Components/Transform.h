@@ -25,6 +25,8 @@ namespace PetrolEngine {
 
         glm::mat4 transformation = glm::mat4(1.0f);
 
+        void setPosition(glm::vec3 position);
+
         void setRotationX(float x, bool local = true);
         void setRotationY(float y, bool local = true);
         void setRotationZ(float z, bool local = true);

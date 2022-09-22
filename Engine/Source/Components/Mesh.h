@@ -23,7 +23,9 @@
 namespace PetrolEngine {
     class Mesh: public Component {
 	public:
-		Ref<VertexBufferI> vertexBuffer;
+        Mesh(VertexLayout layout);
+
+        Ref<VertexBufferI> vertexBuffer;
 		Ref< IndexBufferI>  indexBuffer;
 		Ref< VertexArrayI>  vertexArray;
 		Material material;

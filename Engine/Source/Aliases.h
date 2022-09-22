@@ -192,8 +192,8 @@ template<typename T>
 using Set = std::set<T>;
 
 #include <unordered_map>
-template<typename T1, typename T2>
-using UnorderedMap = std::unordered_map<T1, T2>;
+template<typename ... T>
+using UnorderedMap = std::unordered_map<T...>;
 
 #include <typeindex>
 using TypeIndex = std::type_index;
@@ -225,6 +225,8 @@ static_assert(sizeof(int32) == 4, "int32 size is not 32 bits.");
 static_assert(sizeof(int64) == 8, "int64 size is not 64 bits.");
 
 #include <cstdio>
+
+#define for3D(_tx, _ty, _tz) for (int z = 0; z < _tz; ++z) for (int y = 0; y < _ty; ++y) for (int x = 0; x < _tx; ++x)
 
 // some nice spaghetti here
 

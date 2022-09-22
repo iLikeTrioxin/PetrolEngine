@@ -12,6 +12,11 @@ namespace PetrolEngine{
         matrix *= glm::toMat4   (        this->rotation);
     }
 
+    void Transform::setPosition(glm::vec3 position) {
+        this->position = position;
+        this->updateTransformMatrix();
+    }
+
     void Transform::updateOrientation(){
         glm::quat r = rotation;
 

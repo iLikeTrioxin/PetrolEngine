@@ -9,6 +9,17 @@
 #include "Renderer/Renderer/IndexBuffer.h"
 
 namespace PetrolEngine {
+    Mesh::Mesh(VertexLayout layout) {
+        this->material     = Material();
+
+        this->vertexBuffer = VertexBuffer::create(layout);
+        this->indexBuffer  =  IndexBuffer::create();
+
+        this->vertexArray = VertexArray::create();
+
+        this->vertexArray->addVertexBuffer(vertexBuffer);
+        this->vertexArray-> setIndexBuffer( indexBuffer);
+    }
     // Mesh
     Mesh::Mesh() {
         this->material     = Material();
