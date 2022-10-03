@@ -17,7 +17,7 @@ find_package(Vulkan)
     list(FILTER HEADER_FILES EXCLUDE REGEX "Vulkan")
 #endif()
 
-add_library(Engine ${SOURCE_FILES} ${HEADER_FILES} ${RESOURCE_FILES})
+add_library(Engine STATIC ${SOURCE_FILES} ${HEADER_FILES} ${RESOURCE_FILES})
 
 if(${VULKAN_FOUND})
 	# if it was found add libraries to link to and headers

@@ -16,9 +16,5 @@ namespace PetrolEngine {
     Ref<WindowI> Window::create(int width, int height, const String& title) {
         return Ref<WindowI>(creator->newWindow(width, height, title));
     }
-
-    float WindowI::getAspectRatio() const {
-        return ((float) windowData.width) / ((float)windowData.height);
-    }
     
 }

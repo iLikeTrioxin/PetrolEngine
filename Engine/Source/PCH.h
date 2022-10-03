@@ -2,6 +2,7 @@
 
 #define GLM_ENABLE_EXPERIMENTAL
 //#define GLFW_INCLUDE_VULKAN
+#define GLFW_INCLUDE_NONE
 
 // Math
 #include <glm/gtc/matrix_transform.hpp>

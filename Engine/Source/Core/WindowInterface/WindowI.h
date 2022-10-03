@@ -12,13 +12,6 @@
 
 namespace PetrolEngine {
 
-	extern double deltaXMousePos;
-	extern double deltaYMousePos;
-	extern double cursorXPos;
-	extern double cursorYPos;
-	
-	extern double deltaTime;
-
 	class WindowI {
 	public:
 		struct WindowData {

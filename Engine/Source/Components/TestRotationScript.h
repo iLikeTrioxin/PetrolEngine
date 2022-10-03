@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Core/WindowInterface/WindowI.h"
+#include "Core/Window/Window.h"
 
 #include "Components/Component.h"
 #include "Components/Transform.h"

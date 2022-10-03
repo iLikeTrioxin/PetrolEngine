@@ -12,6 +12,13 @@
 
 namespace PetrolEngine {
 
+    extern double deltaXMousePos;
+    extern double deltaYMousePos;
+    extern double cursorXPos;
+    extern double cursorYPos;
+
+    extern double deltaTime;
+
 	class Window {
 	public:
         static void setContext(WRC& creator){

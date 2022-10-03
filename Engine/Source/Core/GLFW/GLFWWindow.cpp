@@ -1,7 +1,7 @@
 #include <PCH.h>
 
 #include <utility>
-
+#include "../Window/Window.h"
 #include "GLFWWindow.h"
 #include "Renderer/Renderer/GraphicsContext.h"
 
@@ -46,16 +46,23 @@ namespace PetrolEngine {
             reinterpret_cast<      VkSurfaceKHR*         >(s)
         );
     }
-
+    void error_callback(int error, const char* msg) {
+        std::string s;
+        s = " [" + std::to_string(error) + "] " + msg + '\n';
+        std::cerr << s << std::endl;
+    }
     int GLFWWindow::init() { LOG_FUNCTION();
         int success = glfwInit();
 
         if (!success)
             return 0;
 
+        glfwSetErrorCallback(error_callback);
+
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+        //glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
         //glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
 
         window = glfwCreateWindow(windowData.width, windowData.height, windowData.title.c_str(), nullptr, nullptr);
@@ -66,7 +73,7 @@ namespace PetrolEngine {
             return 0;
         }
 
-        if (GraphicsContext::create()->init((void*) glfwGetProcAddress))
+        if (GraphicsContext::create()->init((void*)glfwGetProcAddress)) // 
             return -1;
         
         glfwMakeContextCurrent  (window);

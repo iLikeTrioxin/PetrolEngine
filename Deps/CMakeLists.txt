@@ -1,18 +1,22 @@
 #assimp
+set( BUILD_SHARED_LIBS         ON )
 set( ASSIMP_BUILD_ZLIB         ON  CACHE BOOL "xxx" FORCE )
 set( ASSIMP_BUILD_ASSIMP_TOOLS OFF CACHE BOOL "xxx" FORCE )
 set( ASSIMP_WARNINGS_AS_ERRORS OFF CACHE BOOL "xxx" FORCE )
 
 add_subdirectory(assimp)
 
+#freetype
+add_subdirectory(freetype)
+
+set( BUILD_SHARED_LIBS OFF FORCE)
+set( BUILD_SHARED_LIBS OFF CACHE BOOL "xxx" FORCE )
+
 # openal-soft
 set( ALSOFT_UTILS          OFF CACHE BOOL "Build utility programs"                     FORCE )
 set( ALSOFT_NO_CONFIG_UTIL ON  CACHE BOOL "Disable building the alsoft-config utility" FORCE )
 
 add_subdirectory(openal-soft)
-
-#freetype
-add_subdirectory(freetype)
 
 #glad
 set( USE_MSVC_RUNTIME_LIBRARY_DLL OFF CACHE BOOL "Use MSVC runtime library DLL" FORCE )
