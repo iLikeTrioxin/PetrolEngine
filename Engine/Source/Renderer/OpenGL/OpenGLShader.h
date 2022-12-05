@@ -1,22 +1,35 @@
 #pragma once
 
-#include "Renderer/RendererInterface/ShaderI.h"
+#include "Renderer/RendererInterface/Shader.h"
 #include <sstream>
 #include <fstream>
 #include <glm/glm.hpp>
 
 namespace PetrolEngine {
-    class OpenGLShader : public ShaderI {
+    class OpenGLShader : public Shader {
     public:
-        OpenGLShader( const char* vertexShaderSourceCode  ,
-                      const char* fragmentShaderSourceCode,
-                      const char* geometryShaderSourceCode  );
+        OpenGLShader( String         name,
+                      String   vertexCode,
+                      String fragmentCode,
+                      String geometryCode  );
         
         ~OpenGLShader() override;
 
-        int recompileShader( const char* vertexShaderSourceCode  ,
-                             const char* fragmentShaderSourceCode,
-                             const char* geometryShaderSourceCode  ) override;
+        Vector<uint32>* fromSpvToGlslSpv(Vector<uint32>* spv, ShaderType type);
+
+        //void reflect(Vector<uint32>* spv, ShaderType type);
+
+        void compileFromSpv(
+                Vector<uint32>* vertexByteCode,
+                Vector<uint32>* fragmentByteCode,
+                Vector<uint32>* geometryByteCode
+        ) override;
+
+        void compileNative(
+                const String& vertexShaderSourceCode  ,
+                const String& fragmentShaderSourceCode,
+                const String& geometryShaderSourceCode
+        ) override;
 
         void setInt  ( const String& uniform, int   x                           ) override;
         void setUint ( const String& uniform, uint  x                           ) override;
@@ -32,7 +45,12 @@ namespace PetrolEngine {
         void setMat3 ( const String& uniform, const glm::mat3& x ) override;
         void setMat4 ( const String& uniform, const glm::mat4& x ) override;
 
-    private:
+        void bindUniformBuffer(const String& name, UniformBuffer* uniformBuffer) override{
+            uint32 bind = this->metadata.uniforms[name];
+            glUniformBlockBinding(this->ID, bind, uniformBuffer->getBinding());
+        }
+
+    protected:
         static int checkShaderCompileErrors (GLuint shader, const String& type);
         static int checkProgramCompileErrors(GLuint shader);
     };

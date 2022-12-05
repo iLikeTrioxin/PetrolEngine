@@ -25,3 +25,6 @@
 [submodule "Deps/openal-soft"]
 	path = Deps/openal-soft
 	url = https://github.com/kcat/openal-soft
+[submodule "Deps/SPIRV-Cross"]
+	path = Deps/SPIRV-Cross
+	url = https://github.com/KhronosGroup/SPIRV-Cross

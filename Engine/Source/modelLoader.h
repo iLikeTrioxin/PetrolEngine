@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Renderer/RendererInterface/TextureI.h"
-#include "Renderer/RendererInterface/ShaderI.h"
+#include "Renderer/RendererInterface/Texture.h"
+#include "Renderer/RendererInterface/Shader.h"
 #include "Components/Mesh.h"
 
 #include <future>
@@ -16,7 +16,7 @@ namespace PetrolEngine {
 	class ModelLoader
 	{
 	public:
-		Ref<ShaderI> shader;
+		Ref<Shader> shader;
 		static ModelLoader& Get();
 		static Entity* loadModel(const char* path, Scene*  scene);
 		static Entity* loadModel(const char* path, Entity* parent);
@@ -26,7 +26,7 @@ namespace PetrolEngine {
 		static std::mutex mutex;
 
 		void processMesh(aiMesh* mesh, const aiScene* scene, Mesh*  outputMesh) const;
-		static void texturesFromMaterial(aiMaterial* material, aiTextureType type, Vector< Ref<TextureI> >* textures);
+		static void texturesFromMaterial(aiMaterial* material, aiTextureType type, Vector< Ref<Texture> >* textures);
 		void processNode(aiNode* node, const aiScene* scene, Entity* parent);
 		//std::vector<std::future<void>> meshProcesses;
 		

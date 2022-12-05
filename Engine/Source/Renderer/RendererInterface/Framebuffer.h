@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Aliases.h>
-#include "TextureI.h"
+#include "Texture.h"
 
 namespace PetrolEngine {
 
@@ -30,21 +30,20 @@ namespace PetrolEngine {
         int width;
         int height;
         //FramebufferImageFormat::Formats format;
-//
         //bool swapChainTarget = false;
     };
 
-	class FramebufferI {
+	class Framebuffer {
 	public:
-        Vector<Ref<TextureI>> attachments;
+        Vector<Texture*> attachments;
 
-        virtual void addAttachment(Ref<TextureI> texture) = 0;
+        virtual void addAttachment(Texture*& texture) = 0;
 
-        NO_DISCARD uint getID() const { return id; }
+        NO_DISCARD uint getID () const { return  id; }
         NO_DISCARD uint getTID() const { return tid; }
         NO_DISCARD uint getDID() const { return did; }
 
-        virtual ~FramebufferI() = default;
+        virtual ~Framebuffer() = default;
     protected:
         FramebufferSpecification spec;
         uint id;

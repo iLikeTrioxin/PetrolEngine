@@ -3,7 +3,7 @@
 #include "Renderer/RendererInterface/IndexBufferI.h"
 
 namespace PetrolEngine {
-	class OpenGLIndexBuffer : public IndexBufferI {
+	class OpenGLIndexBuffer : public IndexBuffer {
 	public:
 		OpenGLIndexBuffer();
 		OpenGLIndexBuffer(const void* data, int64 size);

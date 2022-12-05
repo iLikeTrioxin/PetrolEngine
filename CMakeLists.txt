@@ -39,9 +39,10 @@ target_link_libraries(Engine
     PRIVATE OpenAL
     PRIVATE common
     PRIVATE glfw
-    PRIVATE assimp
     PRIVATE shaderc
+    PRIVATE assimp
     PRIVATE freetype
+    PRIVATE spirv-cross-cpp
 )
 
 target_include_directories(Engine
@@ -51,6 +52,7 @@ target_include_directories(Engine
     PUBLIC Deps/assimp/include
     PUBLIC Deps/stb
     PUBLIC Deps/entt/single_include
+    PUBLIC Deps/SPIRV-Cross
     PUBLIC Engine/Source
     PUBLIC ${CMAKE_CURRENT_BINARY_DIR}/Deps/glad/include
     PUBLIC ${CMAKE_CURRENT_BINARY_DIR}/Deps/assimp/include

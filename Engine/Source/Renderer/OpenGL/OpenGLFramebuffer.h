@@ -2,15 +2,15 @@
 
 #include <Aliases.h>
 
-#include "../RendererInterface/FramebufferI.h"
+#include "../RendererInterface/Framebuffer.h"
 
 namespace PetrolEngine{
 
-    class OpenGLFramebuffer : public FramebufferI{
+    class OpenGLFramebuffer : public Framebuffer{
     public:
         OpenGLFramebuffer(const FramebufferSpecification& spec);
 
-        virtual void addAttachment(Ref<TextureI> texture) override;
+        void addAttachment(Texture*& texture) override;
 
         ~OpenGLFramebuffer() override;
 

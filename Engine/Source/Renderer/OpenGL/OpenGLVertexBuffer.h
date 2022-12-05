@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Renderer/RendererInterface/VertexBufferI.h"
+#include "Renderer/RendererInterface/VertexBuffer.h"
 
 namespace PetrolEngine {
-	class OpenGLVertexBuffer : public VertexBufferI {
+	class OpenGLVertexBuffer : public VertexBuffer {
 	public:
 		OpenGLVertexBuffer(VertexLayout layout);
 		OpenGLVertexBuffer(VertexLayout layout, const void* data, int64 size);

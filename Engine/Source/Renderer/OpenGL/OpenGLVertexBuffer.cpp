@@ -3,17 +3,17 @@
 #include "OpenGLVertexBuffer.h"
 
 namespace PetrolEngine {
-	OpenGLVertexBuffer::OpenGLVertexBuffer(VertexLayout layout, const void* data, int64 size): VertexBufferI(layout) {
+	OpenGLVertexBuffer::OpenGLVertexBuffer(VertexLayout layout, const void* data, int64 size): VertexBuffer(layout) {
 		LOG_FUNCTION();
 		
 		glGenBuffers(1, &ID);
 
 		glBindBuffer(GL_ARRAY_BUFFER, ID);
 
-		glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, size, data, GL_DYNAMIC_DRAW); //GL_STATIC_DRAW
 	}
 
-	OpenGLVertexBuffer::OpenGLVertexBuffer(VertexLayout layout): VertexBufferI(layout) {
+	OpenGLVertexBuffer::OpenGLVertexBuffer(VertexLayout layout): VertexBuffer(layout) {
 		LOG_FUNCTION();
 
 		glGenBuffers(1, &ID);
@@ -24,12 +24,10 @@ namespace PetrolEngine {
 
 		glBindBuffer(GL_ARRAY_BUFFER, ID);
 
-		glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, size, data, GL_DYNAMIC_DRAW);
 	}
 
-	OpenGLVertexBuffer::~OpenGLVertexBuffer() {
-		LOG_FUNCTION();
-		
+	OpenGLVertexBuffer::~OpenGLVertexBuffer() { LOG_FUNCTION();
 		glDeleteBuffers(1, &ID);
 	}
 }

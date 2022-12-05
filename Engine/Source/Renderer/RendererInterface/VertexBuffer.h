@@ -72,19 +72,23 @@ namespace PetrolEngine {
 	class VertexLayout {
 	public:
 		struct Element {
-			std::string    name;
-			ShaderDataType type;
+            const char* name;
+            ShaderDataType type;
 		};
 
-		VertexLayout(std::initializer_list<Element> elements) : elements(elements) {};
+        //VertexLayout(std::initializer_list<Element> elements = {}) : elements(elements) {};
+        VertexLayout(Vector<Element> elements = {}) : elements(elements) {};
 
-	public:
-		Vector<Element> elements;
+        NO_DISCARD
+        const Vector<Element>& getElements() const { return elements; }
+
+	private:
+        Vector<Element> elements;
 	};
 
-	class VertexBufferI {
+	class VertexBuffer {
 	public:
-		virtual ~VertexBufferI() = default;
+		virtual ~VertexBuffer() = default;
 
 		//static VertexBufferI* create(RRC creator, const VertexLayout& layout, const void* data = nullptr, int64 size = 0);
 
@@ -94,7 +98,7 @@ namespace PetrolEngine {
 		NO_DISCARD unsigned int getID    () const { return ID    ; }
 
 	protected:
-		explicit VertexBufferI(VertexLayout layout): layout(move(layout)), ID(0) {};
+		explicit VertexBuffer(VertexLayout layout): layout(move(layout)), ID(0) {};
 
 	protected:
 		VertexLayout layout;

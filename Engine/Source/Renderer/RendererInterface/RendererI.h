@@ -6,9 +6,9 @@
 #include "Components/Material.h"
 #include "Components/Transform.h"
 
-#include "ShaderI.h"
-#include "VertexArrayI.h"
-
+#include "Shader.h"
+#include "VertexArray.h"
+#include <Renderer/Renderer/Text.h>
 // TODO: remove camera and mesh dependency.
 
 namespace PetrolEngine {
@@ -64,19 +64,19 @@ namespace PetrolEngine {
         MAX_DUAL_SOURCE_DRAW_BUFFERS
     };
 
-    class RendererI {
+    class RendererAPI {
     public:
-        virtual void drawQuad2D(const Material& material, const Transform& transform) = 0;
+        virtual void drawQuad2D(const Texture* texture, const Transform* transform, Shader* shader, const Camera* camera, glm::vec4 texCoords = {0,0,1,1}) = 0;
 
         virtual int  init    (bool debug) = 0;
 
         virtual void setViewport(int x, int y, int width, int height) = 0;
-        virtual void renderMesh(const Ref<VertexArrayI>& vao , const Transform& tran, const Material& mat, const Camera* cam) = 0;
-        virtual void renderText(const     String       & text, const Transform& tran, const Material& mat, const Camera* cam) = 0;
+        virtual void renderMesh(const VertexArray* vao, const Transform& transform, const Vector<const Texture*>& textures, Shader* shader, const Camera* camera) = 0;
+        virtual void renderText(const String& text, const Transform& tran, const Texture* atlas, Text::FontAtlas* fa,       Shader* shader, const Camera* cam) = 0;
         virtual void clear() = 0;
         virtual void getDeviceConstantValue(DeviceConstant deviceConstant, void* outputBuffer) = 0;
         virtual void setRenderTarget() {}
 
-        virtual ~RendererI() = default;
+        virtual ~RendererAPI() = default;
     };
 }

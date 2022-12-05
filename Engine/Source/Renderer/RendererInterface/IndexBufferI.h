@@ -3,11 +3,11 @@
 #include <Aliases.h>
 
 namespace PetrolEngine {
-	class IndexBufferI {
+	class IndexBuffer {
 	public:
 		virtual void setData(const void* data, int64 size) = 0;
 
-		virtual ~IndexBufferI() = default;
+		virtual ~IndexBuffer() = default;
 
 		NO_DISCARD int64 getID  () const { return ID  ; }
 		NO_DISCARD uint  getSize() const { return size; }

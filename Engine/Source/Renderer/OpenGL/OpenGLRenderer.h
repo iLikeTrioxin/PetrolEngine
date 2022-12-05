@@ -13,24 +13,24 @@
 #include "Components/Transform.h"
 #include "Components/Material.h"
 #include "Components/Camera.h"
-
+#include <Renderer/Renderer/Text.h>
 // TODO: make sure to move shader sources.
 
 namespace PetrolEngine {
 	
-	class OpenGLRenderer : public RendererI {
+	class OpenGLRenderer : public RendererAPI {
 	public:
 		// 2D stuff
-		void drawQuad2D(const Material& material, const Transform& transform) override;
+		void drawQuad2D(const Texture* texture, const Transform* transform, Shader* shader, const Camera* camera, glm::vec4 texCoords = {0,0,1,1}) override;
 
 		// 3D stuff
-		void renderMesh(const Ref<VertexArrayI>& vao, const Transform& transform, const Material& material, const Camera* camera) override;
+		void renderMesh(const VertexArray* vao, const Transform& transform, const Vector<const Texture*>& textures, Shader* shader, const Camera* camera) override;
 
 		// utility
 		void setViewport(int x, int y, int width, int height) override;
 		void clear() override;
 		int  init (bool debug) override;
-		void renderText(const String& text, const Transform& transform, const Material& material, const Camera* camera) override;
+		void renderText(const String& text, const Transform& tran, const Texture* atlas, Text::FontAtlas* fa, Shader* shader, const Camera* cam) override;
 
 		void getDeviceConstantValue(DeviceConstant deviceConstant, void* outputBuffer) override;
 
@@ -41,5 +41,7 @@ namespace PetrolEngine {
 		};
 
         ~OpenGLRenderer() override = default;
-	};
+
+        void drawQuad2D(const Material &material, const Transform &transform, const Camera *camera);
+    };
 }

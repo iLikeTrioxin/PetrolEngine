@@ -8,7 +8,7 @@
 #include "Components/Vertex.h"
 #include "Components/Mesh.h"
 
-#include "Renderer/Renderer/Texture.h"
+#include <Renderer/Renderer/Renderer.h>
 
 namespace PetrolEngine {
 
@@ -72,40 +72,45 @@ namespace PetrolEngine {
 
 		return model;
 	}
-	void ModelLoader::texturesFromMaterial(aiMaterial* material, aiTextureType type, Vector< Ref<TextureI> >* textures) {
+	void ModelLoader::texturesFromMaterial(aiMaterial* material, aiTextureType type, Vector< Ref<Texture> >* textures) {
         //LOG("Detected " + std::to_string(material->GetTextureCount(type))+ " textures of " + std::to_string(static_cast<int>(type)), 1);
 
 		for (uint i = 0; i < (material->GetTextureCount(type)); i++) {
 			aiString path;
 			material->GetTexture(type, i, &path);
 			auto image = Image::create(path.C_Str());
-			auto tex = Texture::create(image);
+			auto tex = Renderer::createTexture(image);
 			textures->push_back(tex);
 		}
 	}
 	
 	void ModelLoader::processMesh(aiMesh* mesh, const aiScene* scene, Mesh* outputMesh) const {
-        std::vector<Vertex> vertices;
-		std::vector< uint > indices;
+        // std::vector<Vertex> vertices;
+		// std::vector< uint > indices;
 
-		vertices.reserve(mesh->mNumVertices);
-		indices .reserve(mesh->mNumVertices);
+        outputMesh->vertices.clear();
+        outputMesh->indices .clear();
+
+        outputMesh->vertices.reserve(mesh->mNumVertices );
+        outputMesh->indices .reserve(mesh->mNumFaces * 3);
 		
 		outputMesh->material.shader = shader;
 
 		for (uint i = 0; i < mesh->mNumVertices; i++) {
-			{ vertices.emplace_back(); }
+			{ outputMesh->vertices.emplace_back(); }
 
-            auto& meshPosition = mesh->mVertices[i];
-            auto& vertPosition = vertices[i].position;
+            auto& meshPosition =      mesh->mVertices[i];
+            auto& vertPosition = outputMesh->vertices[i];
 
 			vertPosition.x = meshPosition.x;
 			vertPosition.y = meshPosition.y;
 			vertPosition.z = meshPosition.z;
 			
 			if (mesh->HasNormals()) {
-                auto& meshNormal = mesh->mNormals[i];
-                auto& vertNormal = vertices[i].normal;
+                { outputMesh->normals.emplace_back(); }
+
+                auto& meshNormal =      mesh->mNormals[i];
+                auto& vertNormal = outputMesh->normals[i];
 
 				vertNormal.x = meshNormal.x;
 				vertNormal.y = meshNormal.y;
@@ -113,15 +118,16 @@ namespace PetrolEngine {
 			}
 
 			if (mesh->mTextureCoords[0]) {
+                { outputMesh->textureCoordinates.emplace_back(); }
+
                 auto& textureCoords = mesh->mTextureCoords[0][i];
 
-				vertices[i].texCoords = { textureCoords.x,
-                                          textureCoords.y  };
+                outputMesh->textureCoordinates[i] = {
+                        textureCoords.x,
+                        textureCoords.y
+                };
 			}
-			else {
-                vertices[i].texCoords = {0, 0};
-            }
-
+            /*
 			if (mesh->HasTangentsAndBitangents()) {
                 auto& meshTangent = mesh->mTangents[i];
                 auto& vertTangent = vertices[i].tangent;
@@ -137,18 +143,21 @@ namespace PetrolEngine {
 				vertBitangent.y = meshBitangent.y;
 				vertBitangent.z = meshBitangent.z;
 			}
+            */
 		}
-		
+
 		for (uint i = 0; i < mesh->mNumFaces; i++) {
 			aiFace face = mesh->mFaces[i];
 
 			for (uint j = 0; j < face.mNumIndices; j++) {
-				indices.emplace_back(face.mIndices[j]);
+				outputMesh->indices.emplace_back(face.mIndices[j]);
 			}
 		}
 
-		outputMesh->vertexBuffer->setData(vertices.data(), vertices.size() * sizeof(Vertex));
-		outputMesh-> indexBuffer->setData(indices .data(), indices .size() * sizeof( uint ));
+        outputMesh->recalculateMesh();
+
+		// outputMesh->vertexBuffer->setData(vertices.data(), vertices.size() * sizeof(Vertex));
+		// outputMesh-> indexBuffer->setData(indices .data(), indices .size() * sizeof( uint ));
 		
 		aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
 		{
@@ -166,7 +175,7 @@ namespace PetrolEngine {
 			Scene* scene = parent->getScene();
 			Entity* meshEntity = scene->createGameObject(name, parent);
 			Mesh*  mesh = &meshEntity->addComponent<Mesh>();
-			
+
 			ModelLoader::processMesh(_mesh_, _scene, mesh);
 		}
 		for (uint32 i = 0; i < node->mNumChildren; i++) {

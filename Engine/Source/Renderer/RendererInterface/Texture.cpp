@@ -1,8 +1,6 @@
-#include <PCH.h>
+#include "Texture.h"
 
-#include "TextureI.h"
-
-namespace PetrolEngine {
+namespace PetrolEngine{
     TextureFormat getFormat(const Image* image){
         uint16 format = 0x0000;
 

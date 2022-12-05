@@ -1,14 +1,14 @@
 #pragma once
 
-#include "Renderer/RendererInterface/VertexArrayI.h"
+#include "Renderer/RendererInterface/VertexArray.h"
 
 namespace PetrolEngine {
-	class OpenGLVertexArray : public VertexArrayI {
+	class OpenGLVertexArray : public VertexArray {
 	public:
 		OpenGLVertexArray();
 
-		void addVertexBuffer(Ref<VertexBufferI> vertexBuffer) override;
-		void  setIndexBuffer(Ref<IndexBufferI >  indexBuffer) override;
+		void addVertexBuffer(VertexBuffer*& vertexBuffer) override;
+		void  setIndexBuffer(IndexBuffer *&  indexBuffer) override;
 
 		~OpenGLVertexArray() override;
 	};

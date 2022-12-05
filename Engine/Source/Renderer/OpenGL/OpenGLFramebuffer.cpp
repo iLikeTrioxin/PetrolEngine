@@ -33,10 +33,13 @@ namespace PetrolEngine{
 
         OpenGLFramebuffer::~OpenGLFramebuffer() {
             glDeleteFramebuffers(1, &id);
+
+            for(Texture* texture : attachments) delete texture;
         }
 
-        void OpenGLFramebuffer::addAttachment(Ref<TextureI> texture) {
+        void OpenGLFramebuffer::addAttachment(Texture*& texture) {
             attachments.push_back(texture);
+            texture = nullptr;
 
             glBindFramebuffer(GL_FRAMEBUFFER, id);
             glBindTexture(GL_TEXTURE_2D, texture->getID());

@@ -1,3 +1,8 @@
+### calling convention for the engine
+if method takes pointer it means that it will not take ownership of the object
+if method takes reference of the pointer it means that it will take ownership of the object
+
+
 ####This file describes how you can contribute to this respository.
 
 #I describe here those topics:
@@ -82,4 +87,18 @@ int main() {
     
     return 0;
 }
+
+int iii(){
+    Renderer* renderer = OpenGL.newRenderer();
+    
+    VertexBuffer* vertexBuffer = Renderer::createVertexBuffer(...);
+    IndexBuffer* indexBuffer   = Renderer::createIndexBuffer (...);
+    
+    Mesh* mesh = Mesh::create(vertexBuffer, indexBuffer);
+    
+    Renderer::setContext(renderer);
+    
+    
+}
+
 ```

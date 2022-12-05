@@ -4,6 +4,9 @@
 
 #include "../../Core/Files.h"
 
+#include <spirv_cross.hpp>
+#include <spirv_glsl.hpp>
+#include <shaderc/shaderc.hpp>
 //
 // INFO
 // 1. I use here properties of glShaderXXX(shader) which is stated at khronos site "A value of 0 for shader will be silently ignored."
@@ -11,103 +14,147 @@
 
 namespace PetrolEngine {
 
-    int OpenGLShader::recompileShader( const char* vertexShaderSourceCode  ,
-                                       const char* fragmentShaderSourceCode,
-                                       const char* geometryShaderSourceCode ) {
-        uint32_t   newVertexShaderID,
-                 newFragmentShaderID,
-                 newGeometryShaderID;
+    Vector<uint32>* OpenGLShader::fromSpvToGlslSpv(Vector<uint32>* spv, ShaderType type) {
+        String source = spirv_cross::CompilerGLSL(*spv).compile();
 
-        if (vertexShaderSourceCode) {
-            newVertexShaderID = glCreateShader(GL_VERTEX_SHADER);    
+        shaderc::Compiler compiler;
+        shaderc::CompileOptions options;
 
-            glShaderSource (newVertexShaderID, 1, &vertexShaderSourceCode, nullptr);
-            glCompileShader(newVertexShaderID);
+        options.SetOptimizationLevel(shaderc_optimization_level_performance);
+        options.SetTargetEnvironment(shaderc_target_env_opengl, 450);
 
-            int error = checkShaderCompileErrors(newVertexShaderID, "VERTEX");
+        auto result = compiler.CompileGlslToSpv(
+            source,
+            shaderTypeToShadercShaderKind(type),
+            this->name.c_str(),
+            options
+        );
 
-            if (!error) {
-                glDetachShader(ID,    vertexShaderID);
-                glAttachShader(ID, newVertexShaderID);
-            }
-        }
+        if(!result.GetCompilationStatus())
+            return new Vector<uint32>(result.cbegin(), result.cend());
 
-        if (fragmentShaderSourceCode) {
-            newFragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);
 
-            glShaderSource (newFragmentShaderID, 1, &fragmentShaderSourceCode, nullptr);
-            glCompileShader(newFragmentShaderID);
-
-            int error = checkShaderCompileErrors(newFragmentShaderID, "FRAGMENT");
-
-            if (!error) {
-                glDetachShader(ID,    fragmentShaderID);
-                glAttachShader(ID, newFragmentShaderID);
-            }
-        }
-
-        if (geometryShaderSourceCode) {
-            newGeometryShaderID = glCreateShader(GL_GEOMETRY_SHADER);
-
-            glShaderSource (newGeometryShaderID, 1, &geometryShaderSourceCode, nullptr);
-            glCompileShader(newGeometryShaderID);
-
-            int error = checkShaderCompileErrors(newGeometryShaderID, "GEOMETRY");
-
-            if (!error) {
-                glDetachShader(ID,    geometryShaderID);
-                glAttachShader(ID, newGeometryShaderID);
-            }
-        }
-
-        glLinkProgram(ID);
-
-        int error = checkProgramCompileErrors(ID);
-
-        if (!error) {
-            // We need to remove only old code before we change old id's to the new ones
-            if (  vertexShaderSourceCode) { glDeleteShader(  vertexShaderID);   vertexShaderID =   newVertexShaderID; }
-            if (fragmentShaderSourceCode) { glDeleteShader(fragmentShaderID); fragmentShaderID = newFragmentShaderID; }
-            if (geometryShaderSourceCode) { glDeleteShader(geometryShaderID); geometryShaderID = newGeometryShaderID; }
-            
-            return 0;
-        }
-        
-        // reverse all changes
-        if (  vertexShaderSourceCode) { glDetachShader(ID,   newVertexShaderID); glAttachShader(ID,   vertexShaderID); glDeleteShader(  vertexShaderID); }
-        if (fragmentShaderSourceCode) { glDetachShader(ID, newFragmentShaderID); glAttachShader(ID, fragmentShaderID); glDeleteShader(fragmentShaderID); }
-        if (geometryShaderSourceCode) { glDetachShader(ID, newGeometryShaderID); glAttachShader(ID, geometryShaderID); glDeleteShader(geometryShaderID); }
-        
-        glLinkProgram(ID);
-        return 1;
+        LOG("Shader compilation failed: " + result.GetErrorMessage(), 3);
+        return nullptr;
     }
 
-    OpenGLShader::OpenGLShader( const char* vertexShaderSourceCode  ,
-                                const char* fragmentShaderSourceCode,
-                                const char* geometryShaderSourceCode ) {
+    void OpenGLShader::compileFromSpv(Vector<uint32>*   vertexByteCode,
+                                      Vector<uint32>* fragmentByteCode,
+                                      Vector<uint32>* geometryByteCode ){
+        uint   vertexShaderID = 0;
+        uint fragmentShaderID = 0;
+        uint geometryShaderID = 0;
+        uint programID        = glCreateProgram();
+
+        if (vertexByteCode) {
+            Vector<uint32>* vertexByteCodeGlsl = fromSpvToGlslSpv(vertexByteCode, ShaderType::Vertex);
+
+            vertexShaderID = glCreateShader(GL_VERTEX_SHADER);
+            glShaderBinary(1, &vertexShaderID, GL_SHADER_BINARY_FORMAT_SPIR_V, vertexByteCodeGlsl->data(), vertexByteCodeGlsl->size() * sizeof(uint32));
+            glSpecializeShader(vertexShaderID, "main", 0, nullptr, nullptr);
+            glAttachShader(programID, vertexShaderID);
+
+            delete vertexByteCodeGlsl;
+        }
+
+        if (fragmentByteCode) {
+            Vector<uint32>* fragmentByteCodeGlsl = fromSpvToGlslSpv(fragmentByteCode, ShaderType::Fragment);
+
+            fragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);
+            glShaderBinary(1, &fragmentShaderID, GL_SHADER_BINARY_FORMAT_SPIR_V, fragmentByteCodeGlsl->data(), fragmentByteCodeGlsl->size() * sizeof(uint32));
+            glSpecializeShader(fragmentShaderID, "main", 0, nullptr, nullptr);
+            glAttachShader(programID, fragmentShaderID);
+
+            delete fragmentByteCodeGlsl;
+        }
+
+        if (geometryByteCode) {
+            Vector<uint32>* geometryByteCodeGlsl = fromSpvToGlslSpv(geometryByteCode, ShaderType::Geometry);
+
+            geometryShaderID = glCreateShader(GL_GEOMETRY_SHADER);
+            glShaderBinary(1, &geometryShaderID, GL_SHADER_BINARY_FORMAT_SPIR_V, geometryByteCodeGlsl->data(), geometryByteCodeGlsl->size() * sizeof(uint32));
+            glSpecializeShader(geometryShaderID, "main", 0, nullptr, nullptr);
+            glAttachShader(programID, geometryShaderID);
+
+            delete geometryByteCodeGlsl;
+        }
+
+        glLinkProgram(programID);
+
+        int error = checkProgramCompileErrors(programID);
+
+        // if error occurred return without changing anything
+        if(error) {
+            glDeleteShader (  vertexShaderID);
+            glDeleteShader (fragmentShaderID);
+            glDeleteShader (geometryShaderID);
+            glDeleteProgram(       programID);
+
+            return;
+        }
+
+        // delete everything that exists
+        if (this->  vertexShaderID) glDeleteShader (this->  vertexShaderID);
+        if (this->fragmentShaderID) glDeleteShader (this->fragmentShaderID);
+        if (this->geometryShaderID) glDeleteShader (this->geometryShaderID);
+        if (this->              ID) glDeleteProgram(this->              ID);
+
+        // replace with new
+        this->  vertexShaderID =   vertexShaderID;
+        this->fragmentShaderID = fragmentShaderID;
+        this->geometryShaderID = geometryShaderID;
+        this->              ID =        programID;
+    }
+
+    OpenGLShader::OpenGLShader( String         name,
+                                String   vertexCode,
+                                String fragmentCode,
+                                String geometryCode ) {
+        this->vertexShaderSourceCode   =   vertexCode;
+        this->fragmentShaderSourceCode = fragmentCode;
+        this->geometryShaderSourceCode = geometryCode;
+
+        this->name = name;
+        this->compile();
+    }
+
+    OpenGLShader::~OpenGLShader() {
+        glDeleteShader(vertexShaderID  );
+        glDeleteShader(fragmentShaderID);
+        glDeleteShader(geometryShaderID);
+
+        glDeleteProgram(this->ID);
+    }
+
+    void OpenGLShader::compileNative( const String& vertexShaderSourceCode  ,
+                                      const String& fragmentShaderSourceCode,
+                                      const String& geometryShaderSourceCode ) {
         this->  vertexShaderID = 0;
         this->fragmentShaderID = 0;
         this->geometryShaderID = 0;
 
         this->ID = glCreateProgram();
 
+
         // creating and attaching vertex shader
         {
             this->vertexShaderID = glCreateShader(GL_VERTEX_SHADER);
-            
-            glShaderSource (vertexShaderID, 1, &vertexShaderSourceCode, nullptr);
+
+            const char* source = vertexShaderSourceCode.c_str();
+            glShaderSource (vertexShaderID, 1, &source, nullptr);
             glCompileShader(vertexShaderID);
 
             checkShaderCompileErrors(vertexShaderID, "VERTEX");
 
             glAttachShader(ID, vertexShaderID);
         }
-        
+
         // creating and attaching fragment shader
         {
             this->fragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);
 
-            glShaderSource(fragmentShaderID, 1, &fragmentShaderSourceCode, nullptr);
+            const char* source = fragmentShaderSourceCode.c_str();
+            glShaderSource(fragmentShaderID, 1, &source, nullptr);
             glCompileShader(fragmentShaderID);
 
             checkShaderCompileErrors(fragmentShaderID, "FRAGMENT");
@@ -116,36 +163,22 @@ namespace PetrolEngine {
         }
 
         // creating and attaching geometry shader if given
-        if (geometryShaderSourceCode != nullptr)
+        if (!geometryShaderSourceCode.empty())
         {
             this->geometryShaderID = glCreateShader(GL_GEOMETRY_SHADER);
 
-            glShaderSource (geometryShaderID, 1, &geometryShaderSourceCode, nullptr);
+            const char* source = geometryShaderSourceCode.c_str();
+            glShaderSource (geometryShaderID, 1, &source, nullptr);
             glCompileShader(geometryShaderID);
 
             checkShaderCompileErrors(geometryShaderID, "GEOMETRY");
-            
+
             glAttachShader(ID, geometryShaderID);
         }
 
         glLinkProgram(ID);
 
         checkProgramCompileErrors(ID);
-        
-        // delete the shaders as they're linked into our program now and no longer necessary
-        //glDeleteShader(vertexShaderID);
-        //glDeleteShader(fragment);
-        //glDeleteShader(geometry);
-    }
-
-    
-
-    OpenGLShader::~OpenGLShader() {
-        glDeleteShader(vertexShaderID  );
-        glDeleteShader(fragmentShaderID);
-        glDeleteShader(geometryShaderID);
-
-        glDeleteProgram(this->ID);
     }
 
     void OpenGLShader::setVec4(const String& uniform, float x, float y, float z, float w) {
@@ -188,16 +221,16 @@ namespace PetrolEngine {
         glUniformMatrix4fv(glGetUniformLocation(ID, uniform.c_str()), 1, GL_FALSE, &mat[0][0]);
     }
 
-    int OpenGLShader::checkProgramCompileErrors(GLuint shader) {
+    int OpenGLShader::checkProgramCompileErrors(GLuint id) {
         GLint success;
         GLchar infoLog[1024];
 
-        glGetProgramiv(shader, GL_LINK_STATUS, &success);
+        glGetProgramiv(id, GL_LINK_STATUS, &success);
 
         if (success)
             return 0;
 
-        glGetProgramInfoLog(shader, 1024, nullptr, infoLog);
+        glGetProgramInfoLog(id, 1024, nullptr, infoLog);
 
         LOG( std::string("PROGRAM_LINKING_ERROR: ") + infoLog, 2);
 

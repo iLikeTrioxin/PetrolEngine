@@ -1,7 +1,5 @@
 #pragma once
 
-#define GLFW_INCLUDE_VULKAN
-
 #include "Core/WindowInterface/WindowI.h"
 #include <GLFW/glfw3.h>
 
@@ -13,7 +11,7 @@ namespace PetrolEngine {
 		bool shouldClose() override { return glfwWindowShouldClose(window      ); };
 		void swapBuffers() override { glfwSwapBuffers             (window      ); };
 		void close      () override { glfwSetWindowShouldClose    (window, true); };
-		void pollEvents () override { glfwPollEvents              (            ); };
+        void pollEvents () override { glfwPollEvents              (            ); };
 
 		int init() override;
 
@@ -28,7 +26,6 @@ namespace PetrolEngine {
 		// Vulkan specific
 		void createWindowSurface(void* instance, const void* allocation, void* surface) override;
 
-	private:
 		GLFWwindow* window;
 	};
 

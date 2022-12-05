@@ -58,7 +58,6 @@ namespace PetrolEngine {
 
         static float getAspectRatio() {return window->getAspectRatio(); };
 
-	private:
         static WRC* creator;
         static WindowI* window;
 	};

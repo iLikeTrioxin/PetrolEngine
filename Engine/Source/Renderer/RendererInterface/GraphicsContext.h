@@ -1,9 +1,9 @@
 #pragma once
 
 namespace PetrolEngine {
-    class GraphicsContextI {
+    class GraphicsContext {
     public:
-        virtual ~GraphicsContextI() = default;
+        virtual ~GraphicsContext() = default;
 
         virtual int init(void* loaderProc = nullptr) = 0;
     };

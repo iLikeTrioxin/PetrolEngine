@@ -10,31 +10,36 @@
 #include "OpenGLVertexBuffer.h"
 #include "OpenGLContext.h"
 #include "OpenGLFramebuffer.h"
+#include "OpenGLUniformBuffer.h"
 
 namespace PetrolEngine {
     class OPENGL_: public RRC {
     public:
         // with arguments
-        VertexBufferI* newVertexBuffer(const VL& layout, const void* data, int64 size) override { return new OpenGLVertexBuffer(layout, data, size); }
-        IndexBufferI * newIndexBuffer (                  const void* data, int64 size) override { return new OpenGLIndexBuffer (        data, size); }
+        VertexBuffer* newVertexBuffer(const VL& layout, const void* data, int64 size) override { return new OpenGLVertexBuffer(layout, data, size); }
+        IndexBuffer * newIndexBuffer (                  const void* data, int64 size) override { return new OpenGLIndexBuffer (        data, size); }
 
         // without arguments
-        VertexBufferI* newVertexBuffer(const VL& layout) override { return new OpenGLVertexBuffer(layout); }
-        IndexBufferI * newIndexBuffer (                ) override { return new OpenGLIndexBuffer (      ); }
+        VertexBuffer* newVertexBuffer(const VL& layout) override { return new OpenGLVertexBuffer(layout); }
+        IndexBuffer * newIndexBuffer (                ) override { return new OpenGLIndexBuffer (      ); }
 
+        UniformBuffer* newUniformBuffer(uint32_t size, uint32_t binding) override { return new OpenGLUniformBuffer(size, binding); }
 
-        VertexArrayI * newVertexArray (                                              ) override { return new OpenGLVertexArray (                  ); }
-        RendererI    * newRenderer    (                                              ) override { return new OpenGLRenderer    (                  ); }
-        GraphicsContextI * newGraphicsContext() override { return new OpenGLContext(); }
+        VertexArray * newVertexArray (                                              ) override { return new OpenGLVertexArray (                  ); }
+        RendererAPI  * newRenderer    (                                              ) override { return new OpenGLRenderer    (                  ); }
+        GraphicsContext * newGraphicsContext() override { return new OpenGLContext(); }
 
-        ShaderI* newShader(const char* vertexShader  ,
-                           const char* fragmentShader,
-                           const char* geometryShader  ) override { return new OpenGLShader(vertexShader, fragmentShader, geometryShader); }
+        Shader* newShader(const String&           name,
+                          const String&   vertexShader,
+                          const String& fragmentShader,
+                          const String& geometryShader  ) override { return new OpenGLShader(name, vertexShader, fragmentShader, geometryShader); }
 
-        TextureI* newTexture(const Image* image,int a= GL_UNSIGNED_BYTE) { return new OpenGLTexture(image, a); }
-        TextureI* newTexture(int width, int height, TextureFormat format) { return new OpenGLTexture(width, height, format); }
+        Texture* newTexture(const Image* image) override { return new OpenGLTexture(image); }
+        Texture* newTexture(int width, int height, TextureFormat format, TextureType type)  override { return new OpenGLTexture(width, height, format, type); }
 
-        FramebufferI* newFramebuffer(const FramebufferSpecification& spec) override { return new OpenGLFramebuffer(spec); }
+        Framebuffer* newFramebuffer(const FramebufferSpecification& spec) override { return new OpenGLFramebuffer(spec); }
 
-    } OpenGL;
+    };
+
+    extern OPENGL_ OpenGL;
 }

@@ -7,8 +7,6 @@
 
 #include <iostream>
 
-#include "Renderer/Renderer/Texture.h"
-
 String getFontPath(const String& font) {
     if (font.rfind(".ttf") != String::npos) return font;
 
@@ -27,11 +25,11 @@ namespace PetrolEngine {
     static FT_Library lib;
     UnorderedMap<String, Text::FontAtlas> Text::fonts;
 
-    Text::FontAtlas Text::getAtlas(const String& character) {
-        if(fonts.find(character) == fonts.end())
-            loadFont(character);
+    Text::FontAtlas& Text::getAtlas(const String& font) {
+        if(fonts.find(font) == fonts.end())
+            loadFont(font);
 
-        return Text::fonts[character];
+        return Text::fonts[font];
     }
 
     int Text::destroy() {
@@ -78,9 +76,9 @@ namespace PetrolEngine {
             err = err ? err : FT_Load_Char(face, asciiCode, FT_LOAD_RENDER);
              err = err ? err : FT_Render_Glyph(slot, FT_RENDER_MODE_SDF);
 
-            if(face->glyph->bitmap.width * face->glyph->bitmap.rows == 0) continue;
+            if(err) { LOG("FREETYPE ERROR: Failed to load glyph with ASCII " + toString(asciiCode) + " (error code:" + toString(err) + ")", 2); err = 0; continue; }
 
-            if(err) { LOG("FREETYPE ERROR: Failed to load glyph with ASCII " + toString(asciiCode) + " (error code:" + toString(err) + ")", 2); continue; }
+            if(face->glyph->bitmap.width * face->glyph->bitmap.rows == 0) continue;
 
             uint8 column = asciiCode % atlas->getCellCountX();
             uint8 row    = asciiCode / atlas->getCellCountX();
@@ -90,7 +88,8 @@ namespace PetrolEngine {
                 column,
                 row,
                 slot->bitmap.width,
-                slot->bitmap.rows
+                slot->bitmap.rows,
+                true
             );
 
             // now store character for later use

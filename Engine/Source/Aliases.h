@@ -224,6 +224,9 @@ static_assert(sizeof(int16) == 2, "int16 size is not 16 bits.");
 static_assert(sizeof(int32) == 4, "int32 size is not 32 bits.");
 static_assert(sizeof(int64) == 8, "int64 size is not 64 bits.");
 
+#include <algorithm>
+using std::swap;
+
 #include <cstdio>
 
 #define for3D(_tx, _ty, _tz) for (int z = 0; z < _tz; ++z) for (int y = 0; y < _ty; ++y) for (int x = 0; x < _tx; ++x)

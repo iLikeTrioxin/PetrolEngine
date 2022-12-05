@@ -31,9 +31,8 @@ namespace PetrolEngine {
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
 	}
 
-	OpenGLIndexBuffer::~OpenGLIndexBuffer() {
-		LOG_FUNCTION();
-		
+	OpenGLIndexBuffer::~OpenGLIndexBuffer() { LOG_FUNCTION();
+        LOG("Deleting OpenGLIndexBuffer", 1);
 		glDeleteBuffers(1, &ID);
 	}
 }

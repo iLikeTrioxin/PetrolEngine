@@ -3,8 +3,7 @@
 #include <utility>
 #include "../Window/Window.h"
 #include "GLFWWindow.h"
-#include "Renderer/Renderer/GraphicsContext.h"
-
+#include <Renderer/Renderer/Renderer.h>
 // TODO: Remove unnecessary type size conversions
 
 namespace PetrolEngine {
@@ -49,6 +48,7 @@ namespace PetrolEngine {
     void error_callback(int error, const char* msg) {
         std::string s;
         s = " [" + std::to_string(error) + "] " + msg + '\n';
+        LOG(s,3);
         std::cerr << s << std::endl;
     }
     int GLFWWindow::init() { LOG_FUNCTION();
@@ -59,12 +59,6 @@ namespace PetrolEngine {
 
         glfwSetErrorCallback(error_callback);
 
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-        //glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-        //glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
-
         window = glfwCreateWindow(windowData.width, windowData.height, windowData.title.c_str(), nullptr, nullptr);
 
         if (!window) {
@@ -73,18 +67,13 @@ namespace PetrolEngine {
             return 0;
         }
 
-        if (GraphicsContext::create()->init((void*)glfwGetProcAddress)) // 
-            return -1;
-        
-        glfwMakeContextCurrent  (window);
         glfwSetWindowUserPointer(window, &windowData);
-        
         glfwSetWindowSizeCallback(window, [](GLFWwindow* windowPtr, int newWidth, int newHeight) {
                 auto* newWindowData = reinterpret_cast<WindowData*>(glfwGetWindowUserPointer(windowPtr));
-                
+
                 newWindowData->width  = newWidth ;
                 newWindowData->height = newHeight;
-                
+
                 EventStack::addEvent( new WindowResizedEvent(*newWindowData) );
             }
         );
@@ -135,6 +124,12 @@ namespace PetrolEngine {
         );
 
         glfwMakeContextCurrent(window);
+
+        if (Renderer::createGraphicsContext()->init((void*)glfwGetProcAddress))
+            return -1;
+
+        glfwSetTime( 0.0 );
+
         return 0;
     }
 }

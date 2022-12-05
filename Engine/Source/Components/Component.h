@@ -13,7 +13,7 @@ namespace PetrolEngine {
 
     class NativeComponent: public InternalComponent {
     public:
-        uint64 typeId;
+        uint64 typeId = 0;
     };
 
     class Component: public InternalComponent {
