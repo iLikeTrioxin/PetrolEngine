@@ -44,3 +44,6 @@ add_subdirectory(shaderc)
 
 # SPIRV-Cross
 add_subdirectory(SPIRV-Cross)
+
+# metal
+add_subdirectory(Metal)

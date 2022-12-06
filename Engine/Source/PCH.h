@@ -12,7 +12,7 @@
 
 // Standard renderers
 #include <glad/glad.h>
-#include <vulkan/vulkan.h>
+//#include <vulkan/vulkan.h>
 
 // Windowing libs
 #include <GLFW/glfw3.h>

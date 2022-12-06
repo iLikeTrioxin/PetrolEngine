@@ -38,12 +38,12 @@ namespace PetrolEngine {
     }
 
     void GLFWWindow::createWindowSurface(void* i, const void* a, void* s){
-        glfwCreateWindowSurface(
-            *reinterpret_cast<VkInstance*>(i),
-            window,
-            reinterpret_cast<const VkAllocationCallbacks*>(a),
-            reinterpret_cast<      VkSurfaceKHR*         >(s)
-        );
+//        glfwCreateWindowSurface(
+//            *reinterpret_cast<VkInstance*>(i),
+//            window,
+//            reinterpret_cast<const VkAllocationCallbacks*>(a),
+//            reinterpret_cast<      VkSurfaceKHR*         >(s)
+//        );
     }
     void error_callback(int error, const char* msg) {
         std::string s;

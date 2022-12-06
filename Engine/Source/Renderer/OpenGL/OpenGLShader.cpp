@@ -45,7 +45,7 @@ namespace PetrolEngine {
         uint fragmentShaderID = 0;
         uint geometryShaderID = 0;
         uint programID        = glCreateProgram();
-
+        auto a = glGetString(GL_VERSION);
         if (vertexByteCode) {
             Vector<uint32>* vertexByteCodeGlsl = fromSpvToGlslSpv(vertexByteCode, ShaderType::Vertex);
 

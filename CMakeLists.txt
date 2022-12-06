@@ -17,7 +17,7 @@ find_package(Vulkan)
     list(FILTER HEADER_FILES EXCLUDE REGEX "Vulkan")
 #endif()
 
-add_library(Engine STATIC ${SOURCE_FILES} ${HEADER_FILES} ${RESOURCE_FILES})
+add_library(Engine STATIC ${SOURCE_FILES} ${HEADER_FILES} ${RESOURCE_FILES} Engine/Source/Renderer/Metal/Metal.h Engine/Source/Renderer/Metal/Metal.cpp Engine/Source/Renderer/Metal/MetalRenderer.cpp Engine/Source/Renderer/Metal/MetalRenderer.h)
 
 if(${VULKAN_FOUND})
 	# if it was found add libraries to link to and headers
@@ -35,6 +35,7 @@ endif()
 add_subdirectory(Deps)
 
 target_link_libraries(Engine
+        PRIVATE Metal
     PRIVATE glad
     PRIVATE OpenAL
     PRIVATE common
@@ -43,9 +44,12 @@ target_link_libraries(Engine
     PRIVATE assimp
     PRIVATE freetype
     PRIVATE spirv-cross-cpp
+
 )
 
 target_include_directories(Engine
+        PUBLIC Deps/Metal/metal-cpp
+        PUBLIC Deps/Metal/metal-cpp-extensions
     PUBLIC Deps/glm
     PUBLIC Deps/openal-soft/include
     PUBLIC Deps/glfw/include
@@ -54,6 +58,7 @@ target_include_directories(Engine
     PUBLIC Deps/entt/single_include
     PUBLIC Deps/SPIRV-Cross
     PUBLIC Engine/Source
+    PUBLIC Deps/shaderc/libshaderc/include
     PUBLIC ${CMAKE_CURRENT_BINARY_DIR}/Deps/glad/include
     PUBLIC ${CMAKE_CURRENT_BINARY_DIR}/Deps/assimp/include
 )
