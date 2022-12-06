@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Renderer/RawRenderer/VertexBufferApi.h"
+#include "Renderer/RendererInterface/VertexBuffer.h"
 
 namespace PetrolEngine {
-	class VulkanVertexBuffer : public VertexBufferApi {
+	class VulkanVertexBuffer : public VertexBuffer {
 	public:
 		VulkanVertexBuffer(VertexLayout layout);
 		VulkanVertexBuffer(VertexLayout layout, const void* data, int64 size);

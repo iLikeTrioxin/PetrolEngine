@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Renderer/RawRenderer/VertexArrayApi.h"
+#include "Renderer/RendererInterface/VertexArray.h"
 
 namespace PetrolEngine {
-	class VulkanVertexArray : public VertexArrayApi {
+	class VulkanVertexArray : public VertexArray {
 	public:
 		VulkanVertexArray();
 

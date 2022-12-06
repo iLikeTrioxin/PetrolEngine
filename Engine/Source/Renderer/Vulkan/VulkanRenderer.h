@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Renderer/RawRenderer/RendererApi.h"
-#include "Transform.h"
-#include "Mesh.h"
+#include "Renderer/RendererInterface/RendererI.h"
+#include "Components/Transform.h"
+#include "Components/Mesh.h"
 #include <vulkan/vulkan.h>
 
 namespace PetrolEngine {

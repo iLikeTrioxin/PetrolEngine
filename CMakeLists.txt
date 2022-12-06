@@ -8,22 +8,27 @@ file(GLOB_RECURSE SOURCE_FILES   Engine/Source/*.cpp )
 file(GLOB_RECURSE HEADER_FILES   Engine/Source/*.h   )
 file(GLOB_RECURSE RESOURCE_FILES Engine/Resources/*.*)
 
-find_package(Vulkan)
-
-#if(NOT ${VULKAN_FOUND})
-	# If vulkan was not found exclude source code for vulkan
-    message(WARNING "Vulkan SDK not found. Building without vulkan.")
-    list(FILTER SOURCE_FILES EXCLUDE REGEX "Vulkan")
-    list(FILTER HEADER_FILES EXCLUDE REGEX "Vulkan")
-#endif()
-
 add_library(Engine STATIC ${SOURCE_FILES} ${HEADER_FILES} ${RESOURCE_FILES} Engine/Source/Renderer/Metal/Metal.h Engine/Source/Renderer/Metal/Metal.cpp Engine/Source/Renderer/Metal/MetalRenderer.cpp Engine/Source/Renderer/Metal/MetalRenderer.h)
 
-if(${VULKAN_FOUND})
-	# if it was found add libraries to link to and headers
-    target_link_libraries     (Engine PRIVATE ${Vulkan_LIBRARIES}   )
-    target_include_directories(Engine PUBLIC  ${Vulkan_INCLUDE_DIRS})
-endif()
+find_library(APPLE_FWK_METAL Metal)
+
+find_package(Vulkan)
+
+#if(${VULKAN_FOUND})
+#    ADD_DEFINITIONS(-DVULKAN)
+#	# if it was found add libraries to link to and headers
+#    target_link_libraries     (Engine PRIVATE ${Vulkan_LIBRARIES}   )
+#    target_include_directories(Engine PUBLIC  ${Vulkan_INCLUDE_DIRS})
+#else()
+#    # If vulkan was not found exclude source code for vulkan
+#    message(WARNING "Vulkan SDK not found. Building without vulkan.")
+#    list(FILTER SOURCE_FILES EXCLUDE REGEX "Vulkan")
+#    list(FILTER HEADER_FILES EXCLUDE REGEX "Vulkan")
+#endif()
+
+message(WARNING "Vulkan SDK not found. Building without vulkan.")
+list(FILTER SOURCE_FILES EXCLUDE REGEX "Vulkan")
+list(FILTER HEADER_FILES EXCLUDE REGEX "Vulkan")
 
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/Engine FILES ${SOURCE_FILES} ${HEADER_FILES} ${RESOURCE_FILES})
 
@@ -35,7 +40,6 @@ endif()
 add_subdirectory(Deps)
 
 target_link_libraries(Engine
-        PRIVATE Metal
     PRIVATE glad
     PRIVATE OpenAL
     PRIVATE common
@@ -48,8 +52,7 @@ target_link_libraries(Engine
 )
 
 target_include_directories(Engine
-        PUBLIC Deps/Metal/metal-cpp
-        PUBLIC Deps/Metal/metal-cpp-extensions
+        PUBLIC Deps/metal-cpp/SingleHeader
     PUBLIC Deps/glm
     PUBLIC Deps/openal-soft/include
     PUBLIC Deps/glfw/include

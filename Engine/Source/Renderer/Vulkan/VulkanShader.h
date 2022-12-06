@@ -1,22 +1,18 @@
 #pragma once
 
-#include "Renderer/RawRenderer/ShaderApi.h"
+#include "Renderer/RendererInterface/Shader.h"
 #include <sstream>
 #include <fstream>
 #include <glm/glm.hpp>
 
 namespace PetrolEngine {
-    class VulkanShader : public ShaderApi {
+    class VulkanShader : public Shader {
     public:
         VulkanShader( const char* vertexShaderSourceCode   = nullptr,
                       const char* fragmentShaderSourceCode = nullptr,
                       const char* geometryShaderSourceCode = nullptr );
         
         ~VulkanShader() override;
-
-        int recompileShader(const char* vertexShaderSourceCode  ,
-                            const char* fragmentShaderSourceCode,
-                            const char* geometryShaderSourceCode ) override;
 
         void setBool (const String& name, bool  x                           ) override;
         void setInt  (const String& name, int   x                           ) override;

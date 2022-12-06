@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Renderer/RawRenderer/IndexBufferApi.h"
+#include "Renderer/RendererInterface/IndexBuffer.h"
 
 namespace PetrolEngine {
-    class VulkanIndexBuffer : public IndexBufferApi {
+    class VulkanIndexBuffer : public IndexBuffer {
 	public:
 		VulkanIndexBuffer();
 		VulkanIndexBuffer(const void* data, int64 size);

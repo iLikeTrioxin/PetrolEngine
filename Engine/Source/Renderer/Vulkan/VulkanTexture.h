@@ -1,10 +1,10 @@
 #pragma once
 
-#include "Renderer/RawRenderer/TextureApi.h"
+#include "Renderer/RendererInterface/Texture.h"
 
 namespace PetrolEngine {
 
-	class VulkanTexture : public TextureApi {
+	class VulkanTexture : public Texture {
 	public:
 		VulkanTexture(
 			int width,
