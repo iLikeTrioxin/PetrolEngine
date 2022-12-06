@@ -47,3 +47,5 @@ add_subdirectory(SPIRV-Cross)
 
 # metal
 add_subdirectory(Metal)
+
+execute_process(COMMAND ${Python_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}./SingleHeader/MakeSingleHeader.py Foundation/Foundation.hpp QuartzCore/QuartzCore.hpp Metal/Metal.hpp COMMAND_ECHO STDOUT)
